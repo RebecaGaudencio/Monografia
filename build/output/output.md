@@ -1,1 +1,1 @@
-##### Arquivo criado dentro da pasta.
+##### Arquivo criado dentro da pasta
