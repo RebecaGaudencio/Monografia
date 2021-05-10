@@ -35,3 +35,6 @@ build/input/PNADC_042017.txt
 build/input/PNADC_042018.txt
 build/input/PNADC_042019.txt
 build/input/PNADC_042020.txt
+build/input/input_PNADC_trimestral.sas
+build/input/input_PNADC_trimestral.txt
+build/input/dicionario_PNADC_microdados_trimestral.xls
