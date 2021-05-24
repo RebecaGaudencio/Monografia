@@ -32,11 +32,18 @@ pnadc_df = read_pnadc(microdata=lista_PNAD, input_txt = chave_input)
 
 pnadc_df %>% sum(V1028)
 
+# Populacao por estado (UF) #
+
 populacao <- pnadc_df %>%
   select(UF, Trimestre, V1028) %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (populacao = mean(aux))
+
+
+### VARIAVEIS DO MERCADO DE TRABALHO ### 
+
+# Ocupacao por estado # 
 
 ocupacao <- pnadc_df %>%
   select(UF, Trimestre, V1028, VD4002) %>%
@@ -46,6 +53,8 @@ ocupacao <- pnadc_df %>%
   summarise (ocupacao = mean(aux))
 
 
+# Pop. Economicamente Ativa por estado # 
+
 PEA <- pnadc_df %>%
   select(UF, Trimestre, V1028, VD4002) %>%
   dplyr::filter(VD4002 == 1 |VD4002 == 2) %>%
@@ -53,6 +62,7 @@ PEA <- pnadc_df %>%
   mutate(aux = sum(V1028)) %>%
   summarise (PEA = mean(aux))
 
+# Pop. em Ativa (>14 anos) por estado # 
 
 PIA <- pnadc_df %>%
   select(UF, Trimestre, V1028, V2009) %>%
@@ -61,6 +71,9 @@ PIA <- pnadc_df %>%
   mutate(aux = sum(V1028)) %>%
   summarise (PIA = mean(aux))
 
+
+# No. de informais por estado #
+
 informais <- pnadc_df %>%
   select(UF, Trimestre, V1028, VD4009, VD4012) %>%
   dplyr::filter(VD4009 == 2 |VD4009 == 4| VD4009 == 6| (VD4009 == 8 & VD4012 == 2) | (VD4009 == 9 & VD4012 == 2) | VD4009 == 10) %>%
@@ -68,6 +81,34 @@ informais <- pnadc_df %>%
   mutate(aux = sum(V1028)) %>%
   summarise (informais = mean(aux))
 
+# No. de formais por estado #
+
+formais <- pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4009, VD4012) %>%
+  dplyr::filter(VD4009 == 1 |VD4009 == 3| VD4009 == 5| VD4009 == 7|(VD4009 == 8 & VD4012 == 1) | (VD4009 == 9 & VD4012 == 2)) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (formais = mean(aux))
+
+
+# No. de desalentados por estado #
+
+desalentados <- pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4005) %>%
+  dplyr::filter(VD4005 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desalentados = mean(aux))
+
+# No. de nem-nem por estado #
+nemnem <- pnadc_df %>%
+  select(UF, Trimestre, V2009, V3002, V4074, V4074A, VD4001, VD4002) %>%
+  dplyr::filter(VD4002 == 2| (VD4001 == 2 & VD3002 == 2)) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028), aux2 = ifelse(.pnadc_df$V4074 == 6)) %>%
+  summarise (nemnem = mean(aux), teste =  mean(aux2))
+
+# testar o cOdigo acima
 
 
 
