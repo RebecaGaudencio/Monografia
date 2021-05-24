@@ -38,7 +38,12 @@ populacao <- pnadc_df %>%
   summarise (populacao = mean(aux))
 
 
-### VARIAVEIS DO MERCADO DE TRABALHO ### 
+############################################################
+#                                                          #   
+##                Variaveis DO Mercado De Trabalho        ## 
+#                                                          #
+############################################################
+
 
 # Ocupacao por estado # 
 
