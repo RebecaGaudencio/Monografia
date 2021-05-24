@@ -26,11 +26,8 @@ setwd(input_path)
 lista_PNAD = list.files(pattern = "PNADC_012012.txt")
 chave_input = list.files(pattern = "input_PNADC_trimestral.sas")
 
-
 pnadc_df = read_pnadc(microdata=lista_PNAD, input_txt = chave_input)
 
-
-pnadc_df %>% sum(V1028)
 
 # Populacao por estado (UF) #
 
@@ -117,7 +114,7 @@ nemnem <- pnadc_df %>%
   mutate(aux = sum(V1028), aux2 = ifelse(.pnadc_df$V4074 == 6)) %>%
   summarise (nemnem = mean(aux), teste =  mean(aux2))
 
-# testar o cOdigo acima
+# testar o codigo acima
 
 
 
