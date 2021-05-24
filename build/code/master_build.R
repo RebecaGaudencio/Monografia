@@ -90,6 +90,15 @@ formais <- pnadc_df %>%
   mutate(aux = sum(V1028)) %>%
   summarise (formais = mean(aux))
 
+# No. de desocupados por estado #
+
+desocupados <- pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002) %>%
+  dplyr::filter(VD4002 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupados = mean(aux))
+
 
 # No. de desalentados por estado #
 
