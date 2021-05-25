@@ -25,7 +25,6 @@ setwd(input_path)
 
 lista_PNAD = list.files(pattern = "PNADC_012012.txt")
 chave_input = list.files(pattern = "input_PNADC_trimestral.sas")
-
 pnadc_df = read_pnadc(microdata=lista_PNAD, input_txt = chave_input)
 
 
