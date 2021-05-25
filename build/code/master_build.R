@@ -44,7 +44,7 @@ populacao <- pnadc_df %>%
 #                                                          #
 ############################################################
 
-# 1. Força de Trabalho por estado #
+# 1. Forca de Trabalho por estado #
 workforce <- pnadc_df %>%
   select(UF, Trimestre, V1028, VD4001) %>%
   dplyr::filter(VD4001 == 1) %>%
@@ -148,7 +148,7 @@ desocup4 <- pnadc_df %>%
 ##########################################################
 #        Ocupacao e Desocupacao por Escolaridade        ##
 #                                                        #
-#        1. Sem instrução                                #
+#        1. Sem instrucao                                #
 #        2. Fundamental incompleto ou eq                 #
 #        3. Fundamental completo                         #
 #        4. Medio incompleto                             #
