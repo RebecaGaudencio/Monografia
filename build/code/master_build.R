@@ -53,20 +53,19 @@ workforce <- pnadc_df %>%
 
 
 # 2. Ocupacao e Desocupacao  por estado # 
-
-ocupacao <- pnadc_df %>%
+ocup <- pnadc_df %>%
   select(UF, Trimestre, V1028, VD4002) %>%
   dplyr::filter(VD4002 == 1) %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
-  summarise (ocupacao = mean(aux))
+  summarise (ocup = mean(aux))
 
-desocupados <- pnadc_df %>%
+desocup <- pnadc_df %>%
   select(UF, Trimestre, V1028, VD4002) %>%
   dplyr::filter(VD4002 == 2) %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
-  summarise (desocupados = mean(aux))
+  summarise (desocups = mean(aux))
 
 ##########################################################
 ##       Ocupacao e Desocupacao por Faixa Etaria        ##
@@ -118,7 +117,6 @@ desocup1 <- pnadc_df %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (desocup1 = mean(aux))
-
 
 
 desocup2 <- pnadc_df %>%
@@ -315,7 +313,7 @@ desocupfem <- pnadc_df %>%
 #        2. Preta                                        #
 #        3. Amarela                                      #
 #        4. Parda                                        #
-#        5. Indígena                                     #          
+#        5. Indigena                                     #          
 ##                                                      ## 
 ##########################################################
 
