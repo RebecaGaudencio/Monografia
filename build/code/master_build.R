@@ -393,6 +393,113 @@ desocupcor5 <-  pnadc_df %>%
   summarise (desocupcor5 = mean(aux))
 
 ##########################################################
+#       Ocupacao e Desocupacao por Genero  e  Raca      ##
+##                                                      ## 
+##########################################################
+
+# 1. Brancos
+
+ocupmascor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
+  dplyr::filter(VD4002 == 1 & V2007 == 1 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupmascor1 = mean(aux))
+
+
+ocupfemcor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
+  dplyr::filter(VD4002 == 1 & V2007 == 2 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupfemcor1 = mean(aux))
+
+
+desocupmascor1 <- pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD2007 == 1 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupmascor1 = mean(aux))
+
+
+desocupfemcor1 <- pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
+  dplyr::filter(VD4002 == 2 & V2007 == 2 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupfemcor1 = mean(aux))
+
+
+# 2. Negros 
+
+ocupmascor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
+  dplyr::filter(VD4002 == 1 & V2007 == 1 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupmascor2 = mean(aux))
+
+
+ocupfemcor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
+  dplyr::filter(VD4002 == 1 & V2007 == 2 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupfemcor2 = mean(aux))
+
+
+desocupmascor2 <- pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD2007 == 1 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupmascor2 = mean(aux))
+
+
+desocupfemcor2 <- pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
+  dplyr::filter(VD4002 == 2 & V2007 == 2 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupfemcor2 = mean(aux))
+
+
+# 3. Indigenas
+
+ocupmascor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
+  dplyr::filter(VD4002 == 1 & V2007 == 1 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupmascor5 = mean(aux))
+
+
+ocupfemcor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
+  dplyr::filter(VD4002 == 1 & V2007 == 2 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupfemcor5 = mean(aux))
+
+
+desocupmascor5 <- pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD2007 == 1 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupmascor5 = mean(aux))
+
+
+desocupfemcor5 <- pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
+  dplyr::filter(VD4002 == 2 & V2007 == 2 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupfemcor5 = mean(aux))
+
+
+##########################################################
 #   Ocupacao e Desocupacao por Escolaridade e Genero    ##
 ##                                                      ## 
 ##########################################################
@@ -597,6 +704,356 @@ desocupesco7fem <-  pnadc_df %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (desocupesco7fem = mean(aux))
+
+
+
+##########################################################
+#   Ocupacao e Desocupacao por Escolaridade e Raca    ##
+##                                                      ## 
+##########################################################
+
+# 1. Brancos
+
+ocupesco1cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 1 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco1cor1 = mean(aux))
+
+
+ocupesco2cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 2 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco2cor1 = mean(aux))
+
+
+ocupesco3cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 3 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco3cor1 = mean(aux))
+
+
+ocupesco4cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 4 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco4cor1 = mean(aux))
+
+
+ocupesco5cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 5 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco5cor1 = mean(aux))
+
+
+ocupesco6cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 6 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco6cor1 = mean(aux))
+
+
+ocupesco7cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 7 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco7cor1 = mean(aux))
+
+
+desocupesco1cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 1 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco1cor1 = mean(aux))
+
+
+desocupesco2cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 2 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco2cor1 = mean(aux))
+
+
+desocupesco3cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 3 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco3cor1 = mean(aux))
+
+
+desocupesco4cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 4 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco4cor1 = mean(aux))
+
+
+desocupesco5cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 5 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco5cor1 = mean(aux))
+
+
+desocupesco6cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 6 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco6cor1 = mean(aux))
+
+
+desocupesco7cor1 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 7 & V2010 == 1) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco7cor1 = mean(aux))
+
+
+# 2. Negros
+
+ocupesco1cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 1 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco1cor2 = mean(aux))
+
+
+ocupesco2cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 2 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco2cor2 = mean(aux))
+
+
+ocupesco3cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 3 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco3cor2 = mean(aux))
+
+
+ocupesco4cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 4 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco4cor2= mean(aux))
+
+
+ocupesco5cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 5 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco5cor2 = mean(aux))
+
+
+ocupesco6cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 6 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco6cor2 = mean(aux))
+
+
+ocupesco7cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 7 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco7cor2 = mean(aux))
+
+
+desocupesco1cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 1 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco1cor2 = mean(aux))
+
+
+desocupesco2cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 2 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco2cor2 = mean(aux))
+
+
+desocupesco3cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 3 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco3cor2 = mean(aux))
+
+
+desocupesco4cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 4 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco4cor2 = mean(aux))
+
+
+desocupesco5cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 5 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco5cor2 = mean(aux))
+
+
+desocupesco6cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 6 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco6cor2 = mean(aux))
+
+
+desocupesco7cor2 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 7 & V2010 == 2) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco7cor2 = mean(aux))
+
+
+# 3. Indígenas
+
+ocupesco1cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 1 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco1cor5 = mean(aux))
+
+
+ocupesco2cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 2 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco2cor5 = mean(aux))
+
+
+ocupesco3cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 3 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco3cor5 = mean(aux))
+
+
+ocupesco4cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 4 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco4cor5 = mean(aux))
+
+
+ocupesco5cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 5 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco5cor5 = mean(aux))
+
+
+ocupesco6cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 6 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco6cor5 = mean(aux))
+
+
+ocupesco7cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 1 & VD3004 == 7 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (ocupesco7cor5 = mean(aux))
+
+
+desocupesco1cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 1 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco1cor5 = mean(aux))
+
+
+desocupesco2cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 2 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco2cor5 = mean(aux))
+
+
+desocupesco3cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 3 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco3cor5 = mean(aux))
+
+
+desocupesco4cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 4 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco4cor5 = mean(aux))
+
+
+desocupesco5cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 5 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco5cor5 = mean(aux))
+
+
+desocupesco6cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 6 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco6cor5 = mean(aux))
+
+
+desocupesco7cor5 <-  pnadc_df %>%
+  select(UF, Trimestre, V1028, VD4002, VD3004, V2010) %>%
+  dplyr::filter(VD4002 == 2 & VD3004 == 7 & V2010 == 5) %>%
+  group_by(UF,Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (desocupesco7cor5 = mean(aux))
+
+
 
 
 # 3. Pop. Economicamente Ativa por estado # 
