@@ -4,13 +4,6 @@
 #####                                                          #####
 ####################################################################
 
-# Pacotes necessarios
-install.packages("usethis")
-install.packages("PNADcIBGE")
-install.packages("tidyverse")
-install.packages("magrittr")
-
-
 # Chamando as bibliotecas
 library(PNADcIBGE)
 library(conflicted)
@@ -706,7 +699,6 @@ desocupesco7fem <-  pnadc_df %>%
   summarise (desocupesco7fem = mean(aux))
 
 
-
 ##########################################################
 #   Ocupacao e Desocupacao por Escolaridade e Raca    ##
 ##                                                      ## 
@@ -1052,8 +1044,6 @@ desocupesco7cor5 <-  pnadc_df %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (desocupesco7cor5 = mean(aux))
-
-
 
 
 # 3. Pop. Economicamente Ativa por estado # 
