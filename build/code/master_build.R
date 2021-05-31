@@ -98,11 +98,7 @@ populacao <- pnadc_df %>%
 write.csv(populacao, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/tmp/populacao", "012012", ".csv"))
 
 
-############################################################
-#                                                          #   
-##                VARIAVEIS DO MERCADO DE TRABALHO        ## 
-#                                                          #
-############################################################
+
 
 # 1. Forca de Trabalho por estado #
 workforce <- pnadc_df %>%
@@ -113,7 +109,26 @@ workforce <- pnadc_df %>%
   summarise (workforce = mean(aux))
 
 
-# 2. Ocupacao e Desocupacao  por estado # 
+# 2. Pop. Economicamente Ativa por estado # 
+
+PEA <- pnadc_df %>%
+  select(UF, Trimestre, Ano, V1028, VD4002) %>%
+  dplyr::filter(VD4002 == 1 |VD4002 == 2) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (PEA = mean(aux))
+
+# 3. Pop. em Ativa (>14 anos) por estado # 
+
+PIA <- pnadc_df %>%
+  select(UF, Trimestre, Ano, V1028, V2009) %>%
+  dplyr::filter(V2009 >= 14) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise (PIA = mean(aux))
+
+
+# 4. Ocupacao e Desocupacao  por estado # 
 ocup <- pnadc_df %>%
   select(UF, Trimestre, Ano, V1028, VD4002) %>%
   dplyr::filter(VD4002 == 1) %>%
@@ -1112,26 +1127,6 @@ desocupesco7cor5 <-  pnadc_df %>%
   mutate(aux = sum(V1028)) %>%
   summarise (desocupesco7cor5 = mean(aux))
 
-
-# 3. Pop. Economicamente Ativa por estado # 
-
-PEA <- pnadc_df %>%
-  select(UF, Trimestre, Ano, V1028, VD4002) %>%
-  dplyr::filter(VD4002 == 1 |VD4002 == 2) %>%
-  group_by(UF,Trimestre,Ano) %>%
-  mutate(aux = sum(V1028)) %>%
-  summarise (PEA = mean(aux))
-
-# 4. Pop. em Ativa (>14 anos) por estado # 
-
-PIA <- pnadc_df %>%
-  select(UF, Trimestre, Ano, V1028, V2009) %>%
-  dplyr::filter(V2009 >= 14) %>%
-  group_by(UF,Trimestre,Ano) %>%
-  mutate(aux = sum(V1028)) %>%
-  summarise (PIA = mean(aux))
-
-
 # 5. No. de informais por estado #
 
 informais <- pnadc_df %>%
@@ -1149,8 +1144,6 @@ formais <- pnadc_df %>%
   group_by(UF,Trimestre, Ano) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (formais = mean(aux))
-
-
 
 # 7. No. de desalentados por estado #
 
