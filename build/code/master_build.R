@@ -10,15 +10,80 @@ library(conflicted)
 library(tidyverse)
 library(magrittr)
 
+####################
+# Folder Path
+####################
+
+user <- Sys.info()[["user"]]
+message(sprintf("Current User: %s\n"))
+if (user == "rebec") {
+  ROOT <- "C:/Users/rebec/Documents/GitHub/Monografia"
+} else if (user == "f.cavalcanti") {
+  ROOT <- "C:/Users/Francisco/Dropbox"
+} else {
+  stop("Invalid user")
+}
+
+home_dir <- file.path(ROOT, "build")
+in_dir <- file.path(ROOT, "build", "input")
+out_dir <- file.path(ROOT, "build", "output")
+tmp_dir <- file.path(ROOT, "build", "tmp")
+code_dir <- file.path(ROOT, "build", "code")
+
+
 # Importacao dos dados e leitura da PNADc 
 help("get_pnadc")
+lista_ano <- c("PNADC_012012.txt",
+               "PNADC_022012.txt",
+               "PNADC_032012.txt",
+               "PNADC_042012.txt",
+               "PNADC_012013.txt",
+               "PNADC_022013.txt",
+               "PNADC_032013.txt",
+               "PNADC_042013.txt",
+               "PNADC_012014.txt",
+               "PNADC_022014.txt",
+               "PNADC_032014.txt",
+               "PNADC_042014.txt",
+               "PNADC_012015.txt",
+               "PNADC_022015.txt",
+               "PNADC_032015.txt",
+               "PNADC_042015.txt",
+               "PNADC_012016.txt",
+               "PNADC_022016.txt",
+               "PNADC_032016.txt",
+               "PNADC_042016.txt",
+               "PNADC_012017.txt",
+               "PNADC_022017.txt",
+               "PNADC_032017.txt",
+               "PNADC_042017.txt",
+               "PNADC_012018.txt",
+               "PNADC_022018.txt",
+               "PNADC_032018.txt",
+               "PNADC_042018.txt",
+               "PNADC_012019.txt",
+               "PNADC_022019.txt",
+               "PNADC_032019.txt",
+               "PNADC_042019.txt",
+               "PNADC_012020.txt",
+               "PNADC_022020.txt",
+               "PNADC_032020.txt",
+               "PNADC_042020.txt",
+               "PNADC_012021.txt"
+               )
 
-input_path <- file.path("C:/Users/rebec/Documents/GitHub/Monografia/build/input")
-setwd(input_path)
 
-lista_PNAD = list.files(pattern = "PNADC_012012.txt")
-chave_input = list.files(pattern = "input_PNADC_trimestral.sas")
-pnadc_df = read_pnadc(microdata=lista_PNAD, input_txt = chave_input)
+for (yr in lista_ano) {
+  
+  setwd(in_dir)
+  
+  lista_pnad <- list.files(pattern = yr)
+  
+  chave_input <- list.files(pattern = "input_PNADC_trimestral.sas")
+  
+  pnadc_df <- read_pnadc(microdata = lista_pnad, input_txt = chave_input)
+
+
 
 
 # Populacao por estado (UF) #
@@ -28,6 +93,9 @@ populacao <- pnadc_df %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (populacao = mean(aux))
+
+
+write.csv(populacao, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/tmp/populacao", "012012", ".csv"))
 
 
 ############################################################
@@ -58,7 +126,7 @@ desocup <- pnadc_df %>%
   dplyr::filter(VD4002 == 2) %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
-  summarise (desocups = mean(aux))
+  summarise (desocup = mean(aux))
 
 ##########################################################
 ##       Ocupacao e Desocupacao por Faixa Etaria        ##
@@ -286,7 +354,7 @@ ocupfem <-  pnadc_df %>%
 
 desocupmasc <- pnadc_df %>%
   select(UF, Trimestre, V1028, VD4002, V2007) %>%
-  dplyr::filter(VD4002 == 2 & VD2007 == 1) %>%
+  dplyr::filter(VD4002 == 2 & V2007 == 1) %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (desocupmasc = mean(aux))
@@ -410,7 +478,7 @@ ocupfemcor1 <-  pnadc_df %>%
 
 desocupmascor1 <- pnadc_df %>%
   select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
-  dplyr::filter(VD4002 == 2 & VD2007 == 1 & V2010 == 1) %>%
+  dplyr::filter(VD4002 == 2 & V2007 == 1 & V2010 == 1) %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (desocupmascor1 = mean(aux))
@@ -444,7 +512,7 @@ ocupfemcor2 <-  pnadc_df %>%
 
 desocupmascor2 <- pnadc_df %>%
   select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
-  dplyr::filter(VD4002 == 2 & VD2007 == 1 & V2010 == 2) %>%
+  dplyr::filter(VD4002 == 2 & V2007 == 1 & V2010 == 2) %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (desocupmascor2 = mean(aux))
@@ -478,7 +546,7 @@ ocupfemcor5 <-  pnadc_df %>%
 
 desocupmascor5 <- pnadc_df %>%
   select(UF, Trimestre, V1028, VD4002, V2007, V2010) %>%
-  dplyr::filter(VD4002 == 2 & VD2007 == 1 & V2010 == 5) %>%
+  dplyr::filter(VD4002 == 2 & V2007 == 1 & V2010 == 5) %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (desocupmascor5 = mean(aux))
@@ -597,7 +665,6 @@ ocupesco7fem <-  pnadc_df %>%
   summarise (ocupesco7fem = mean(aux))
 
 
-
 desocupesco1masc <-  pnadc_df %>%
   select(UF, Trimestre, V1028, VD4002, VD3004, V2007) %>%
   dplyr::filter(VD4002 == 2 & VD3004 == 1 & V2007 == 1) %>%
@@ -700,7 +767,7 @@ desocupesco7fem <-  pnadc_df %>%
 
 
 ##########################################################
-#   Ocupacao e Desocupacao por Escolaridade e Raca    ##
+#    Ocupacao e Desocupacao por Escolaridade e Raca      #
 ##                                                      ## 
 ##########################################################
 
@@ -1069,7 +1136,7 @@ PIA <- pnadc_df %>%
 
 informais <- pnadc_df %>%
   select(UF, Trimestre, V1028, VD4009, VD4012) %>%
-  dplyr::filter(VD4009 == 2 |VD4009 == 4| VD4009 == 6| (VD4009 == 8 & VD4012 == 2) | (VD4009 == 9 & VD4012 == 2) | VD4009 == 10) %>%
+  dplyr::filter(VD4009 == "02" |VD4009 == "04"| VD4009 == "06"| (VD4009 == "08" & VD4012 == 2) | (VD4009 == "09" & VD4012 == 2) | VD4009 == "10") %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (informais = mean(aux))
@@ -1078,10 +1145,12 @@ informais <- pnadc_df %>%
 
 formais <- pnadc_df %>%
   select(UF, Trimestre, V1028, VD4009, VD4012) %>%
-  dplyr::filter(VD4009 == 1 |VD4009 == 3| VD4009 == 5| VD4009 == 7|(VD4009 == 8 & VD4012 == 1) | (VD4009 == 9 & VD4012 == 2)) %>%
+  dplyr::filter(VD4009 == "01" |VD4009 == "03"| VD4009 == "05"| VD4009 == "07"|(VD4009 == "08" & VD4012 == 1) | (VD4009 == "09" & VD4012 == 1)) %>%
   group_by(UF,Trimestre) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (formais = mean(aux))
+
+
 
 # 7. No. de desalentados por estado #
 
@@ -1104,14 +1173,33 @@ desalentados <- pnadc_df %>%
 #                                                 #
 ###################################################
 
-nemnem <- pnadc_df %>%
-  select(UF, Trimestre, V1028, V2009, V3002, V4074, VD4001, VD4002, V4001, V4002) %>%
-  dplyr::filter(VD4002 == 2 &  VD4001 == 2 & V2009>=14 & V2009<=25 & VD3002 == 2 & V4001 ==2 & V4002 == 2) %>%
-  group_by(UF,Trimestre) %>%
-  mutate(aux = sum(V1028), aux2 = ifelse(.pnadc_df$V4074 == 6)) %>%
-  summarise (nemnem = mean(aux), teste =  mean(aux2))
+#nemnem <- pnadc_df %>%
+#  select(UF, Trimestre, V1028, V2009, V3002, V4074, VD4001, VD4002, V4001, V4002) %>%
+#  dplyr::filter(VD4002 == 2 &  VD4001 == 2 & V2009>=14 & V2009<=25 & V3002 == 2 & V4001 ==2 & V4002 == 2) %>%
+#  group_by(UF,Trimestre) %>%
+#  mutate(aux = sum(V1028), aux2 = ifelse(.pnadc_df$V4074 == 6)) %>%
+#  summarise (nemnem = mean(aux), teste =  mean(aux2))
 
-# testar o codigo acima
+
+
+basefinal <- populacao
+
+basefinal <- merge(basefinal, desalentados, by = c("UF", "Trimestre")) 
+basefinal <- merge(basefinal, desalentados, by = c("UF", "Trimestre")) 
+
+basefinal <- merge(basefinal, desalentados, by = c("UF", "Trimestre")) 
+
+basefinal <- merge(basefinal, desalentados, by = c("UF", "Trimestre")) 
+
+basefinal <- merge(basefinal, desalentados, by = c("UF", "Trimestre")) 
+
+
+write.csv(basefinal, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/ouput/basefinal", yr , ".csv"))
+
+
+}
+
+
 
 ####################################################
 #                                                  #
