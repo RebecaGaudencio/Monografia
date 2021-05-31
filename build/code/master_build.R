@@ -10,9 +10,9 @@ library(conflicted)
 library(tidyverse)
 library(magrittr)
 
-####################
-# Folder Path
-####################
+############################################################
+#                          Folder Path                     #
+############################################################
 
 user <- Sys.info()[["user"]]
 message(sprintf("Current User: %s\n"))
@@ -84,8 +84,6 @@ for (yr in lista_ano) {
   pnadc_df <- read_pnadc(microdata = lista_pnad, input_txt = chave_input)
 
 
-
-
 # Populacao por estado (UF) #
 
 populacao <- pnadc_df %>%
@@ -98,8 +96,6 @@ populacao <- pnadc_df %>%
 write.csv(populacao, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/tmp/populacao", "012012", ".csv"))
 
 
-
-
 # 1. Forca de Trabalho por estado #
 workforce <- pnadc_df %>%
   select(UF, Trimestre, Ano, V1028, VD4001) %>%
@@ -110,7 +106,6 @@ workforce <- pnadc_df %>%
 
 
 # 2. Pop. Economicamente Ativa por estado # 
-
 PEA <- pnadc_df %>%
   select(UF, Trimestre, Ano, V1028, VD4002) %>%
   dplyr::filter(VD4002 == 1 |VD4002 == 2) %>%
@@ -119,7 +114,6 @@ PEA <- pnadc_df %>%
   summarise (PEA = mean(aux))
 
 # 3. Pop. em Ativa (>14 anos) por estado # 
-
 PIA <- pnadc_df %>%
   select(UF, Trimestre, Ano, V1028, V2009) %>%
   dplyr::filter(V2009 >= 14) %>%
