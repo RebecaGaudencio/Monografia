@@ -1302,7 +1302,7 @@ basefinal <- merge(basefinal, desalentados, by = c("UF", "Trimestre","Ano"))
 
 
 
-write.csv(basefinal, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/ouput/Resultados", yr , ".csv"))
+write.csv(basefinal, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/output/Resultados", yr , ".csv"))
 
 
 }
