@@ -32,48 +32,43 @@ code_dir <- file.path(ROOT, "build", "code")
 
 
 # Importacao dos dados e leitura da PNADc 
-help("get_pnadc")
-
-lista_ano <- c("PNADC_012012.txt",
-               "PNADC_022012.txt")
-
-lista_ano <- c("PNADC_012012.txt",
-               "PNADC_022012.txt",
-               "PNADC_032012.txt",
-               "PNADC_042012.txt",
-               "PNADC_012013.txt",
-               "PNADC_022013.txt",
-               "PNADC_032013.txt",
-               "PNADC_042013.txt",
-               "PNADC_012014.txt",
-               "PNADC_022014.txt",
-               "PNADC_032014.txt",
-               "PNADC_042014.txt",
-               "PNADC_012015.txt",
-               "PNADC_022015.txt",
-               "PNADC_032015.txt",
-               "PNADC_042015.txt",
-               "PNADC_012016.txt",
-               "PNADC_022016.txt",
-               "PNADC_032016.txt",
-               "PNADC_042016.txt",
-               "PNADC_012017.txt",
-               "PNADC_022017.txt",
-               "PNADC_032017.txt",
-               "PNADC_042017.txt",
-               "PNADC_012018.txt",
-               "PNADC_022018.txt",
-               "PNADC_032018.txt",
-               "PNADC_042018.txt",
-               "PNADC_012019.txt",
-               "PNADC_022019.txt",
-               "PNADC_032019.txt",
-               "PNADC_042019.txt",
-               "PNADC_012020.txt",
-               "PNADC_022020.txt",
-               "PNADC_032020.txt",
-               "PNADC_042020.txt",
-               "PNADC_012021.txt"
+lista_ano <- c("PNADC_012012",
+               "PNADC_022012",
+               "PNADC_032012",
+               "PNADC_042012",
+               "PNADC_012013",
+               "PNADC_022013",
+               "PNADC_032013",
+               "PNADC_042013",
+               "PNADC_012014",
+               "PNADC_022014",
+               "PNADC_032014",
+               "PNADC_042014",
+               "PNADC_012015",
+               "PNADC_022015",
+               "PNADC_032015",
+               "PNADC_042015",
+               "PNADC_012016",
+               "PNADC_022016",
+               "PNADC_032016",
+               "PNADC_042016",
+               "PNADC_012017",
+               "PNADC_022017",
+               "PNADC_032017",
+               "PNADC_042017",
+               "PNADC_012018",
+               "PNADC_022018",
+               "PNADC_032018",
+               "PNADC_042018",
+               "PNADC_012019",
+               "PNADC_022019",
+               "PNADC_032019",
+               "PNADC_042019",
+               "PNADC_012020",
+               "PNADC_022020",
+               "PNADC_032020",
+               "PNADC_042020",
+               "PNADC_012021"
                )
 
 
@@ -1303,7 +1298,7 @@ basefinal <- merge(basefinal, desalentados, by = c("UF", "Trimestre","Ano"), all
 basefinal <- basefinal %>% mutate(year = yr)
 
 
-write.csv(basefinal, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/output/Resultados", yr , ".csv"))
+write.csv(basefinal, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/output/DadosBrutos", yr , ".csv"))
 
 }
 
