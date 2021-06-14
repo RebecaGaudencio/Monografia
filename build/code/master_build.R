@@ -1159,13 +1159,23 @@ desalentados <- pnadc_df %>%
 #                                                 #
 ###################################################
 
-#nemnem <- pnadc_df %>%
-#  select(UF, Trimestre, V1028, V2009, V3002, V4074, VD4001, VD4002, V4001, V4002) %>%
-#  dplyr::filter(VD4002 == 2 &  VD4001 == 2 & V2009>=14 & V2009<=25 & V3002 == 2 & V4001 ==2 & V4002 == 2) %>%
-#  group_by(UF,Trimestre) %>%
-#  mutate(aux = sum(V1028), aux2 = ifelse(.pnadc_df$V4074 == 6)) %>%
-#  summarise (nemnem = mean(aux), teste =  mean(aux2))
+item1 <- pnadc_df %>%
+  select(UF, Trimestre, Ano, V1028, V2009, V3002, V4074, V4074A, VD4001, VD4002, V4001, V4002) %>%
+  dplyr::filter(VD4002 == 2)
 
+item2 <- item1 %>%
+  dplyr::filter(V3002 != 1 | V4074 != 6 | V4074A != 8)
+
+item3 <- pnadc_df %>%
+  select(UF, Trimestre, Ano, V1028, V2009, V3002, V4074, V4074A, VD4001, VD4002, V4001, V4002) %>%
+  dplyr::filter(VD4001 == 2 & V3002 == 2)
+
+nemnem <- rbind(item2, item3)
+
+nemnem <- nemnem %>% dplyr:: filter(V2009 >=14 & V2009 <= 25) %>% 
+  group_by(UF, Trimestre, Ano) %>%
+  mutate(aux = sum (V1028)) %>%
+  summarise(nemnem = mean (aux))
 
 
 basefinal <- populacao
