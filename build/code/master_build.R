@@ -1305,6 +1305,7 @@ basefinal <- merge(basefinal, desocupesco7cor5, by = c("UF", "Trimestre","Ano"),
 basefinal <- merge(basefinal, informais, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, formais, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, desalentados, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, nemnem, by = c("UF","Trimestre", "Ano"), all = TRUE)
 basefinal <- basefinal %>% mutate(year = yr)
 
 
