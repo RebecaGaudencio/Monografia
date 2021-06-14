@@ -31,6 +31,11 @@ help("get_pnadc")
 lista_ano <- c("PNADC_012012",
                "PNADC_022012",
                "PNADC_032012",
+               "PNADC_042012")
+
+lista_ano <- c("PNADC_012012",
+               "PNADC_022012",
+               "PNADC_032012",
                "PNADC_042012",
                "PNADC_012013",
                "PNADC_022013",
