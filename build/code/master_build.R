@@ -1172,11 +1172,15 @@ item3 <- pnadc_df %>%
 
 nemnem <- rbind(item2, item3)
 
+# 8. No. de nem-nem por estado #
+
 nemnem <- nemnem %>% dplyr:: filter(V2009 >=14 & V2009 <= 25) %>% 
   group_by(UF, Trimestre, Ano) %>%
   mutate(aux = sum (V1028)) %>%
   summarise(nemnem = mean (aux))
 
+
+# Juncao de todas as variaveis num data frame unico
 
 basefinal <- populacao
 basefinal <- merge(basefinal, workforce, by = c("UF", "Trimestre","Ano"), all = TRUE) 
@@ -1308,6 +1312,8 @@ basefinal <- merge(basefinal, desalentados, by = c("UF", "Trimestre","Ano"), all
 basefinal <- merge(basefinal, nemnem, by = c("UF","Trimestre", "Ano"), all = TRUE)
 basefinal <- basefinal %>% mutate(year = yr)
 
+
+# Salvando data frame no excel
 
 write.csv(basefinal, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/output/DadosBrutos", yr , ".csv"))
 
