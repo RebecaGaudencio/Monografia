@@ -1318,14 +1318,3 @@ basefinal <- basefinal %>% mutate(year = yr)
 write.csv(basefinal, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/output/DadosBrutos", yr , ".csv"))
 
 }
-
-
-####################################################
-#                                                  #
-#                       TAXAS                      #
-#                                                  #
-####################################################
-
-# 1. Taxa de Desemprego
-
-Txdesemprego <- (desocupados[,3]/workforce[,3])
