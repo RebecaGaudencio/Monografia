@@ -1,8 +1,14 @@
-# Chamando as bibliotecas
+# ##########################################################
+##                   Chamando as bibliotecas              ##
+############################################################
+
 library(PNADcIBGE)
 library(conflicted)
 library(tidyverse)
 library(magrittr)
+library(haven)
+library(hrbrthemes)
+library(zoo)
 
 ############################################################
 #                          Folder Path                     #
