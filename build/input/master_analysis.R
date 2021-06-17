@@ -107,7 +107,23 @@ basededados <- basededados %>%
 basededados$tempo <- as.Date(as.yearqtr(basededados$tempo))
 
   
-basefinal <- merge(basefinal, workforce, by = c("UF", "Trimestre","Ano"), all = TRUE) 
-basefinal <- merge(basefinal, PEA, by = c("UF", "Trimestre","Ano"), all = TRUE)
+
+###############################################################
+#                   Criacao da Taxa de Desemprego             #
+###############################################################
+
+item1 <- basededados %>%
+  mutate(desocupado = sum(desocup),
+         ocupado = sum(ocup.x),
+         forcadetrabalho = sum(workforce),
+         taxadesemprego = (desocupado/forcadetrabalho)*100)
 
 
+ggplot(data = item1, aes(tempo, taxadesemprego)) +
+  geom_line(color = "blue") + 
+  geom_point(shape = 21, color = "black", fill = "#69b3a2", size = 2) +
+  geom_vline(xintercept = item1$tempo[33], linetype = 8) +
+  theme_bw() +
+  labs(x = "Ano",
+       y = "Em %",
+       title = "Evolução da Taxa de Desemprego no Brasil")
