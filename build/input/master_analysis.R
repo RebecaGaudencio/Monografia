@@ -24,6 +24,7 @@ if (user == "rebec") {
   stop("Invalid user")
 }
 
+
 home_dir <- file.path(ROOT, "analysis")
 in_dir <- file.path(ROOT, "build", "output")
 out_dir <- file.path(ROOT, "analysis", "output")
@@ -80,13 +81,32 @@ lista_ano <- c("PNADC_012012",
 
 basededados <- data.frame( UF = character(),Trimestre = character(),Ano = character())
 
+#################################################################
+##                 Loop p/ ler PNADCs em .csv                  ##
+#################################################################
 
 for (xx in lista_ano) {
+  setwd(in_dir)
   db1 <- read.csv(paste0(in_dir, "/DadosBrutos", xx, ".csv"))
   basededados <- rbind(basededados, db1)
 }
 
+#################################################################
+#                    Ajustes na base de dados                   #
+#################################################################
 
+basededados <- basededados %>%
+  mutate(time = paste0("0",year))
+
+basededados <- basededados %>%
+  mutate(time = paste0("0",year),
+         aa = substr(basededados$time, 1, 2),
+         bb = substr(basededados$time, 3, 6),
+         tempo = paste0(bb, "-", aa))
+
+basededados$tempo <- as.Date(as.yearqtr(basededados$tempo))
+
+  
 basefinal <- merge(basefinal, workforce, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PEA, by = c("UF", "Trimestre","Ano"), all = TRUE)
 
