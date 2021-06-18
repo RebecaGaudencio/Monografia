@@ -109,17 +109,15 @@ basededados$Tempo <- as.yearqtr(basededados$Tempo)
 #                   Criacao da Taxa de Desemprego             #
 ###############################################################
 
+
 item1 <- basededados %>%
-  mutate(desocupado = sum(desocup),
-         ocupado = sum(ocup.x),
-         forcadetrabalho = sum(workforce),
-         taxadesemprego = (desocupado/forcadetrabalho)*100)
+  mutate(taxadesemprego = (desocup/workforce)*100)
 
 
 ggplot(data = item1, aes(Tempo, taxadesemprego)) +
   geom_line(color = "blue") + 
   geom_point(shape = 21, color = "black", fill = "#69b3a2", size = 2) +
-  geom_vline(xintercept = item1$tempo[33], linetype = 8) +
+  geom_vline(xintercept = item1$Tempo[33], linetype = 8) +
   theme_bw() +
   labs(x = "Ano",
        y = "Em %",
