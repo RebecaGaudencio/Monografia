@@ -116,9 +116,10 @@ item1 <- basededados %>%
 
 ggplot(data = item1, aes(Tempo, taxadesemprego)) +
   geom_line(color = "blue") + 
-  geom_point(shape = 21, color = "black", fill = "#69b3a2", size = 2) +
-  geom_vline(xintercept = item1$Tempo[33], linetype = 8) +
+  geom_point(shape = 21, color = "black", fill = "#69b3a2", size = 3) +
+  geom_vline(xintercept = item1$Tempo[865], linetype = 8) +
   theme_bw() +
-  labs(x = "Ano",
+  labs(x = "Trimestre",
        y = "Em %",
        title = "Evolução da Taxa de Desemprego no Brasil")
+
