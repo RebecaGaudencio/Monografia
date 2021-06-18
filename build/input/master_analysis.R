@@ -33,8 +33,6 @@ code_dir <- file.path(ROOT, "analysis", "code")
 
 
 # Importacao dos dados e leitura da PNADc 
-help("get_pnadc")
-
 lista_ano <- c("PNADC_012012",
                "PNADC_022012",
                "PNADC_032012",
@@ -96,15 +94,15 @@ for (xx in lista_ano) {
 #################################################################
 
 basededados <- basededados %>%
-  mutate(time = paste0("0",year))
+  mutate(year = substr(basededados$year, 7,12))
 
 basededados <- basededados %>%
-  mutate(time = paste0("0",year),
-         aa = substr(basededados$time, 1, 2),
-         bb = substr(basededados$time, 3, 6),
-         tempo = paste0(bb, "-", aa))
+  mutate(aa = substr(basededados$year, 1, 2),
+         bb = substr(basededados$year, 3, 6),
+         Tempo = paste0(bb,"-",aa))
 
-basededados$tempo <- as.Date(as.yearqtr(basededados$tempo))
+
+basededados$Tempo <- as.Date(as.yearqtr(basededados$Tempo))
 
   
 
@@ -119,7 +117,7 @@ item1 <- basededados %>%
          taxadesemprego = (desocupado/forcadetrabalho)*100)
 
 
-ggplot(data = item1, aes(tempo, taxadesemprego)) +
+ggplot(data = item1, aes(Tempo, taxadesemprego)) +
   geom_line(color = "blue") + 
   geom_point(shape = 21, color = "black", fill = "#69b3a2", size = 2) +
   geom_vline(xintercept = item1$tempo[33], linetype = 8) +
