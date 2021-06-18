@@ -102,9 +102,8 @@ basededados <- basededados %>%
          Tempo = paste0(bb,"-",aa))
 
 
-basededados$Tempo <- as.Date(as.yearqtr(basededados$Tempo))
+basededados$Tempo <- as.yearqtr(basededados$Tempo)
 
-  
 
 ###############################################################
 #                   Criacao da Taxa de Desemprego             #
