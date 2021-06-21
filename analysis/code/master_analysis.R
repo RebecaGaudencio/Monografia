@@ -116,10 +116,6 @@ item1 <- basededados %>%
          taxadesemprego = (aux1/aux2)*100) %>%
   summarise(taxadesemprego = mean(taxadesemprego))
 
-
-colnames(item2)[2] <- "taxadedesemprego"
-colnames(item2)[1] <- "periodo"
-
 ggplot(data = item1, aes(Tempo, taxadesemprego)) +
   geom_line(color = "gray20") + 
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
@@ -134,13 +130,33 @@ ggplot(data = item1, aes(Tempo, taxadesemprego)) +
 #                   Desempregados por Raça                 #
 ############################################################
 
+item1 <- basededados %>%
+  group_by(Tempo) %>%
+  mutate(aux1 = sum(desocup), aux2 = sum(workforce),
+         taxadesemprego = (aux1/aux2)*100) %>%
+  summarise(taxadesemprego = mean(taxadesemprego))
+
+item2 <- 
+  
+  basededados[is.na(basededados)] <- 0 
 
 item1 <- basededados %>%
-  mutate(taxadedesempregobrancos = (desocupcor1/ocupcor1)*100,
-         taxadedesempregonegros = (desocupcor2/ocupcor2)*100,
-         taxadedesempregoamarelos = (desocupcor3/ocupcor3)*100,
-         taxadedesempregopardos = (desocupcor4/ocupcor4)*100,
-         taxadedesempregoindios = (desocupcor5/ocupcor5)*100)
+    group_by(Tempo) %>%
+    mutate(aux1 = sum(desocupcor1), aux2 = sum(ocupcor1), 
+           aux3 = sum(desocupcor2), aux4 = sum(ocupcor2),
+           aux5 = sum(desocupcor3), aux6 = sum(ocupcor3),
+           aux7 = sum(desocupcor4), aux8 = sum(ocupcor4),
+           aux9 = sum(desocupcor5), aux10 = sum(ocupcor5),
+         taxadedesempregobrancos   = (aux1/(aux1+aux2))*100,
+         taxadedesempregonegros = (aux3/(aux3+aux4))*100,
+         taxadedesempregoamarelos = (aux5/(aux5+aux6))*100,
+         taxadedesempregopardos = (aux7/(aux7+aux8))*100,
+         taxadedesempregoindios = (aux9/(aux9+aux10))*100) %>%
+  summarise(taxadedesempregobrancos = mean(taxadedesempregobrancos),
+            taxadedesempregonegros = mean(taxadedesempregonegros),
+            taxadedesempregoamarelos = mean(taxadedesempregoamarelos),
+            taxadedesempregopardos = mean(taxadedesempregopardos),
+            taxadedesempregoindios = mean(taxadedesempregoindios))
 
 
 ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
