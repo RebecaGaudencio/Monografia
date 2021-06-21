@@ -160,3 +160,34 @@ ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
        y = "Em %",
        title = "Evolução do Desemprego por Raça") +
   theme(legend.position = 'bottom')
+
+
+############################################################
+#               Desempregados por Escolaridade             #
+############################################################
+
+
+item1 <- basededados %>%
+  mutate(taxadedesempregoesco1 = (desocupesco1/ocupesco1)*100,
+         taxadedesempregoesco2 = (desocupesco2/ocupesco2)*100,
+         taxadedesempregoesco3 = (desocupesco3/ocupesco3)*100,
+         taxadedesempregoesco4 = (desocupesco4/ocupesco4)*100,
+         taxadedesempregoesco5 = (desocupesco5/ocupesco5)*100,
+         taxadedesempregoesco6 = (desocupesco5/ocupesco5)*100,
+         taxadedesempregoesco7 = (desocupesco5/ocupesco5)*100)
+
+
+ggplot(item1, aes(x = Tempo, y = taxadedesempregoesco1)) +
+  geom_line(aes(col = "Sem Instrução"), size = 1) +
+  geom_line(aes(y = taxadedesempregoesco2  , col = "Fundamental Incompleto"), size = 1) +
+  geom_line(aes(y = taxadedesempregoesco3, col = "Fundamental Completo"), size = 1) +
+  geom_line(aes(y = taxadedesempregoesco4, col = "Medio Incompleto"), size = 1) +
+  geom_line(aes(y = taxadedesempregoesco5, col = "Medio Completo"), size = 1) +
+  geom_line(aes(y = taxadedesempregoesco6, col = "Superior Incompleto"), size = 1) +
+  geom_line(aes(y = taxadedesempregoesco7, col = "Superior Completo"), size = 1) +
+    geom_vline(xintercept = item1$Tempo[865], linetype = 8) +
+  theme_bw() +
+  labs(x = "Trimestre",
+       y = "Em %",
+       title = "Evolução do Desemprego por Escolaridade") +
+  theme(legend.position = 'bottom')
