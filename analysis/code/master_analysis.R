@@ -111,24 +111,19 @@ basededados$Tempo <- as.yearqtr(basededados$Tempo)
 
 
 item1 <- basededados %>%
-  mutate(taxadesemprego = (desocup/workforce)*100)
+  group_by(Tempo) %>%
+  mutate(aux1 = sum(desocup), aux2 = sum(workforce),
+         taxadesemprego = (aux1/aux2)*100) %>%
+  summarise(taxadesemprego = mean(taxadesemprego))
 
-
-item2 <- item1 %>%
-  group_by(Tempo, workforce) %>%
-  summarise(taxadesemprego)
-
-item2 <- aggregate(item2$taxadesemprego | item2$workforce, 
-            by = list(item2$Tempo),
-            FUN = sum) 
 
 colnames(item2)[2] <- "taxadedesemprego"
 colnames(item2)[1] <- "periodo"
 
-ggplot(data = item2, aes(periodo, taxadedesemprego)) +
+ggplot(data = item1, aes(Tempo, taxadesemprego)) +
   geom_line(color = "gray20") + 
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
-  geom_vline(xintercept = item1$Tempo[865], linetype = 8) +
+  geom_vline(xintercept = item1$Tempo[33], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
        y = "Em %",
