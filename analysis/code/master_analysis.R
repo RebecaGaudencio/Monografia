@@ -316,11 +316,15 @@ item1 <- basededados %>%
 
 windowsFonts(Times=windowsFont("Times New Roman"))
 
-ggplot(item1, aes(x = Tempo, y = taxadedesempregonordeste)) +
-  geom_line(aes(col = "Nordeste"), color = "gray69", size = 1.2) +
+ggplot(item1, aes(x = Tempo)) +
+  geom_line(aes(y = taxadedesempregonordeste, col = "Nordeste"), color = "gray69", size = 1.2) +
   geom_line(aes(y = taxadedesempregoesco4 , col = "Médio Incompleto"), color = "tan4", size = 1.2) +
   geom_line(aes(y = taxadedesempregonegros, col = "Negros"), color = "black", size = 1.2) +
-  geom_line(aes(y = taxadedesempregoadol, col = "Adolescentes"), color = "khaki4", size = 1.2) + 
+  geom_line(aes(y = taxadedesempregoadol, col = "Adolescentes"), color = "khaki4", size = 1.2) +
+  geom_point(aes(y = taxadedesempregonordeste, col = "Nordeste"), color = "gray69", shape = 18, size = 3 ) +
+  geom_point(aes(y = taxadedesempregoesco4 , col = "Médio Incompleto"), color = "tan4", shape = 16 , size = 3) +
+  geom_point(aes(y = taxadedesempregonegros, col = "Negros"), color = "black", shape = 15, size = 3) +
+  geom_point(aes(y = taxadedesempregoadol, col = "Adolescentes"), color = "khaki4", shape = 17, size = 3) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
@@ -329,7 +333,7 @@ ggplot(item1, aes(x = Tempo, y = taxadedesempregonordeste)) +
        subtitle = "Nordeste, Pessoas com Ensino Médio Incompleto, Negros e Adolescentes - Brasil (2012.1 - 2021.1)") +
   theme(legend.position = 'bottom') +
   theme(plot.title = element_text(family = "Times"),
-        plot.subtitle = element_text(family = "Times"),)
+        plot.subtitle = element_text(family = "Times"))
 
 
 #######################################################
