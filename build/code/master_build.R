@@ -137,6 +137,83 @@ desocup <- pnadc_df %>%
   summarise (desocup = mean(aux))
 
 ##########################################################
+##                                                      ##
+#           Ocupacao e Desocupacao por Regiao            #  
+##                                                      ## 
+##########################################################
+
+ocupnorte <- pnadc_df %>%
+  select(UF, V1028, Trimestre, Ano, VD4002) %>%
+  dplyr:: filter(VD4002 == "1" & (UF == "11" | UF == "12" | UF == "13"| UF == "14"| UF == "15"| UF == "16"| UF == "17")) %>%
+  group_by(Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(ocupnorte = mean(aux))
+
+ocupnordeste <- pnadc_df %>%
+  select(UF, V1028, Trimestre, Ano, VD4002) %>%
+  dplyr::filter(VD4002 == "1" & (UF == "21" | UF == "22" | UF == "23"| UF == "24"| UF == "25"| UF == "26"| UF == "27"| UF == "28"| UF == "29")) %>%
+  group_by(Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(ocupnordeste = mean(aux))
+
+ocupsudeste <- pnadc_df %>%
+  select(UF, V1028, Trimestre, Ano, VD4002) %>%
+  dplyr::filter(VD4002 == "1" & (UF == "31" | UF == "32" | UF == "33"| UF == "34"| UF == "35")) %>%
+  group_by(Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(ocupsudeste = mean(aux))
+
+ocupsul <- pnadc_df %>%
+  select(UF, V1028, Trimestre, Ano, VD4002) %>%
+  dplyr ::filter(VD4002 == "1" & (UF == "41" | UF == "42" | UF == "43")) %>%
+  group_by(Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(ocupsul = mean(aux))
+
+ocupcentrooeste <- pnadc_df %>%
+  select(UF, V1028, Trimestre, Ano, VD4002) %>%
+  dplyr::filter(VD4002 == "1" & (UF == "50" | UF == "51" | UF == "52"| UF == "53")) %>%
+  group_by(Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(ocupcentrooeste = mean(aux))
+
+
+desocupnorte <- pnadc_df %>%
+  select(UF, V1028, Trimestre, Ano, VD4002) %>%
+  dplyr:: filter(VD4002 == "2" & (UF == "11" | UF == "12" | UF == "13"| UF == "14"| UF == "15"| UF == "16"| UF == "17")) %>%
+  group_by(Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(desocupnorte = mean(aux))
+
+desocupnordeste <- pnadc_df %>%
+  select(UF, V1028, Trimestre, Ano, VD4002) %>%
+  dplyr::filter(VD4002 == "2" & (UF == "21" | UF == "22" | UF == "23"| UF == "24"| UF == "25"| UF == "26"| UF == "27"| UF == "28"| UF == "29")) %>%
+  group_by(Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(desocupnordeste = mean(aux))
+
+desocupsudeste <- pnadc_df %>%
+  select(UF, V1028, Trimestre, Ano, VD4002) %>%
+  dplyr::filter(VD4002 == "2" & (UF == "31" | UF == "32" | UF == "33"| UF == "34"| UF == "35")) %>%
+  group_by(Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(desocupsudeste = mean(aux))
+
+desocupsul <- pnadc_df %>%
+  select(UF, V1028, Trimestre, Ano, VD4002) %>%
+  dplyr ::filter(VD4002 == "2" & (UF == "41" | UF == "42" | UF == "43")) %>%
+  group_by(Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(desocupsul = mean(aux))
+
+desocupcentrooeste <- pnadc_df %>%
+  select(UF, V1028, Trimestre, Ano, VD4002) %>%
+  dplyr::filter(VD4002 == "2" & (UF == "50" | UF == "51" | UF == "52"| UF == "53")) %>%
+  group_by(Trimestre) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(desocupcentrooeste = mean(aux))
+
+##########################################################
 ##       Ocupacao e Desocupacao por Faixa Etaria        ##
 #                                                        #
 #        1. Adolescentes --> 14 a 19 anos                #
@@ -1188,6 +1265,16 @@ basefinal <- merge(basefinal, PEA, by = c("UF", "Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, PIA, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, ocup, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, desocup, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, ocupnorte, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, ocupnordeste, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, ocupsudeste, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, ocupsul, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, ocupcentrooeste, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, desocupnorte, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, desocupnordeste, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, desocupsudeste, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, desocupsul, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, desocupcentrooeste, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, ocup1, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, ocup2, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, ocup3, by = c("UF", "Trimestre","Ano"), all = TRUE) 
@@ -1201,6 +1288,7 @@ basefinal <- merge(basefinal, ocupesco1, by = c("UF", "Trimestre","Ano"), all = 
 basefinal <- merge(basefinal, ocupesco2, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, ocupesco3, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, ocupesco4, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, ocupesco5, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, ocupesco6, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, ocupesco7, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, desocupesco1, by = c("UF", "Trimestre","Ano"), all = TRUE) 
