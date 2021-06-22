@@ -151,6 +151,7 @@ item1 <- basededados %>%
             taxadedesempregopardos = mean(taxadedesempregopardos),
             taxadedesempregoindios = mean(taxadedesempregoindios))
 
+windowsFonts(Times=windowsFont("Times New Roman"))
 
 ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
   geom_line(aes(col = "Brancos"), color = "gray69", size = 1.2) +
@@ -167,9 +168,8 @@ ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
   theme(plot.title = element_text(family = "Times"))
 
 
-
 ############################################################
-#               Desempregados por Escolaridade             #
+#         Taxa de Desemprego por Escolaridade              #
 ############################################################
 
 item1 <- basededados %>%
@@ -197,9 +197,8 @@ item1 <- basededados %>%
             taxadedesempregoesco7 = mean(taxadedesempregoesco7))
 
 
-
 ggplot(item1, aes(x = Tempo, y = taxadedesempregoesco1)) +
-  geom_line(aes(col = "Sem Instrução"), size = 1) +
+  geom_line(aes(col = "Sem Instrução"), size = 1.1) +
   geom_line(aes(y = taxadedesempregoesco2  , col = "Fundamental Incompleto"), size = 1.1) +
   geom_line(aes(y = taxadedesempregoesco3, col = "Fundamental Completo"), size = 1.1) +
   geom_line(aes(y = taxadedesempregoesco4, col = "Medio Incompleto"), size = 1.1) +
@@ -214,4 +213,25 @@ ggplot(item1, aes(x = Tempo, y = taxadedesempregoesco1)) +
   theme(legend.position = 'bottom')+
   theme(plot.title = element_text(family = "Times"))
 
+
+#######################################################
+#                   Taxa de Informalidade             #
+#######################################################
+
+
+item1 <- basededados %>%
+  group_by(Tempo) %>%
+  mutate(aux1 = sum(informais), aux2 = sum(ocup.x),
+         taxadeinformalidade = (aux1/aux2)*100) %>%
+  summarise(taxadeinformalidade = mean(taxadeinformalidade))
+
+ggplot(data = item1, aes(Tempo, taxadeinformalidade)) +
+  geom_line(color = "gray20") + 
+  geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  theme_bw() +
+  labs(x = "Trimestre",
+       y = "Em %",
+       title = "Evolução da Taxa de Informalidade no Brasil") +
+  theme(plot.title = element_text(family = "Times"))
 
