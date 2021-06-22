@@ -91,10 +91,6 @@ populacao <- pnadc_df %>%
   mutate(aux = sum(V1028)) %>%
   summarise (populacao = mean(aux))
 
-
-write.csv(populacao, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/tmp/populacao", "012012", ".csv"))
-
-
 # 1. Forca de Trabalho por estado #
 workforce <- pnadc_df %>%
   select(UF, Trimestre, Ano, V1028, VD4001) %>%
@@ -1251,7 +1247,16 @@ nemnem <- rbind(item2, item3)
 
 # 8. No. de nem-nem por estado #
 
-nemnem <- nemnem %>% dplyr:: filter(V2009 >=14 & V2009 <= 25) %>% 
+jovens <- pnadc_df %>%
+  select(UF, Trimestre, Ano, V1028, V2009) %>%
+  dplyr:: filter(V2009 >=14 & V2009 <= 25) %>%
+  group_by(UF,Trimestre, Ano) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(jovens = mean(aux))
+
+
+nemnem <- nemnem %>% 
+  dplyr:: filter(V2009 >=14 & V2009 <= 25) %>% 
   group_by(UF, Trimestre, Ano) %>%
   mutate(aux = sum (V1028)) %>%
   summarise(nemnem = mean (aux))
@@ -1397,6 +1402,7 @@ basefinal <- merge(basefinal, desocupesco7cor5, by = c("UF", "Trimestre","Ano"),
 basefinal <- merge(basefinal, informais, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, formais, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, desalentados, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, jovens, by = c("UF","Trimestre", "Ano"), all = TRUE)
 basefinal <- merge(basefinal, nemnem, by = c("UF","Trimestre", "Ano"), all = TRUE)
 basefinal <- basefinal %>% mutate(year = yr)
 
