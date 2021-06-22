@@ -116,6 +116,8 @@ item1 <- basededados %>%
          taxadesemprego = (aux1/aux2)*100) %>%
   summarise(taxadesemprego = mean(taxadesemprego))
 
+windowsFonts(Times=windowsFont("Times New Roman"))
+
 ggplot(data = item1, aes(Tempo, taxadesemprego)) +
   geom_line(color = "gray20") + 
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
@@ -251,11 +253,6 @@ ggplot(item1, aes(x = Tempo, y = taxadedesempregoadol)) +
   theme(plot.title = element_text(family = "Times"))
 
 
-
-
-
-
-
 ############################################################
 #             Taxa de Desemprego por Região                #
 ############################################################
@@ -298,6 +295,44 @@ ggplot(item1, aes(x = Tempo, y = taxadedesempregonorte)) +
 
 
 #######################################################
+#               Compilado de Desemprego               #
+#######################################################
+
+item1 <- basededados %>%
+  group_by(Tempo) %>%
+  mutate(aux1 = sum(desocupnordeste), aux2 = sum(ocupnordeste),
+         aux3 = sum(desocupesco4), aux4 = sum(ocupesco4),
+         aux5 = sum(desocupcor2), aux6 = sum(ocupcor2),
+         aux7 = sum(desocup1), aux8 = sum(ocup1),
+         taxadedesempregonordeste = (aux1/(aux1+aux2))*100,
+         taxadedesempregoesco4 = (aux3/(aux3+aux4))*100,
+         taxadedesempregonegros = (aux5/(aux5+aux6))*100,
+         taxadedesempregoadol   = (aux7/(aux7+aux8))*100) %>%
+  summarise(taxadedesempregonordeste = mean(taxadedesempregonordeste),
+            taxadedesempregoesco4 = mean(taxadedesempregoesco4),
+            taxadedesempregonegros = mean(taxadedesempregonegros),
+            taxadedesempregoadol = mean(taxadedesempregoadol))
+
+
+windowsFonts(Times=windowsFont("Times New Roman"))
+
+ggplot(item1, aes(x = Tempo, y = taxadedesempregonordeste)) +
+  geom_line(aes(col = "Nordeste"), color = "gray69", size = 1.2) +
+  geom_line(aes(y = taxadedesempregoesco4 , col = "Médio Incompleto"), color = "tan4", size = 1.2) +
+  geom_line(aes(y = taxadedesempregonegros, col = "Negros"), color = "black", size = 1.2) +
+  geom_line(aes(y = taxadedesempregoadol, col = "Adolescentes"), color = "khaki4", size = 1.2) + 
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  theme_bw() +
+  labs(x = "Trimestre",
+       y = "Em %",
+       title = "Evolução do Desemprego" ,
+       subtitle = "Nordeste, Pessoas com Ensino Médio Incompleto, Negros e Adolescentes - Brasil (2012.1 - 2021.1)") +
+  theme(legend.position = 'bottom') +
+  theme(plot.title = element_text(family = "Times"),
+        plot.subtitle = element_text(family = "Times"),)
+
+
+#######################################################
 #                   Taxa de Informalidade             #
 #######################################################
 
@@ -323,11 +358,11 @@ ggplot(data = item1, aes(Tempo, taxadeinformalidade)) +
 #               Evolução dos Nem-nens                 #
 #######################################################
 
-#item1 <- basededados %>%
-#  group_by(Tempo) %>%
-#  mutate(aux1 = sum(nemnem), aux2 = sum(jovens)
-#         taxanemnem = (aux1/aux2)*100) %>%
-#  summarise(taxanemnem = mean(taxanemnem))
+item1 <- basededados %>%
+  group_by(Tempo) %>%
+  mutate(aux1 = sum(nemnem), aux2 = sum(jovens),
+         taxanemnem = (aux1/aux2)*100) %>%
+  summarise(taxanemnem = mean(taxanemnem))
 
 ggplot(data = item1, aes(Tempo, taxanemnem)) +
   geom_line(color = "gray20") + 
