@@ -156,9 +156,9 @@ item1 <- basededados %>%
 windowsFonts(Times=windowsFont("Times New Roman"))
 
 ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
-  geom_line(aes(col = "Brancos"), color = "gray69", size = 1.2) +
+  geom_line(aes(col = "Brancos"), color = "tan4", size = 1.2) +
   geom_line(aes(y = taxadedesempregonegros , col = "Negros"), color = "black", size = 1.2) +
-  geom_line(aes(y = taxadedesempregoamarelos, col = "Amarelos"), color = "tan4", size = 1.2) +
+  geom_line(aes(y = taxadedesempregoamarelos, col = "Amarelos"), color = "gray69", size = 1.2) +
   geom_line(aes(y = taxadedesempregopardos, col = "Pardos"), color = "khaki4", size = 1.2) +
   geom_line(aes(y = taxadedesempregoindios, col = "Indígenas"), color = "bisque3", size = 1.2) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
@@ -200,13 +200,13 @@ item1 <- basededados %>%
 
 
 ggplot(item1, aes(x = Tempo, y = taxadedesempregoesco1)) +
-  geom_line(aes(col = "Sem Instrução"), size = 1.1) +
-  geom_line(aes(y = taxadedesempregoesco2  , col = "Fundamental Incompleto"), size = 1.1) +
-  geom_line(aes(y = taxadedesempregoesco3, col = "Fundamental Completo"), size = 1.1) +
-  geom_line(aes(y = taxadedesempregoesco4, col = "Medio Incompleto"), size = 1.1) +
-  geom_line(aes(y = taxadedesempregoesco5, col = "Medio Completo"), size = 1.1) +
-  geom_line(aes(y = taxadedesempregoesco6, col = "Superior Incompleto"), size = 1.1) +
-  geom_line(aes(y = taxadedesempregoesco7, col = "Superior Completo"), size = 1.1) +
+  geom_line(aes(col = "Sem Instrução"), color = "darkslategrey", size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco2  , col = "Fundamental Incompleto"), color = "tan4", size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco3, col = "Fundamental Completo"), color = "black", size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco4, col = "Medio Incompleto"), color = "skyblue4", size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco5, col = "Medio Completo"), color = "khaki4", size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco6, col = "Superior Incompleto"), color = "gray69", size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco7, col = "Superior Completo"), color = "lightcyan4", size = 1.1) +
     geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
