@@ -156,9 +156,9 @@ windowsFonts(Times=windowsFont("Times New Roman"))
 ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
   geom_line(aes(col = "Brancos"), color = "gray69", size = 1.2) +
   geom_line(aes(y = taxadedesempregonegros , col = "Negros"), color = "black", size = 1.2) +
-  geom_line(aes(y = taxadedesempregoamarelos, col = "Amarelos"), color = "lightyellow4", size = 1.2) +
-  geom_line(aes(y = taxadedesempregopardos, col = "Pardos"), color = "orange", size = 1.2) +
-  geom_line(aes(y = taxadedesempregoindios, col = "Indígenas"),color = "indianred1", size = 1.2) +
+  geom_line(aes(y = taxadedesempregoamarelos, col = "Amarelos"), color = "tan4", size = 1.2) +
+  geom_line(aes(y = taxadedesempregopardos, col = "Pardos"), color = "khaki4", size = 1.2) +
+  geom_line(aes(y = taxadedesempregoindios, col = "Indígenas"), color = "bisque3", size = 1.2) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
@@ -214,26 +214,46 @@ ggplot(item1, aes(x = Tempo, y = taxadedesempregoesco1)) +
   theme(plot.title = element_text(family = "Times"))
 
 
-#######################################################
-#                   Taxa de Informalidade             #
-#######################################################
+############################################################
+#          Taxa de Desemprego por Faixa Etaria             #
+############################################################
 
+basededados[is.na(basededados)] <- 0 
 
 item1 <- basededados %>%
   group_by(Tempo) %>%
-  mutate(aux1 = sum(informais), aux2 = sum(ocup.x),
-         taxadeinformalidade = (aux1/aux2)*100) %>%
-  summarise(taxadeinformalidade = mean(taxadeinformalidade))
+  mutate(aux1 = sum(desocup1), aux2 = sum(ocup1), 
+         aux3 = sum(desocup2), aux4 = sum(ocup2),
+         aux5 = sum(desocup3), aux6 = sum(ocup3),
+         aux7 = sum(desocup4), aux8 = sum(ocup4),
+         taxadedesempregoadol   = (aux1/(aux1+aux2))*100,
+         taxadedesempregojovens = (aux3/(aux3+aux4))*100,
+         taxadedesempregoadultos = (aux5/(aux5+aux6))*100,
+         taxadedesempregoidosos = (aux7/(aux7+aux8))*100) %>%
+  summarise(taxadedesempregoadol = mean(taxadedesempregoadol),
+            taxadedesempregojovens = mean(taxadedesempregojovens),
+            taxadedesempregoadultos = mean(taxadedesempregoadultos),
+            taxadedesempregoidosos = mean(taxadedesempregoidosos))
 
-ggplot(data = item1, aes(Tempo, taxadeinformalidade)) +
-  geom_line(color = "gray20") + 
-  geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
+windowsFonts(Times=windowsFont("Times New Roman"))
+
+ggplot(item1, aes(x = Tempo, y = taxadedesempregoadol)) +
+  geom_line(aes(col = "Adolescentes"), color = "gray69", size = 1.2) +
+  geom_line(aes(y = taxadedesempregojovens , col = "Jovens"), color = "black", size = 1.2) +
+  geom_line(aes(y = taxadedesempregoadultos, col = "Adultos"), color = "tan4", size = 1.2) +
+  geom_line(aes(y = taxadedesempregoidosos, col = "Idosos"), color = "khaki4", size = 1.2) + 
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
        y = "Em %",
-       title = "Evolução da Taxa de Informalidade no Brasil") +
+       title = "Evolução do Desemprego por Faixa Etária") +
+  theme(legend.position = 'bottom') +
   theme(plot.title = element_text(family = "Times"))
+
+
+
+
+
 
 
 ############################################################
@@ -275,4 +295,48 @@ ggplot(item1, aes(x = Tempo, y = taxadedesempregonorte)) +
        title = "Evolução da Taxa de Desemprego por Região") +
   theme(legend.position = 'bottom') +
   theme(plot.title = element_text(family = "Times"))
+
+
+#######################################################
+#                   Taxa de Informalidade             #
+#######################################################
+
+
+item1 <- basededados %>%
+  group_by(Tempo) %>%
+  mutate(aux1 = sum(informais), aux2 = sum(ocup.x),
+         taxadeinformalidade = (aux1/aux2)*100) %>%
+  summarise(taxadeinformalidade = mean(taxadeinformalidade))
+
+ggplot(data = item1, aes(Tempo, taxadeinformalidade)) +
+  geom_line(color = "gray20") + 
+  geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  theme_bw() +
+  labs(x = "Trimestre",
+       y = "Em %",
+       title = "Evolução da Taxa de Informalidade no Brasil") +
+  theme(plot.title = element_text(family = "Times"))
+
+
+#######################################################
+#               Evolução dos Nem-nens                 #
+#######################################################
+
+#item1 <- basededados %>%
+#  group_by(Tempo) %>%
+#  mutate(aux1 = sum(nemnem), aux2 = sum(jovens)
+#         taxanemnem = (aux1/aux2)*100) %>%
+#  summarise(taxanemnem = mean(taxanemnem))
+
+ggplot(data = item1, aes(Tempo, taxanemnem)) +
+  geom_line(color = "gray20") + 
+  geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  theme_bw() +
+  labs(x = "Trimestre",
+       y = "Em %",
+       title = "Evolução do Nº de Nem-nem no Brasil") +
+  theme(plot.title = element_text(family = "Times"))
+
 
