@@ -375,3 +375,26 @@ ggplot(data = item1, aes(Tempo, taxanemnem)) +
   theme(plot.title = element_text(family = "Times"))
 
 
+#######################################################
+#                   Taxa de Desocupacao               #
+#######################################################
+
+
+item1 <- basededados %>%
+  group_by(Tempo) %>%
+  mutate(aux1 = sum(desocup), aux2 = sum(PEA),
+         taxadesocupacao = (aux1/aux2)*100) %>%
+  summarise(taxadesocupacao = mean(taxadesocupacao))
+
+windowsFonts(Times=windowsFont("Times New Roman"))
+
+ggplot(data = item1, aes(Tempo, taxadesocupacao)) +
+  geom_line(color = "gray20") + 
+  geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  theme_bw() +
+  labs(x = "Trimestre",
+       y = "Em %",
+       title = "Evolução da Taxa de Desocupação no Brasil") +
+  theme(plot.title = element_text(family = "Times"))
+
