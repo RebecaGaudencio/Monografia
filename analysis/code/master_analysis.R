@@ -105,9 +105,9 @@ basededados <- basededados %>%
 basededados$Tempo <- as.yearqtr(basededados$Tempo)
 
 
-###############################################################
-#                   Criacao da Taxa de Desemprego             #
-###############################################################
+#######################################################
+#                   Taxa de Desemprego               #
+#######################################################
 
 
 item1 <- basededados %>%
@@ -119,26 +119,19 @@ item1 <- basededados %>%
 ggplot(data = item1, aes(Tempo, taxadesemprego)) +
   geom_line(color = "gray20") + 
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
-  geom_vline(xintercept = item1$Tempo[33], linetype = 8) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
        y = "Em %",
-       title = "Evolução da Taxa de Desemprego no Brasil")
+       title = "Evolução da Taxa de Desemprego no Brasil") +
+  theme(plot.title = element_text(family = "Times"))
 
 
 ############################################################
 #                   Desempregados por Raça                 #
 ############################################################
 
-item1 <- basededados %>%
-  group_by(Tempo) %>%
-  mutate(aux1 = sum(desocup), aux2 = sum(workforce),
-         taxadesemprego = (aux1/aux2)*100) %>%
-  summarise(taxadesemprego = mean(taxadesemprego))
-
-item2 <- 
-  
-  basededados[is.na(basededados)] <- 0 
+basededados[is.na(basededados)] <- 0 
 
 item1 <- basededados %>%
     group_by(Tempo) %>%
@@ -160,45 +153,65 @@ item1 <- basededados %>%
 
 
 ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
-  geom_line(aes(col = "Brancos"), size = 1) +
-  geom_line(aes(y = taxadedesempregonegros , col = "Negros"), size = 1) +
-  geom_line(aes(y = taxadedesempregoamarelos, col = "Amarelos"), size = 1) +
-  geom_line(aes(y = taxadedesempregopardos, col = "Pardos"), size = 1) +
-  geom_line(aes(y = taxadedesempregoindios, col = "Indígenas"), size = 1) +
-  geom_vline(xintercept = item1$Tempo[865], linetype = 8) +
+  geom_line(aes(col = "Brancos"), color = "gray69", size = 1.2) +
+  geom_line(aes(y = taxadedesempregonegros , col = "Negros"), color = "black", size = 1.2) +
+  geom_line(aes(y = taxadedesempregoamarelos, col = "lightyellow4"), color = "yellow", size = 1.2) +
+  geom_line(aes(y = taxadedesempregopardos, col = "Pardos"), color = "orange",size = 1.2) +
+  geom_line(aes(y = taxadedesempregoindios, col = "Indígenas"),color = "indianred1",size = 1.2) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
        y = "Em %",
        title = "Evolução do Desemprego por Raça") +
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom') +
+  theme(plot.title = element_text(family = "Times"))
+
 
 
 ############################################################
 #               Desempregados por Escolaridade             #
 ############################################################
 
-
 item1 <- basededados %>%
-  mutate(taxadedesempregoesco1 = (desocupesco1/ocupesco1)*100,
-         taxadedesempregoesco2 = (desocupesco2/ocupesco2)*100,
-         taxadedesempregoesco3 = (desocupesco3/ocupesco3)*100,
-         taxadedesempregoesco4 = (desocupesco4/ocupesco4)*100,
-         taxadedesempregoesco5 = (desocupesco5/ocupesco5)*100,
-         taxadedesempregoesco6 = (desocupesco5/ocupesco5)*100,
-         taxadedesempregoesco7 = (desocupesco5/ocupesco5)*100)
+  group_by(Tempo) %>%
+  mutate(aux1 = sum(desocupesco1), aux2 = sum(ocupesco1), 
+         aux3 = sum(desocupesco2), aux4 = sum(ocupesco2),
+         aux5 = sum(desocupesco3), aux6 = sum(ocupesco3),
+         aux7 = sum(desocupesco4), aux8 = sum(ocupesco4),
+         aux9 = sum(desocupesco5), aux10 = sum(ocupesco5),
+         aux11 = sum(desocupesco6), aux12 = sum(ocupesco6),
+         aux13 = sum(desocupesco7), aux14 = sum(ocupesco7),
+         taxadedesempregoesco1 = (aux1/(aux1+aux2))*100,
+         taxadedesempregoesco2 = (aux3/(aux3+aux4))*100,
+         taxadedesempregoesco3 = (aux5/(aux5+aux6))*100,
+         taxadedesempregoesco4 = (aux7/(aux7+aux8))*100,
+         taxadedesempregoesco5 = (aux9/(aux9+aux10))*100,
+         taxadedesempregoesco6 = (aux11/(aux11+aux12))*100,
+         taxadedesempregoesco7 = (aux13/(aux13+aux14))*100) %>%
+  summarise(taxadedesempregoesco1 = mean(taxadedesempregoesco1),
+            taxadedesempregoesco2 = mean(taxadedesempregoesco2),
+            taxadedesempregoesco3 = mean(taxadedesempregoesco3),
+            taxadedesempregoesco4 = mean(taxadedesempregoesco4),
+            taxadedesempregoesco5 = mean(taxadedesempregoesco5),
+            taxadedesempregoesco6 = mean(taxadedesempregoesco6),
+            taxadedesempregoesco7 = mean(taxadedesempregoesco7))
+
 
 
 ggplot(item1, aes(x = Tempo, y = taxadedesempregoesco1)) +
   geom_line(aes(col = "Sem Instrução"), size = 1) +
-  geom_line(aes(y = taxadedesempregoesco2  , col = "Fundamental Incompleto"), size = 1) +
-  geom_line(aes(y = taxadedesempregoesco3, col = "Fundamental Completo"), size = 1) +
-  geom_line(aes(y = taxadedesempregoesco4, col = "Medio Incompleto"), size = 1) +
-  geom_line(aes(y = taxadedesempregoesco5, col = "Medio Completo"), size = 1) +
-  geom_line(aes(y = taxadedesempregoesco6, col = "Superior Incompleto"), size = 1) +
-  geom_line(aes(y = taxadedesempregoesco7, col = "Superior Completo"), size = 1) +
-    geom_vline(xintercept = item1$Tempo[865], linetype = 8) +
+  geom_line(aes(y = taxadedesempregoesco2  , col = "Fundamental Incompleto"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco3, col = "Fundamental Completo"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco4, col = "Medio Incompleto"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco5, col = "Medio Completo"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco6, col = "Superior Incompleto"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco7, col = "Superior Completo"), size = 1.1) +
+    geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
        y = "Em %",
        title = "Evolução do Desemprego por Escolaridade") +
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom')+
+  theme(plot.title = element_text(family = "Times"))
+
+
