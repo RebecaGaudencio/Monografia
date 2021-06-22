@@ -156,9 +156,9 @@ windowsFonts(Times=windowsFont("Times New Roman"))
 ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
   geom_line(aes(col = "Brancos"), color = "gray69", size = 1.2) +
   geom_line(aes(y = taxadedesempregonegros , col = "Negros"), color = "black", size = 1.2) +
-  geom_line(aes(y = taxadedesempregoamarelos, col = "lightyellow4"), color = "yellow", size = 1.2) +
-  geom_line(aes(y = taxadedesempregopardos, col = "Pardos"), color = "orange",size = 1.2) +
-  geom_line(aes(y = taxadedesempregoindios, col = "Indígenas"),color = "indianred1",size = 1.2) +
+  geom_line(aes(y = taxadedesempregoamarelos, col = "Amarelos"), color = "lightyellow4", size = 1.2) +
+  geom_line(aes(y = taxadedesempregopardos, col = "Pardos"), color = "orange", size = 1.2) +
+  geom_line(aes(y = taxadedesempregoindios, col = "Indígenas"),color = "indianred1", size = 1.2) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
@@ -233,5 +233,46 @@ ggplot(data = item1, aes(Tempo, taxadeinformalidade)) +
   labs(x = "Trimestre",
        y = "Em %",
        title = "Evolução da Taxa de Informalidade no Brasil") +
+  theme(plot.title = element_text(family = "Times"))
+
+
+############################################################
+#             Taxa de Desemprego por Região                #
+############################################################
+
+basededados[is.na(basededados)] <- 0
+
+item1 <- basededados %>%
+  group_by(Tempo) %>%
+  mutate(aux1 = sum(desocupnorte), aux2 = sum(ocupnorte), 
+         aux3 = sum(desocupnordeste), aux4 = sum(ocupnordeste),
+         aux5 = sum(desocupsudeste), aux6 = sum(ocupsudeste),
+         aux7 = sum(desocupsul), aux8 = sum(ocupsul),
+         aux9 = sum(desocupcentrooeste), aux10 = sum(ocupcentrooeste),
+         taxadedesempregonorte   = (aux1/(aux1+aux2))*100,
+         taxadedesempregonordeste = (aux3/(aux3+aux4))*100,
+         taxadedesempregosudeste = (aux5/(aux5+aux6))*100,
+         taxadedesempregosul = (aux7/(aux7+aux8))*100,
+         taxadedesempregocentrooeste = (aux9/(aux9+aux10))*100) %>%
+  summarise(taxadedesempregonorte = mean(taxadedesempregonorte),
+            taxadedesempregonordeste = mean(taxadedesempregonordeste),
+            taxadedesempregosudeste = mean(taxadedesempregosudeste),
+            taxadedesempregosul = mean(taxadedesempregosul),
+            taxadedesempregocentrooeste = mean(taxadedesempregocentrooeste))
+
+windowsFonts(Times=windowsFont("Times New Roman"))
+
+ggplot(item1, aes(x = Tempo, y = taxadedesempregonorte)) +
+  geom_line(aes(col = "Norte"), color = "gray69", size = 1.2) +
+  geom_line(aes(y = taxadedesempregonordeste, col = "Nordeste"), color = "black", size = 1.2) +
+  geom_line(aes(y = taxadedesempregosudeste, col = "Sudeste"), color = "tan4", size = 1.2) +
+  geom_line(aes(y = taxadedesempregosul, col = "Sul"), color = "khaki4", size = 1.2) +
+  geom_line(aes(y = taxadedesempregocentrooeste, col = "Centro Oeste"),color = "bisque3", size = 1.2) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  theme_bw() +
+  labs(x = "Trimestre",
+       y = "Em %",
+       title = "Evolução da Taxa de Desemprego por Região") +
+  theme(legend.position = 'bottom') +
   theme(plot.title = element_text(family = "Times"))
 
