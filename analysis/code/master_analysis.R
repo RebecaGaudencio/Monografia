@@ -321,8 +321,8 @@ ggplot(item1, aes(x = Tempo)) +
   geom_line(aes(y = taxadedesempregoesco4 , col = "Médio Incompleto"), color = "tan4", size = 1.2) +
   geom_line(aes(y = taxadedesempregonegros, col = "Negros"), color = "black", size = 1.2) +
   geom_line(aes(y = taxadedesempregoadol, col = "Adolescentes"), color = "khaki4", size = 1.2) +
-  geom_point(aes(y = taxadedesempregonordeste, col = "Nordeste"), color = "gray69", shape = 18, size = 3 ) +
-  geom_point(aes(y = taxadedesempregoesco4 , col = "Médio Incompleto"), color = "tan4", shape = 16 , size = 3) +
+  geom_point(aes(y = taxadedesempregonordeste, col = "Nordeste"), color = "gray69", shape = 16, size = 3 ) +
+  geom_point(aes(y = taxadedesempregoesco4 , col = "Médio Incompleto"), color = "tan4", shape = 18 , size = 4) +
   geom_point(aes(y = taxadedesempregonegros, col = "Negros"), color = "black", shape = 15, size = 3) +
   geom_point(aes(y = taxadedesempregoadol, col = "Adolescentes"), color = "khaki4", shape = 17, size = 3) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
