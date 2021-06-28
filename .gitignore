@@ -41,3 +41,6 @@ build/input/dicionario_PNADC_microdados_trimestral.xls
 build/input/PNADC_012021.txt
 build/output/ResultadosPNADC_012012.txt.csv
 *.csv
+build/input/PNADC_2016_Rendimento.xls
+*.xls
+*.xlsx
