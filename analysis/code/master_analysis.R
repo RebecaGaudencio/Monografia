@@ -170,6 +170,31 @@ ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
   theme(plot.title = element_text(family = "Times"))
 
 
+
+Figura1 <- ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
+  geom_line(aes(col = "Brancos"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregonegros , col = "Negros"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregoamarelos, col = "Amarelos"),size = 1.2) +
+  geom_line(aes(y = taxadedesempregopardos, col = "Pardos"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregoindios, col = "Indígenas"), size = 1.2) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  theme_bw() +
+  scale_linetype_manual(values = c("twodash", "dotted")) +
+  scale_color_manual(values = c("tan4", "black", "gray69", "khaki4", "bisque3")) +
+  labs(x = "Trimestre",
+       y = "Em %",
+       title = "Evolução do Desemprego por Raça",
+       color = "") +
+  theme(legend.position = 'bottom') +
+  theme(plot.title = element_text(family = "Times"))
+
+
+setwd(out_dir)
+
+png("Evolucao_do_Desemprego_por_Raca.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura1)
+dev.off()
+
 ############################################################
 #         Taxa de Desemprego por Escolaridade              #
 ############################################################
