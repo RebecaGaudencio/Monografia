@@ -118,7 +118,7 @@ item1 <- basededados %>%
 
 windowsFonts(Times=windowsFont("Times New Roman"))
 
-ggplot(data = item1, aes(Tempo, taxadesemprego)) +
+Figura1 <- ggplot(data = item1, aes(Tempo, taxadesemprego)) +
   geom_line(color = "gray20") + 
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
@@ -128,6 +128,11 @@ ggplot(data = item1, aes(Tempo, taxadesemprego)) +
        title = "Evolução da Taxa de Desemprego no Brasil") +
   theme(plot.title = element_text(family = "Times"))
 
+setwd(out_dir)
+
+png("Evolucao_do_Desemprego.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura1)
+dev.off()
 
 ############################################################
 #                   Desempregados por Raça                 #
@@ -155,23 +160,7 @@ item1 <- basededados %>%
 
 windowsFonts(Times=windowsFont("Times New Roman"))
 
-ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
-  geom_line(aes(col = "Brancos"), color = "tan4", size = 1.2) +
-  geom_line(aes(y = taxadedesempregonegros , col = "Negros"), color = "black", size = 1.2) +
-  geom_line(aes(y = taxadedesempregoamarelos, col = "Amarelos"), color = "gray69", size = 1.2) +
-  geom_line(aes(y = taxadedesempregopardos, col = "Pardos"), color = "khaki4", size = 1.2) +
-  geom_line(aes(y = taxadedesempregoindios, col = "Indígenas"), color = "bisque3", size = 1.2) +
-  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
-  theme_bw() +
-  labs(x = "Trimestre",
-       y = "Em %",
-       title = "Evolução do Desemprego por Raça") +
-  theme(legend.position = 'bottom') +
-  theme(plot.title = element_text(family = "Times"))
-
-
-
-Figura1 <- ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
+Figura2 <- ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
   geom_line(aes(col = "Brancos"), size = 1.2) +
   geom_line(aes(y = taxadedesempregonegros , col = "Negros"), size = 1.2) +
   geom_line(aes(y = taxadedesempregoamarelos, col = "Amarelos"),size = 1.2) +
@@ -180,7 +169,7 @@ Figura1 <- ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
   scale_linetype_manual(values = c("twodash", "dotted")) +
-  scale_color_manual(values = c("tan4", "black", "gray69", "khaki4", "bisque3")) +
+  scale_color_manual(values = c("bisque3", "gray69", "khaki4", "black", "tan4")) +
   labs(x = "Trimestre",
        y = "Em %",
        title = "Evolução do Desemprego por Raça",
@@ -188,11 +177,10 @@ Figura1 <- ggplot(item1, aes(x = Tempo, y = taxadedesempregobrancos)) +
   theme(legend.position = 'bottom') +
   theme(plot.title = element_text(family = "Times"))
 
-
 setwd(out_dir)
 
 png("Evolucao_do_Desemprego_por_Raca.png", units = "px", width = 850, height = 536, res = 100)
-plot(Figura1)
+plot(Figura2)
 dev.off()
 
 ############################################################
@@ -224,22 +212,30 @@ item1 <- basededados %>%
             taxadedesempregoesco7 = mean(taxadedesempregoesco7))
 
 
-ggplot(item1, aes(x = Tempo, y = taxadedesempregoesco1)) +
-  geom_line(aes(col = "Sem Instrução"), color = "darkslategrey", size = 1.1) +
-  geom_line(aes(y = taxadedesempregoesco2  , col = "Fundamental Incompleto"), color = "tan4", size = 1.1) +
-  geom_line(aes(y = taxadedesempregoesco3, col = "Fundamental Completo"), color = "black", size = 1.1) +
-  geom_line(aes(y = taxadedesempregoesco4, col = "Medio Incompleto"), color = "skyblue4", size = 1.1) +
-  geom_line(aes(y = taxadedesempregoesco5, col = "Medio Completo"), color = "khaki4", size = 1.1) +
-  geom_line(aes(y = taxadedesempregoesco6, col = "Superior Incompleto"), color = "gray69", size = 1.1) +
-  geom_line(aes(y = taxadedesempregoesco7, col = "Superior Completo"), color = "lightcyan4", size = 1.1) +
+Figura3 <- ggplot(item1, aes(x = Tempo, y = taxadedesempregoesco1)) +
+  geom_line(aes(col = "Sem Instrução"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco2, col = "Fundamental Incompleto"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco3, col = "Fundamental Completo"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco4, col = "Medio Incompleto"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco5, col = "Medio Completo"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco6, col = "Superior Incompleto"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoesco7, col = "Superior Completo"), size = 1.1) +
     geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
+  scale_linetype_manual(values = c("twodash", "dotted")) +
+  scale_color_manual(values = c("tan4", "lightcyan4","khaki4", "black", "indianred1", "gray69", "darkgreen")) +
   labs(x = "Trimestre",
        y = "Em %",
-       title = "Evolução do Desemprego por Escolaridade") +
+       title = "Evolução do Desemprego por Escolaridade",
+       color = "") +
   theme(legend.position = 'bottom')+
   theme(plot.title = element_text(family = "Times"))
 
+setwd(out_dir)
+
+png("Evolucao_do_Desemprego_por_Escolaridade.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura3)
+dev.off()
 
 ############################################################
 #          Taxa de Desemprego por Faixa Etaria             #
@@ -264,19 +260,27 @@ item1 <- basededados %>%
 
 windowsFonts(Times=windowsFont("Times New Roman"))
 
-ggplot(item1, aes(x = Tempo, y = taxadedesempregoadol)) +
-  geom_line(aes(col = "Adolescentes"), color = "gray69", size = 1.2) +
-  geom_line(aes(y = taxadedesempregojovens , col = "Jovens"), color = "black", size = 1.2) +
-  geom_line(aes(y = taxadedesempregoadultos, col = "Adultos"), color = "tan4", size = 1.2) +
-  geom_line(aes(y = taxadedesempregoidosos, col = "Idosos"), color = "khaki4", size = 1.2) + 
+Figura4 <- ggplot(item1, aes(x = Tempo, y = taxadedesempregoadol)) +
+  geom_line(aes(col = "Adolescentes"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregojovens, col = "Jovens"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregoadultos, col = "Adultos"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregoidosos, col = "Idosos"), size = 1.2) + 
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
+  scale_linetype_manual(values = c("twodash", "dotted")) +
+  scale_color_manual(values = c("forestgreen", "tan4", "khaki4", "black")) +
   labs(x = "Trimestre",
        y = "Em %",
-       title = "Evolução do Desemprego por Faixa Etária") +
+       title = "Evolução do Desemprego por Faixa Etária",
+       color = "") +
   theme(legend.position = 'bottom') +
   theme(plot.title = element_text(family = "Times"))
 
+setwd(out_dir)
+
+png("Evolucao_do_Desemprego_por_Faixa_Etaria.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura4)
+dev.off()
 
 ############################################################
 #             Taxa de Desemprego por Região                #
@@ -304,20 +308,30 @@ item1 <- basededados %>%
 
 windowsFonts(Times=windowsFont("Times New Roman"))
 
-ggplot(item1, aes(x = Tempo, y = taxadedesempregonorte)) +
-  geom_line(aes(col = "Norte"), color = "gray69", size = 1.2) +
-  geom_line(aes(y = taxadedesempregonordeste, col = "Nordeste"), color = "black", size = 1.2) +
-  geom_line(aes(y = taxadedesempregosudeste, col = "Sudeste"), color = "tan4", size = 1.2) +
-  geom_line(aes(y = taxadedesempregosul, col = "Sul"), color = "khaki4", size = 1.2) +
-  geom_line(aes(y = taxadedesempregocentrooeste, col = "Centro Oeste"),color = "bisque3", size = 1.2) +
+Figura5 <- ggplot(item1, aes(x = Tempo, y = taxadedesempregonorte)) +
+  geom_line(aes(col = "Norte"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregonordeste, col = "Nordeste"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregosudeste, col = "Sudeste"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregosul, col = "Sul"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregocentrooeste, col = "Centro Oeste"), size = 1.2) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
+  scale_linetype_manual(values = c("twodash", "dotted")) +
+  scale_color_manual(values = c("bisque3", "black", "gray69", "tan4", "forestgreen")) +
   labs(x = "Trimestre",
        y = "Em %",
-       title = "Evolução da Taxa de Desemprego por Região") +
+       title = "Evolução da Taxa de Desemprego por Região",
+       color = "") +
   theme(legend.position = 'bottom') +
   theme(plot.title = element_text(family = "Times"))
 
+
+# Salvando a imagem #
+setwd(out_dir)
+
+png("Evolucao_do_Desemprego_por_Regiao.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura5)
+dev.off()
 
 #######################################################
 #               Compilado de Desemprego               #
@@ -341,30 +355,37 @@ item1 <- basededados %>%
 
 windowsFonts(Times=windowsFont("Times New Roman"))
 
-ggplot(item1, aes(x = Tempo)) +
-  geom_line(aes(y = taxadedesempregonordeste, col = "Nordeste"), color = "khaki4", size = 1.2) +
-  geom_line(aes(y = taxadedesempregoesco4 , col = "Médio Incompleto"), color = "tan4", size = 1.2) +
-  geom_line(aes(y = taxadedesempregonegros, col = "Negros"), color = "black", size = 1.2) +
-  geom_line(aes(y = taxadedesempregoadol, col = "Adolescentes"), color = "darkolivegreen", size = 1.2) +
-  geom_point(aes(y = taxadedesempregonordeste, col = "Nordeste"), color = "khaki4", shape = 16, size = 3 ) +
-  geom_point(aes(y = taxadedesempregoesco4 , col = "Médio Incompleto"), color = "tan4", shape = 18 , size = 4) +
-  geom_point(aes(y = taxadedesempregonegros, col = "Negros"), color = "black", shape = 15, size = 3) +
-  geom_point(aes(y = taxadedesempregoadol, col = "Adolescentes"), color = "darkolivegreen", shape = 17, size = 3) +
+Figura6 <- ggplot(item1, aes(x = Tempo)) +
+  geom_line(aes(y = taxadedesempregonordeste, col = "Nordeste"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregoesco4 , col = "Médio Incompleto"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregonegros, col = "Negros"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregoadol, col = "Adolescentes"), size = 1.2) +
+  geom_point(aes(y = taxadedesempregonordeste, col = "Nordeste"), color = "khaki4", shape = 17, size = 2.5 ) +
+  geom_point(aes(y = taxadedesempregoesco4 , col = "Médio Incompleto"), color = "tan4", shape = 17 , size = 2.5) +
+  geom_point(aes(y = taxadedesempregonegros, col = "Negros"), color = "black", shape = 17, size = 2.5) +
+  geom_point(aes(y = taxadedesempregoadol, col = "Adolescentes"), color = "darkolivegreen", shape = 17, size = 2.5) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8, color ="gray49", size = 1) +
   theme_bw() +
+  scale_linetype_manual(values = c("twodash", "dotted")) +
+  scale_color_manual(values = c("darkolivegreen", "tan4", "black", "khaki4")) +
   labs(x = "Trimestre",
        y = "Em %",
        title = "Evolução do Desemprego" ,
-       subtitle = "Nordeste, Pessoas com Ensino Médio Incompleto, Negros e Adolescentes - Brasil (2012.1 - 2021.1)") +
+       subtitle = "Nordeste, Pessoas com Ensino Médio Incompleto, Negros e Adolescentes - Brasil (2012.1 - 2021.1)",
+       color = "") +
   theme(legend.position = 'bottom') +
   theme(plot.title = element_text(family = "Times"),
         plot.subtitle = element_text(family = "Times"))
 
+setwd(out_dir)
+
+png("Evolucao_do_Desemprego_Compilaado.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura6)
+dev.off()
 
 #######################################################
 #                   Taxa de Informalidade             #
 #######################################################
-
 
 item1 <- basededados %>%
   group_by(Tempo) %>%
@@ -372,16 +393,21 @@ item1 <- basededados %>%
          taxadeinformalidade = (aux1/aux2)*100) %>%
   summarise(taxadeinformalidade = mean(taxadeinformalidade))
 
-ggplot(data = item1, aes(Tempo, taxadeinformalidade)) +
+Figura7 <- ggplot(data = item1, aes(Tempo, taxadeinformalidade)) +
   geom_line(color = "gray20") + 
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
-  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  geom_vline(xintercept = item1$Tempo[33], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
        y = "Em %",
        title = "Evolução da Taxa de Informalidade no Brasil") +
   theme(plot.title = element_text(family = "Times"))
 
+setwd(out_dir)
+
+png("Evolucao_da_Informalidade.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura7)
+dev.off()
 
 #######################################################
 #               Evolução dos Nem-nens                 #
@@ -393,16 +419,21 @@ item1 <- basededados %>%
          taxanemnem = (aux1/aux2)*100) %>%
   summarise(taxanemnem = mean(taxanemnem))
 
-ggplot(data = item1, aes(Tempo, taxanemnem)) +
+Figura8 <- ggplot(data = item1, aes(Tempo, taxanemnem)) +
   geom_line(color = "gray20") + 
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
        y = "Em %",
-       title = "Evolução do Nº de Nem-nem no Brasil") +
+       title = "Evolução dos Nem-nens no Brasil") +
   theme(plot.title = element_text(family = "Times"))
 
+setwd(out_dir)
+
+png("Evolucao_dos_Nem-nens.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura8)
+dev.off()
 
 #######################################################
 #                   Taxa de Desocupacao               #
@@ -417,7 +448,7 @@ item1 <- basededados %>%
 
 windowsFonts(Times=windowsFont("Times New Roman"))
 
-ggplot(data = item1, aes(Tempo, taxadesocupacao)) +
+Figura9 <- ggplot(data = item1, aes(Tempo, taxadesocupacao)) +
   geom_line(color = "gray20") + 
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
@@ -426,4 +457,10 @@ ggplot(data = item1, aes(Tempo, taxadesocupacao)) +
        y = "Em %",
        title = "Evolução da Taxa de Desocupação no Brasil") +
   theme(plot.title = element_text(family = "Times"))
+
+setwd(out_dir)
+
+png("Evolucao_da_Desocupacao.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura9)
+dev.off()
 
