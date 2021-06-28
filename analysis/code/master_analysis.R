@@ -320,7 +320,7 @@ Figura5 <- ggplot(item1, aes(x = Tempo, y = taxadedesempregonorte)) +
   scale_color_manual(values = c("bisque3", "black", "gray69", "tan4", "forestgreen")) +
   labs(x = "Trimestre",
        y = "Em %",
-       title = "Evolução da Taxa de Desemprego por Região",
+       title = "Evolução do Desemprego por Região",
        color = "") +
   theme(legend.position = 'bottom') +
   theme(plot.title = element_text(family = "Times"))
