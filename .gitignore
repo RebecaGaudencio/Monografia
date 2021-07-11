@@ -44,3 +44,15 @@ build/output/ResultadosPNADC_012012.txt.csv
 build/input/PNADC_2016_Rendimento.xls
 *.xls
 *.xlsx
+build/input/PNADC_2019_visita5.txt
+build/input/PNADC_2013_visita1.txt
+build/input/PNADC_2012_visita1.txt
+build/input/PNADC_2014_visita1.txt
+build/input/PNADC_2015_visita1.txt
+build/input/PNADC_2016_visita5.txt
+build/input/PNADC_2016_visita1.txt
+build/input/PNADC_2017_visita1.txt
+build/input/PNADC_2017_visita5.txt
+build/input/PNADC_2018_visita1.txt
+build/input/PNADC_2018_visita5.txt
+build/input/PNADC_2019_visita1.txt
