@@ -17,7 +17,7 @@ library(magrittr)
 user <- Sys.info()[["user"]]
 message(sprintf("Current User: %s\n"))
 if (user == "rebec") {
-  ROOT <- "C:/Users/rebec/Documents/GitHub/Monografia"
+  ROOT <- "C:/Users/rebec/Desktop/Monografia/Monografia"
 } else if (user == "f.cavalcanti") {
   ROOT <- "C:/Users/Francisco/Dropbox"
 } else {
@@ -33,17 +33,39 @@ code_dir <- file.path(ROOT, "build", "code")
 ...
 # Importacao dos dados e leitura da PNADc 
 
-lista_ano <- c("PNADC_2016_visita1",
-               "PNADC_2016_visita5",
-               "PNADC_2017_visita1",
-               "PNADC_2017_visita5",
-               "PNADC_2018_visita1",
-               "PNADC_2018_visita5",
-               "PNADC_2019_visita1",
-               "PNADC_2019_visita5")
+setwd(in_dir)
+
+lista_ano <- c("PNADC_2016_visita1.txt")
+
+lista_chave <- c("input_PNADC_2016_visita1.txt")
+
+
+
+lista_ano <-  c("PNADC_2016_visita1.txt",
+                "PNADC_2016_visita5.txt",
+               "PNADC_2017_visita1.txt",
+               "PNADC_2017_visita5.txt",
+               "PNADC_2018_visita1.txt",
+               "PNADC_2018_visita5.txt",
+               "PNADC_2019_visita1.txt",
+               "PNADC_2019_visita5.txt")
 
 lista_ano_trabalho <- c("PNADC_2016_visita5",
                         "PNADC_2017_visita5",
                         "PNADC_2018_visita5",
                         "PNADC_2019_visita5")
+
+
+lista_chave <- c("input_PNADC_2016_visita1.txt",
+                 "input_PNADC_2016_visita5.txt",
+                 "input_PNADC_2017_visita1.txt",
+                 "input_PNADC_2017_visita5.txt",
+                 "input_PNADC_2018_visita1.txt",
+                 "input_PNADC_2018_visita5.txt",
+                 "input_PNADC_2019_visita1.txt",
+                 "input_PNADC_2019_visita5.txt",)
+
+
+basededados <- PNADcIBGE::read_pnadc(microdata = lista_ano, input_txt = lista_chave)
+
 
