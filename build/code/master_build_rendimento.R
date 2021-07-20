@@ -9,6 +9,8 @@ library(PNADcIBGE)
 library(conflicted)
 library(tidyverse)
 library(magrittr)
+library(survey)
+library(convey)
 
 ############################################################
 #                          Folder Path                     #
@@ -68,12 +70,48 @@ lista_chave <- c("input_PNADC_2016_visita1.txt",
 
 basededados <- PNADcIBGE::read_pnadc(microdata = lista_ano, input_txt = lista_chave)
 
-############################################
-#  Declarando a variável de peso amostral  #
-############################################
+##############################################
+#   Declarando a variável de peso amostral   #
+##############################################
 
 populacao <- basededados %>%
   select(UF, Trimestre, Ano, V1032) %>%
   group_by(UF, Trimestre, Ano) %>%
   mutate(aux = sum(V1032)) %>%
   summarise(populacao = mean(aux))
+
+######################################################
+#   Rendimento Habitual Médio de Todos os Trabalhos  #
+######################################################
+
+rendtrahabit <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD4019) %>%
+  dplyr::filter(VD4019 == "Valor") %>%
+  group_by(UF, Trimestre, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(rendtrabhabit = mean(aux))
+
+######################################################
+#   Rendimento Efetivo Médio de Todos os Trabalhos   #
+######################################################
+
+rendtrabefet <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD4020) %>%
+  dplyr::filter(VD4020 == "Valor") %>%
+  group_by(UF, Trimestre, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(rendtrabeft = mean(aux))
+
+
+#####################################################
+#        Rendimento Domiciliar per capita           #
+#####################################################
+
+rendpc <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5011) %>%
+  dplyr::filter(VD5011 == "Valor") %>%
+  group_by(UF, Trimestre, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(rendpc = mean(aux))
+
+
