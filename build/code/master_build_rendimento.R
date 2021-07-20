@@ -68,4 +68,12 @@ lista_chave <- c("input_PNADC_2016_visita1.txt",
 
 basededados <- PNADcIBGE::read_pnadc(microdata = lista_ano, input_txt = lista_chave)
 
+############################################
+#  Declarando a variável de peso amostral  #
+############################################
 
+populacao <- basededados %>%
+  select(UF, Trimestre, Ano, V1032) %>%
+  group_by(UF, Trimestre, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(populacao = mean(aux))
