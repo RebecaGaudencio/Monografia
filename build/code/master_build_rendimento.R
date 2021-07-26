@@ -76,7 +76,7 @@ basededados <- PNADcIBGE::read_pnadc(microdata = lista_ano, input_txt = lista_ch
 
 populacao <- basededados %>%
   select(UF, Trimestre, Ano, V1032) %>%
-  group_by(UF, Trimestre, Ano) %>%
+  group_by(UF, Ano) %>%
   mutate(aux = sum(V1032)) %>%
   summarise(populacao = mean(aux))
 
@@ -87,7 +87,7 @@ populacao <- basededados %>%
 rendtrahabit <- basededados %>%
   select(UF, Trimestre, Ano, V1032, VD4019) %>%
   dplyr::filter(VD4019 == "Valor") %>%
-  group_by(UF, Trimestre, Ano) %>%
+  group_by(UF, Ano) %>%
   mutate(aux = sum(V1032)) %>%
   summarise(rendtrabhabit = mean(aux))
 
@@ -114,4 +114,131 @@ rendpc <- basededados %>%
   mutate(aux = sum(V1032)) %>%
   summarise(rendpc = mean(aux))
 
+rendpc <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5011) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(rendpc = mean(aux))
 
+######################################################
+#     Faixa de Rendimento domiciliar per capita      #
+#                      Habitual                      #
+######################################################
+
+#Faixa 1 
+faixa1rendhab <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5012) %>%
+  dplyr::filter(VD5012 == 1) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa1rendhab = mean(aux))
+
+#Faixa 2 
+faixa2rendhab <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5012) %>%
+  dplyr::filter(VD5012 == 2) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa2rendhab = mean(aux))
+
+#Faixa 3 
+faixa3rendhab <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5012) %>%
+  dplyr::filter(VD5012 == 3) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa3rendhab = mean(aux))
+
+#Faixa 4 
+faixa4rendhab <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5012) %>%
+  dplyr::filter(VD5012 == 4) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa4rendhab = mean(aux))
+
+#Faixa 5 
+faixa5rendhab <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5012) %>%
+  dplyr::filter(VD5012 == 5) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa5rendhab = mean(aux))
+
+#Faixa 6 
+faixa6rendhab <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5012) %>%
+  dplyr::filter(VD5012 == 6) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa6rendhab = mean(aux))
+
+#Faixa 7 
+faixa7rendhab <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5012) %>%
+  dplyr::filter(VD5012 == 7) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa7rendhab = mean(aux))
+
+
+######################################################
+#     Faixa de Rendimento domiciliar per capita      #
+#                      Efetivo                       #
+######################################################
+
+#Faixa 1 
+faixa1rendeft <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5006) %>%
+  dplyr::filter(VD5006 == 1) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa1rendeft = mean(aux))
+
+#Faixa 2 
+faixa2rendeft <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5006) %>%
+  dplyr::filter(VD5006 == 2) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa2rendeft = mean(aux))
+
+#Faixa 3 
+faixa3rendeft <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5006) %>%
+  dplyr::filter(VD5006 == 3) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa3rendeft = mean(aux))
+
+#Faixa 4 
+faixa4rendeft <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5006) %>%
+  dplyr::filter(VD5006 == 4) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa4rendeft = mean(aux))
+
+#Faixa 5 
+faixa1rendeft <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5006) %>%
+  dplyr::filter(VD5006 == 5) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa5rendeft = mean(aux))
+
+#Faixa 6 
+faixa6rendeft <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5006) %>%
+  dplyr::filter(VD5006 == 6) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa6rendeft = mean(aux))
+
+#Faixa 7 
+faixa7rendeft <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5006) %>%
+  dplyr::filter(VD5006 == 7) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(faixa7endeft = mean(aux))
