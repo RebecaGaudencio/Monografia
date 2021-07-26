@@ -273,3 +273,51 @@ PSocial <- basededados %>%
   summarise(PSocial = mean(aux))
 
 
+#############################################
+#             Seguro Desemprego             #
+#############################################
+
+#Seguro desemprego
+Segdesemprego <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V5005A) %>%
+  dplyr::filter(V5005A == 1) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Segdesemprego = mean(aux)) 
+
+#    Seguro Desemprego por Regiao    #
+
+Segdesempregonorte <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V5005A) %>%
+  dplyr::filter(V5005A == 1 & (UF == "11" | UF == "12" | UF == "13"| UF == "14"| UF == "15"| UF == "16"| UF == "17")) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Segdesempregonorte = mean(aux)) 
+
+Segdesempregonordeste <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V5005A) %>%
+  dplyr::filter(V5005A == 1 & (UF == "21" | UF == "22" | UF == "23"| UF == "24"| UF == "25"| UF == "26"| UF == "27"| UF == "28"| UF == "29")) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Segdesempregonordeste = mean(aux)) 
+
+Segdesempregosudeste <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V5005A) %>%
+  dplyr::filter(V5005A == 1 & (UF == "31" | UF == "32" | UF == "33"| UF == "34"| UF == "35")) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Segdesempregosudeste = mean(aux)) 
+
+Segdesempregosul <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V5005A) %>%
+  dplyr::filter(V5005A == 1 & (UF == "41" | UF == "42" | UF == "43")) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Segdesempregosul = mean(aux)) 
+
+Segdesempregocentrooeste <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V5005A) %>%
+  dplyr::filter(V5005A == 1 & (UF == "50" | UF == "51" | UF == "52"| UF == "53")) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Segdesempregocentrooeste = mean(aux)) 
