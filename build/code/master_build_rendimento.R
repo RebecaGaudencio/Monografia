@@ -242,3 +242,34 @@ faixa7rendeft <- basededados %>%
   group_by(UF, Ano) %>%
   mutate(aux = sum(V1032)) %>%
   summarise(faixa7endeft = mean(aux))
+
+
+#############################################
+#     Rendimento de Programas Sociais      #
+#############################################
+
+# BPC
+BPC <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V5001A) %>%
+  dplyr::filter(V5001A == 1) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(BPC = mean(aux))
+
+# Bolsa Familia
+BF <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V5002A) %>%
+  dplyr::filter(V5002A == 1) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(BF = mean(aux))
+
+# Outros Programas Sociais
+PSocial <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V5003A) %>%
+  dplyr::filter(V5003A == 1) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(PSocial = mean(aux))
+
+
