@@ -286,7 +286,6 @@ Segdesemprego <- basededados %>%
   summarise(Segdesemprego = mean(aux)) 
 
 #    Seguro Desemprego por Regiao    #
-
 Segdesempregonorte <- basededados %>%
   select(UF, Trimestre, Ano, V1032, V5005A) %>%
   dplyr::filter(V5005A == 1 & (UF == "11" | UF == "12" | UF == "13"| UF == "14"| UF == "15"| UF == "16"| UF == "17")) %>%
