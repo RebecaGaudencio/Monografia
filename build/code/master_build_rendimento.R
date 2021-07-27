@@ -97,23 +97,22 @@ rendtrahabit <- basededados %>%
 
 rendtrabefet <- basededados %>%
   select(UF, Trimestre, Ano, V1032, VD4020) %>%
-  dplyr::filter(VD4020 == "Valor") %>%
-  group_by(UF, Trimestre, Ano) %>%
-  mutate(aux = sum(V1032)) %>%
-  summarise(rendtrabeft = mean(aux))
+  group_by(UF, Ano) %>%
+  mutate(aux = (V1032*VD4020),
+         aux1 = sum(aux, na.rm = TRUE)) %>%
+  summarise(rendtrabeft = mean(aux1))
 
 
 ######################################################
 #   Rendimento Efetivo Medio de Todas as Fontes     #
 ######################################################
 
-rendtrabefet <- basededados %>%
+rendtrabefetfontes <- basededados %>%
   select(UF, Trimestre, Ano, V1032, VD4022) %>%
-  dplyr::filter(VD4022 == "Valor") %>%
-  group_by(UF, Trimestre, Ano) %>%
-  mutate(aux = sum(V1032)) %>%
-  summarise(rendtrabeft = mean(aux))
-
+  group_by(UF, Ano) %>%
+  mutate(aux = (V1032*VD4022),
+         aux1 = sum(aux, na.rm = TRUE)) %>%
+  summarise(rendtrabeft = mean(aux1))
 
 
 #####################################################
@@ -122,16 +121,11 @@ rendtrabefet <- basededados %>%
 
 rendpc <- basededados %>%
   select(UF, Trimestre, Ano, V1032, VD5011) %>%
-  dplyr::filter(VD5011 == "Valor") %>%
-  group_by(UF, Trimestre, Ano) %>%
-  mutate(aux = sum(V1032)) %>%
-  summarise(rendpc = mean(aux))
-
-rendpc <- basededados %>%
-  select(UF, Trimestre, Ano, V1032, VD5011) %>%
   group_by(UF, Ano) %>%
-  mutate(aux = sum(V1032)) %>%
-  summarise(rendpc = mean(aux))
+  mutate(aux = (V1032*VD5011),
+         aux1 = sum(aux, na.rm = TRUE)) %>%
+  summarise(rendpc = mean(aux1))
+
 
 ######################################################
 #     Faixa de Rendimento domiciliar per capita      #
@@ -343,12 +337,20 @@ basededados2 <- convey_prep(basededados2)
 
 ginihab <- svygini(~VD4020, basededados2, na.rm = TRUE)
 ginihab
-
 ginihabUF <- svyby(~VD4020, by = ~UF, basededados2, svygini, na.rm = TRUE)
+colnames(ginihabUF) <- c ("UF", "Gini", "SE")
+ginihabUF <- ginihabUF[,2]
+
+giniefe <- svygini(~VD4019, basededados2, na.rm = TRUE)
+giniefebUF <- svyby(~VD4019, by = ~UF, basededados2, svygini, na.rm = TRUE)
+giniefebUF <- giniefebUF[,2]
+view(giniefebUF)
 
 
-###################################
-
-class(basededados$V1008) 
+######################################
+#  Adicao de variaveis no dataframe  #
+######################################
+ 
 basededados <- basededados %>%
   mutate(domicilio = paste0(UPA, V1008))
+
