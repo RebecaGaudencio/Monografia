@@ -69,7 +69,7 @@ lista_chave <- c("input_PNADC_2016_visita1.txt",
 
 
 basededados <- PNADcIBGE::read_pnadc(microdata = lista_ano, input_txt = lista_chave)
-
+basededados2 <- pnadc_design(basededados)
 ##############################################
 #   Declarando a variável de peso amostral   #
 ##############################################
@@ -86,10 +86,10 @@ populacao <- basededados %>%
 
 rendtrahabit <- basededados %>%
   select(UF, Trimestre, Ano, V1032, VD4019) %>%
-  dplyr::filter(VD4019 == "Valor") %>%
   group_by(UF, Ano) %>%
-  mutate(aux = sum(V1032)) %>%
-  summarise(rendtrabhabit = mean(aux))
+  mutate(aux = (V1032*VD4019), 
+         aux1 = sum(aux, na.rm = TRUE)) %>%
+  summarise(rendtrabhabit = mean(aux1))
 
 ######################################################
 #   Rendimento Efetivo Médio de Todos os Trabalhos   #
@@ -333,3 +333,22 @@ Segdesempregocentrooeste <- basededados %>%
   group_by(UF, Ano) %>%
   mutate(aux = sum(V1032)) %>%
   summarise(Segdesempregocentrooeste = mean(aux)) 
+
+
+####################################
+#           Indice de Gini         #
+####################################
+
+basededados2 <- convey_prep(basededados2)
+
+ginihab <- svygini(~VD4020, basededados2, na.rm = TRUE)
+ginihab
+
+ginihabUF <- svyby(~VD4020, by = ~UF, basededados2, svygini, na.rm = TRUE)
+
+
+###################################
+
+class(basededados$V1008) 
+basededados <- basededados %>%
+  mutate(domicilio = paste0(UPA, V1008))
