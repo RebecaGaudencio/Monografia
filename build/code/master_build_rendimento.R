@@ -103,6 +103,19 @@ rendtrabefet <- basededados %>%
   summarise(rendtrabeft = mean(aux))
 
 
+######################################################
+#   Rendimento Efetivo Medio de Todas as Fontes     #
+######################################################
+
+rendtrabefet <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD4022) %>%
+  dplyr::filter(VD4022 == "Valor") %>%
+  group_by(UF, Trimestre, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(rendtrabeft = mean(aux))
+
+
+
 #####################################################
 #        Rendimento Domiciliar per capita           #
 #####################################################
