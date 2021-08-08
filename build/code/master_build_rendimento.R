@@ -281,7 +281,7 @@ PSocial <- basededados %>%
 
 
 #############################################
-#             Seguro Desemprego             #
+#             Outros Rendimentos            #
 #############################################
 
 #Seguro desemprego
@@ -329,6 +329,31 @@ Segdesempregocentrooeste <- basededados %>%
   summarise(Segdesempregocentrooeste = mean(aux)) 
 
 
+#Aposentadoria
+Aposentadoria <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V5004A) %>%
+  dplyr::filter(V5004A == 1) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Aposentadoria = mean(aux)) 
+
+#Doacao
+Doacao <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V5006A) %>%
+  dplyr::filter(V5006A == 1) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Doacao = mean(aux)) 
+
+#Aluguel
+Aluguel <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V5007A) %>%
+  dplyr::filter(V5007A == 1) %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Aluguel = mean(aux)) 
+
+
 ####################################
 #           Indice de Gini         #
 ####################################
@@ -354,3 +379,12 @@ view(giniefebUF)
 basededados <- basededados %>%
   mutate(domicilio = paste0(UPA, V1008))
 
+
+renda_ajuda_gov <- basededados %>%
+  group_by(Ano) %>%
+  mutate (aux1 = sum(BPC), 
+          aux2 = sum(BF), 
+          aux3 = sum(PSocial), 
+          aux4 = sum(Segdesemprego),
+          ajudagoverno = (aux1+aux2+aux3+aux4)) %>%
+  summarise(ajudagoverno = mean(ajudagoverno))
