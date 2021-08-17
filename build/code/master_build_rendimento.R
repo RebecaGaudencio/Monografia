@@ -388,3 +388,25 @@ renda_ajuda_gov <- basededados %>%
           aux4 = sum(Segdesemprego),
           ajudagoverno = (aux1+aux2+aux3+aux4)) %>%
   summarise(ajudagoverno = mean(ajudagoverno))
+
+
+renda_extra <- basededados %>%
+  group_by(Ano) %>%
+  mutate (aux1 = sum(Aposentadoria), 
+          aux2 = sum(Doacao), 
+          aux3 = sum(Aluguel), 
+          aux4 = sum(Segdesemprego),
+          ajudaextra = (aux1+aux2+aux3+aux4)) %>%
+  summarise(ajudaextra = mean(ajudaextra))
+
+
+#####################################
+
+item <- basededados %>%
+  group_by(Ano) %>%
+  dplyr::arrange(desc(VD5011)) %>%
+  select(VD5011, Ano, V1032) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  dplyr:: filter(aux1 < 2000000)
+
+  
