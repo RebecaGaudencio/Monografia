@@ -80,6 +80,17 @@ populacao <- basededados %>%
   mutate(aux = sum(V1032)) %>%
   summarise(populacao = mean(aux))
 
+
+pop <- basededados %>%
+  select(UF, Trimestre, Ano, V1032) %>%
+  group_by(Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(pop = mean(aux))
+
+pop1 = 0.1*pop[1,2]
+pop2 = 0.6*pop[1,2]
+
+
 ######################################################
 #   Rendimento Habitual Médio de Todos os Trabalhos  #
 ######################################################
@@ -369,7 +380,7 @@ ginihabUF <- ginihabUF[,2]
 giniefe <- svygini(~VD4019, basededados2, na.rm = TRUE)
 giniefebUF <- svyby(~VD4019, by = ~UF, basededados2, svygini, na.rm = TRUE)
 giniefebUF <- giniefebUF[,2]
-view(giniefebUF)
+
 
 
 ######################################
@@ -379,7 +390,7 @@ view(giniefebUF)
 basededados <- basededados %>%
   mutate(domicilio = paste0(UPA, V1008))
 
-
+#Fazer essa parte no analysis
 renda_ajuda_gov <- basededados %>%
   group_by(Ano) %>%
   mutate (aux1 = sum(BPC), 
@@ -399,14 +410,33 @@ renda_extra <- basededados %>%
           ajudaextra = (aux1+aux2+aux3+aux4)) %>%
   summarise(ajudaextra = mean(ajudaextra))
 
+# Até esta linha fazer no analysis
+
 
 #####################################
+##     Concentracao de Renda      ##
 
 item <- basededados %>%
   group_by(Ano) %>%
   dplyr::arrange(desc(VD5011)) %>%
   select(VD5011, Ano, V1032) %>%
-  mutate(aux1 = cumsum(V1032)) %>%
-  dplyr:: filter(aux1 < 2000000)
+  mutate(aux1 = cumsum(V1032)) 
 
-  
+# Rendimento dos 10% mais ricos
+
+item1 <- basededados %>%
+  group_by(Ano) %>%
+  dplyr::arrange(desc(VD5011)) %>%
+  select(VD5011, Ano, V1032) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  dplyr:: filter(aux1 <= pop1[1,1])
+
+# Rendimento dos 50% seguintes
+
+item2 <- basededados %>%
+  group_by(Ano) %>%
+  dplyr::arrange(desc(VD5011)) %>%
+  select(VD5011, Ano, V1032) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  dplyr:: filter(aux1 >= pop1[1,1] & aux1 <= pop2[1,1])
+
