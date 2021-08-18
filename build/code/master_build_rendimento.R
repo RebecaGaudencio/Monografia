@@ -87,6 +87,7 @@ pop <- basededados %>%
   mutate(aux = sum(V1032)) %>%
   summarise(pop = mean(aux))
 
+pop01 = 0.01*pop[1,2]
 pop1 = 0.1*pop[1,2]
 pop2 = 0.6*pop[1,2]
 
@@ -136,6 +137,16 @@ rendpc <- basededados %>%
   mutate(aux = (V1032*VD5011),
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpc = mean(aux1))
+
+
+rendpc2 <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5011) %>%
+  group_by(Ano) %>%
+  mutate(aux = (V1032*VD5011),
+         aux1 = sum(aux, na.rm = TRUE)) %>%
+  summarise(rendpc = mean(aux1))
+
+rendpc2 <- rendpc2[1,2]
 
 
 ######################################################
@@ -423,7 +434,21 @@ item <- basededados %>%
   select(VD5011, Ano, V1032) %>%
   mutate(aux1 = cumsum(V1032)) 
 
+#################################
+# Rendimento dos 1% mais ricos ##
 ##################################
+
+item01 <- basededados %>%
+  group_by(Ano) %>%
+  dplyr::arrange(desc(VD5011)) %>%
+  select(VD5011, Ano, V1032) %>%
+  mutate(aux1 = cumsum(V1032),
+         aux2 = (VD5011*V1032),
+         aux3 = cumsum(aux2)) %>%
+  dplyr:: filter(aux1 <= pop01[1,1])
+
+
+#################################
 # Rendimento dos 10% mais ricos ##
 ##################################
 
@@ -443,6 +468,8 @@ item1_renda <- item1_renda %>%
   mutate(aux3 = cumsum(aux2))
 
 renda10p <- item1_renda[34049,6]
+rendap1_total <- (renda10p/rendpc2)*100
+
 
 # Rendimento dos 50% seguintes
 
@@ -453,3 +480,29 @@ item2 <- basededados %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 >= pop1[1,1] & aux1 <= pop2[1,1])
 
+item2_renda <- item2 %>%
+  mutate(aux2 = VD5011*V1032)
+
+item2_renda <- item2_renda %>%
+  group_by(Ano) %>%
+  select(VD5011, Ano, V1032, aux1, aux2) %>%
+  mutate(aux3 = cumsum(aux2))
+
+renda50p <- item2_renda[210470,6]
+rendap50_total <- (renda50p/rendpc2)*100
+
+
+# Rendimento dos Pobres
+
+#   Em 2020, o Banco Mundial considerava pobre toda pessoa que vivia com menos 
+#   de US$5,50 por dia. Por mes, ao dolar equivalente a R$6, pobres no Brasil 
+#   são aqueles que vivem com menos de R$990. 
+
+itm <- basededados %>%
+  group_by(Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  select(VD5011, Ano, V1032) %>%
+  mutate(aux1 = cumsum(V1032),
+         aux2 = (VD5011*V1032),
+         aux3 = cumsum (aux2)) %>%
+  dplyr:: filter(VD5011 < 990)
