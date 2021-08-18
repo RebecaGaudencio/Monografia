@@ -414,7 +414,8 @@ renda_extra <- basededados %>%
 
 
 #####################################
-##     Concentracao de Renda      ##
+##     Concentracao de Renda       ##
+#####################################
 
 item <- basededados %>%
   group_by(Ano) %>%
@@ -422,7 +423,9 @@ item <- basededados %>%
   select(VD5011, Ano, V1032) %>%
   mutate(aux1 = cumsum(V1032)) 
 
-# Rendimento dos 10% mais ricos
+##################################
+# Rendimento dos 10% mais ricos ##
+##################################
 
 item1 <- basededados %>%
   group_by(Ano) %>%
@@ -430,6 +433,16 @@ item1 <- basededados %>%
   select(VD5011, Ano, V1032) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 <= pop1[1,1])
+
+item1_renda <- item1 %>%
+  mutate(aux2 = VD5011*V1032)
+
+item1_renda <- item1_renda %>%
+  group_by(Ano) %>%
+  select(VD5011, Ano, V1032, aux1, aux2) %>%
+  mutate(aux3 = cumsum(aux2))
+
+renda10p <- item1_renda[34049,6]
 
 # Rendimento dos 50% seguintes
 
