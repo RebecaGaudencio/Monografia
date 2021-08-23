@@ -17,7 +17,7 @@ library(zoo)
 user <- Sys.info()[["user"]]
 message(sprintf("Current User: %s\n"))
 if (user == "rebec") {
-  ROOT <- "C:/Users/rebec/Documents/GitHub/Monografia"
+  ROOT <- "C:/Users/rebec/Desktop/Monografia/Monografia"
 } else if (user == "f.cavalcanti") {
   ROOT <- "C:/Users/Francisco/Dropbox"
 } else {
@@ -333,6 +333,46 @@ png("Evolucao_do_Desemprego_por_Regiao.png", units = "px", width = 850, height =
 plot(Figura5)
 dev.off()
 
+
+############################################################
+#             Taxa de Desemprego por Genero                #
+############################################################
+
+basededados[is.na(basededados)] <- 0
+
+item1 <- basededados %>%
+  group_by(Tempo) %>%
+  mutate(aux1 = sum(desocupfem), aux2 = sum(ocupfem), 
+         aux3 = sum(desocupmasc), aux4 = sum(ocupmasc),
+         taxadedesempregofem = (aux1/(aux1+aux2))*100,
+         taxadedesempregomasc = (aux3/(aux3+aux4))*100) %>%
+  summarise(taxadedesempregofem = mean(taxadedesempregofem),
+            taxadedesempregomasc = mean(taxadedesempregomasc))
+
+windowsFonts(Times=windowsFont("Times New Roman"))
+
+Figura6 <- ggplot(item1, aes(x = Tempo, y = taxadedesempregofem)) +
+  geom_line(aes(col = "Feminino"), size = 1.2) +
+  geom_line(aes(y = taxadedesempregomasc, col = "Masculino"), size = 1.2) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  theme_bw() +
+  scale_linetype_manual(values = c("twodash", "dotted")) +
+  scale_color_manual(values = c("bisque3", "black")) +
+  labs(x = "Trimestre",
+       y = "Em %",
+       title = "Evolução do Desemprego por Gênero",
+       color = "") +
+  theme(legend.position = 'bottom') +
+  theme(plot.title = element_text(family = "Times"))
+
+
+# Salvando a imagem #
+setwd(out_dir)
+
+png("Evolucao_do_Desemprego_por_Genero.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura6)
+dev.off()
+
 #######################################################
 #               Compilado de Desemprego               #
 #######################################################
@@ -355,7 +395,7 @@ item1 <- basededados %>%
 
 windowsFonts(Times=windowsFont("Times New Roman"))
 
-Figura6 <- ggplot(item1, aes(x = Tempo)) +
+Figura7 <- ggplot(item1, aes(x = Tempo)) +
   geom_line(aes(y = taxadedesempregonordeste, col = "Nordeste"), size = 1.2) +
   geom_line(aes(y = taxadedesempregoesco4 , col = "Médio Incompleto"), size = 1.2) +
   geom_line(aes(y = taxadedesempregonegros, col = "Negros"), size = 1.2) +
@@ -380,7 +420,7 @@ Figura6 <- ggplot(item1, aes(x = Tempo)) +
 setwd(out_dir)
 
 png("Evolucao_do_Desemprego_Compilaado.png", units = "px", width = 850, height = 536, res = 100)
-plot(Figura6)
+plot(Figura7)
 dev.off()
 
 #######################################################
@@ -393,10 +433,10 @@ item1 <- basededados %>%
          taxadeinformalidade = (aux1/aux2)*100) %>%
   summarise(taxadeinformalidade = mean(taxadeinformalidade))
 
-Figura7 <- ggplot(data = item1, aes(Tempo, taxadeinformalidade)) +
+Figura8 <- ggplot(data = item1, aes(Tempo, taxadeinformalidade)) +
   geom_line(color = "gray20") + 
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
-  geom_vline(xintercept = item1$Tempo[33], linetype = 8) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
        y = "Em %",
@@ -406,7 +446,7 @@ Figura7 <- ggplot(data = item1, aes(Tempo, taxadeinformalidade)) +
 setwd(out_dir)
 
 png("Evolucao_da_Informalidade.png", units = "px", width = 850, height = 536, res = 100)
-plot(Figura7)
+plot(Figura8)
 dev.off()
 
 #######################################################
@@ -419,7 +459,7 @@ item1 <- basededados %>%
          taxanemnem = (aux1/aux2)*100) %>%
   summarise(taxanemnem = mean(taxanemnem))
 
-Figura8 <- ggplot(data = item1, aes(Tempo, taxanemnem)) +
+Figura9 <- ggplot(data = item1, aes(Tempo, taxanemnem)) +
   geom_line(color = "gray20") + 
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
@@ -432,7 +472,7 @@ Figura8 <- ggplot(data = item1, aes(Tempo, taxanemnem)) +
 setwd(out_dir)
 
 png("Evolucao_dos_Nem-nens.png", units = "px", width = 850, height = 536, res = 100)
-plot(Figura8)
+plot(Figura9)
 dev.off()
 
 #######################################################
@@ -448,7 +488,7 @@ item1 <- basededados %>%
 
 windowsFonts(Times=windowsFont("Times New Roman"))
 
-Figura9 <- ggplot(data = item1, aes(Tempo, taxadesocupacao)) +
+Figura10 <- ggplot(data = item1, aes(Tempo, taxadesocupacao)) +
   geom_line(color = "gray20") + 
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
   geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
@@ -461,6 +501,59 @@ Figura9 <- ggplot(data = item1, aes(Tempo, taxadesocupacao)) +
 setwd(out_dir)
 
 png("Evolucao_da_Desocupacao.png", units = "px", width = 850, height = 536, res = 100)
-plot(Figura9)
+plot(Figura10)
 dev.off()
 
+#######################################################
+#                   Taxa de Desalento                 #
+#######################################################
+
+
+item1 <- basededados %>%
+  group_by(Tempo) %>%
+  mutate(aux1 = sum(desalentados), aux2 = sum(PEA),
+         taxadesalentados = (aux1/aux2)*100) %>%
+  summarise(taxadesalentados = mean(taxadesalentados))
+
+windowsFonts(Times=windowsFont("Times New Roman"))
+
+Figura11 <- ggplot(data = item1, aes(Tempo, taxadesalentados)) +
+  geom_line(color = "gray20") + 
+  geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  theme_bw() +
+  labs(x = "Trimestre",
+       y = "Em %",
+       title = "Evolução da Taxa de Desalentados no Brasil") +
+  theme(plot.title = element_text(family = "Times"))
+
+setwd(out_dir)
+
+png("Evolucao_do_Desalento.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura11)
+dev.off()
+
+
+item1 <- basededados %>%
+  group_by(Tempo) %>%
+  mutate(aux1 = sum(desalentados), aux2 = sum(PIA),
+         taxadesalentados = (aux1/aux2)*100) %>%
+  summarise(taxadesalentados = mean(taxadesalentados))
+
+windowsFonts(Times=windowsFont("Times New Roman"))
+
+Figura12 <- ggplot(data = item1, aes(Tempo, taxadesalentados)) +
+  geom_line(color = "gray20") + 
+  geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  theme_bw() +
+  labs(x = "Trimestre",
+       y = "Em %",
+       title = "Evolução da Taxa de Desalentados no Brasil") +
+  theme(plot.title = element_text(family = "Times"))
+
+setwd(out_dir)
+
+png("Evolucao_do_Desalento2.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura12)
+dev.off()
