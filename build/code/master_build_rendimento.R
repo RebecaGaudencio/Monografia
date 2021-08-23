@@ -448,8 +448,8 @@ item01 <- basededados %>%
   dplyr:: filter(aux1 <= pop01[1,1])
 
 
-#################################
-# Rendimento dos 10% mais ricos ##
+##################################
+# Rendimento dos 10% mais ricos  #
 ##################################
 
 item1 <- basededados %>%
@@ -470,8 +470,9 @@ item1_renda <- item1_renda %>%
 renda10p <- item1_renda[34049,6]
 rendap1_total <- (renda10p/rendpc2)*100
 
-
-# Rendimento dos 50% seguintes
+#######################################
+#    Rendimento dos 50% seguintes     #
+#######################################
 
 item2 <- basededados %>%
   group_by(Ano) %>%
@@ -492,11 +493,14 @@ renda50p <- item2_renda[210470,6]
 rendap50_total <- (renda50p/rendpc2)*100
 
 
-# Rendimento dos Pobres
+####################################
+#       Rendimento dos Pobres      #    
+####################################
+
 
 #   Em 2020, o Banco Mundial considerava pobre toda pessoa que vivia com menos 
-#   de US$5,50 por dia. Por mes, ao dolar equivalente a R$6, pobres no Brasil 
-#   são aqueles que vivem com menos de R$990. 
+#   de US$5,50 por dia. Por mes, ao dolar equivalente a R$5,5, pobres no Brasil 
+#   são aqueles que vivem com menos de R$907,5. 
 
 itm <- basededados %>%
   group_by(Ano) %>%
@@ -505,4 +509,4 @@ itm <- basededados %>%
   mutate(aux1 = cumsum(V1032),
          aux2 = (VD5011*V1032),
          aux3 = cumsum (aux2)) %>%
-  dplyr:: filter(VD5011 < 990)
+  dplyr:: filter(VD5011 < 907.5)
