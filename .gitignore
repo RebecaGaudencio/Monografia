@@ -65,3 +65,4 @@ build/input/input_PNADC_2018_visita5.txt
 build/input/input_PNADC_2019_visita1.txt
 build/input/input_PNADC_2019_visita5.txt
 build/input/deflacionamento_PNADC_anual_visita.txt
+*.txt
