@@ -37,7 +37,7 @@ code_dir <- file.path(ROOT, "build", "code")
 
 setwd(in_dir)
 
-lista_ano <- c("PNADC_2016_visita1.txt")
+lista_ano <- c("dados_PNADC_2016_visita1.txt")
 
 lista_chave <- c("input_PNADC_2016_visita1.txt")
 
@@ -59,36 +59,13 @@ lista <- c("2016_visita1",
             "2019_visita5"
             )
 
-
-lista_ano <-  c("PNADC_2016_visita1",
-                "PNADC_2016_visita5",
-               "PNADC_2017_visita1",
-               "PNADC_2017_visita5",
-               "PNADC_2018_visita1",
-               "PNADC_2018_visita5",
-               "PNADC_2019_visita1",
-               "PNADC_2019_visita5"
-               )
-
-
-lista_chave <- c("input_PNADC_2016_visita1",
-                 "input_PNADC_2016_visita5",
-                 "input_PNADC_2017_visita1",
-                 "input_PNADC_2017_visita5",
-                 "input_PNADC_2018_visita1",
-                 "input_PNADC_2018_visita5",
-                 "input_PNADC_2019_visita1",
-                 "input_PNADC_2019_visita5"
-                 )
-
-
- for (yr in lista) {
+for (yr in lista) {
 
  setwd(in_dir)
 
- lista_pnad <- list.files(pattern = "PNADC_")
+ lista_pnad <- list.files(pattern = "dados_PNADC_20")
 
- chave_input <- list.files(pattern = "input_PNADC_")
+ chave_input <- list.files(pattern = "input_PNADC_20")
 
 
 basededados <- PNADcIBGE::read_pnadc(microdata = lista_pnad, input_txt = chave_input)
@@ -603,5 +580,6 @@ write.csv(basefinal, paste0("C:/Users/rebec/Desktop/Monografia/Monografia/build/
 
 write.csv(basefinal, paste0("C:/Users/rebec/Desktop/Monografia/Monografia/build/output/DadosRenda", yr , ".csv"))
 
-
 }
+
+
