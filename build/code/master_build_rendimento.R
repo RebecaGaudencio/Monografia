@@ -32,7 +32,7 @@ out_dir <- file.path(ROOT, "build", "output")
 tmp_dir <- file.path(ROOT, "build", "tmp")
 code_dir <- file.path(ROOT, "build", "code")
 
-...
+
 # Importacao dos dados e leitura da PNADc - teste
 
 setwd(in_dir)
@@ -46,6 +46,19 @@ basededados2 <- pnadc_design(basededados)
 
 
 # Importacao dos dados e leitura da PNADc 
+
+lista <- c("2016_visita1")
+
+lista <- c("2016_visita1",
+            "2016_visita5",
+            "2017_visita1",
+            "2017_visita5",
+            "2018_visita1",
+            "2018_visita5",
+            "2019_visita1",
+            "2019_visita5"
+            )
+
 
 lista_ano <-  c("PNADC_2016_visita1",
                 "PNADC_2016_visita5",
@@ -69,13 +82,13 @@ lista_chave <- c("input_PNADC_2016_visita1",
                  )
 
 
-# for (yr in lista_ano & lista_chave) {
+ for (yr in lista) {
 
-# setwd(in_dir)
+ setwd(in_dir)
 
-# lista_pnad <- list.files(pattern = yr)
+ lista_pnad <- list.files(pattern = "PNADC_")
 
-# chave_input <- list.files(pattern = yr)
+ chave_input <- list.files(pattern = "input_PNADC_")
 
 
 basededados <- PNADcIBGE::read_pnadc(microdata = lista_pnad, input_txt = chave_input)
@@ -96,11 +109,6 @@ pop <- basededados %>%
   group_by(Ano) %>%
   mutate(aux = sum(V1032)) %>%
   summarise(pop = mean(aux))
-
-pop01 = 0.01*pop[1,2]
-pop1 = 0.1*pop[1,2]
-pop2 = 0.6*pop[1,2]
-
 
 ######################################################
 #   Rendimento Habitual Médio de Todos os Trabalhos  #
@@ -149,14 +157,14 @@ rendpc <- basededados %>%
   summarise(rendpc = mean(aux1))
 
 
-rendpc2 <- basededados %>%
+rendatotal <- basededados %>%
   select(UF, Trimestre, Ano, V1032, VD5011) %>%
   group_by(Ano) %>%
   mutate(aux = (V1032*VD5011),
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpc = mean(aux1))
 
-rendpc2 <- rendpc2[1,2]
+
 
 
 ######################################################
@@ -392,17 +400,11 @@ Aluguel <- basededados %>%
 
 basededados2 <- convey_prep(basededados2)
 
-ginihab <- svygini(~VD4020, basededados2, na.rm = TRUE)
-ginihab
-ginihabUF <- svyby(~VD4020, by = ~UF, basededados2, svygini, na.rm = TRUE)
-colnames(ginihabUF) <- c ("UF", "Gini", "SE")
-ginihabUF <- ginihabUF[,2]
+ginihab <- svyby(~VD4020, by = ~UF + Ano, basededados2, svygini, na.rm = TRUE)
+colnames(ginihab) <- c ("UF", "GiniHab", "SE1")
 
-giniefe <- svygini(~VD4019, basededados2, na.rm = TRUE)
-giniefebUF <- svyby(~VD4019, by = ~UF, basededados2, svygini, na.rm = TRUE)
-giniefebUF <- giniefebUF[,2]
-
-
+giniefet <- svyby(~VD4019, by = ~UF + Ano , basededados2, svygini, na.rm = TRUE)
+colnames(giniefet) <- c ("UF", "GiniEfet", "SE2")
 
 ######################################
 #  Adicao de variaveis no dataframe  #
@@ -439,7 +441,7 @@ renda_extra <- basededados %>%
 #####################################
 
 item <- basededados %>%
-  group_by(UF,Ano) %>%
+  group_by(Ano) %>%
   dplyr::arrange(desc(VD5011)) %>%
   select(VD5011, Ano, V1032) %>%
   mutate(aux1 = cumsum(V1032)) 
@@ -448,65 +450,84 @@ item <- basededados %>%
 # Rendimento dos 1% mais ricos ##
 ##################################
 
-item01 <- basededados %>%
-  group_by(UF,Ano) %>%
+item1 <- basededados %>%
+  group_by(Ano) %>%
   dplyr::arrange(desc(VD5011)) %>%
   select(VD5011, Ano, V1032) %>%
-  mutate(aux1 = cumsum(V1032),
-         aux2 = (VD5011*V1032),
-         aux3 = cumsum(aux2)) %>%
-  dplyr:: filter(aux1 <= pop01[1,1])
+  mutate(aux1 = cumsum(V1032)) %>%
+  dplyr:: filter(aux1 <= pop$pop*0.01) %>%
+  mutate(aux2 = (VD5011*V1032)) %>%
+  summarise(renda1rico = sum(aux2))
 
+#################################
+# Rendimento dos 5% mais ricos ##
+##################################
+
+item2 <- basededados %>%
+  group_by(Ano) %>%
+  dplyr::arrange(desc(VD5011)) %>%
+  select(VD5011, Ano, V1032) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  dplyr:: filter(aux1 <= pop$pop*0.05) %>%
+  mutate(aux2 = (VD5011*V1032)) %>%
+  summarise(renda5rico = sum(aux2))
 
 ##################################
 # Rendimento dos 10% mais ricos  #
 ##################################
 
-item1 <- basededados %>%
-  group_by(UF,Ano) %>%
+item3 <- basededados %>%
+  group_by(Ano) %>%
   dplyr::arrange(desc(VD5011)) %>%
   select(VD5011, Ano, V1032) %>%
   mutate(aux1 = cumsum(V1032)) %>%
-  dplyr:: filter(aux1 <= pop1[1,1])
-
-item1_renda <- item1 %>%
-  mutate(aux2 = VD5011*V1032)
-
-item1_renda <- item1_renda %>%
-  group_by(UF,Ano) %>%
-  select(VD5011, Ano, V1032, aux1, aux2) %>%
-  mutate(aux3 = cumsum(aux2))
-
-renda10p <- item1_renda[34049,6]
-rendap1_total <- (renda10p/rendpc2)*100
-
+  dplyr:: filter(aux1 <= pop$pop*0.1) %>%
+  mutate(aux2 = (VD5011*V1032)) %>%
+  summarise(renda10rico = sum(aux2))
+  
 #######################################
 #    Rendimento dos 50% seguintes     #
 #######################################
 
-item2 <- basededados %>%
-  group_by(UF,Ano) %>%
+item4 <- basededados %>%
+  group_by(Ano) %>%
   dplyr::arrange(desc(VD5011)) %>%
   select(VD5011, Ano, V1032) %>%
   mutate(aux1 = cumsum(V1032)) %>%
-  dplyr:: filter(aux1 >= pop1[1,1] & aux1 <= pop2[1,1])
+  dplyr:: filter(aux1 >= pop$pop*0.1 & aux1 <= pop$pop*0.6) %>%
+  mutate(aux2 = (VD5011*V1032)) %>%
+  summarise(renda50seguinte = sum(aux2))
 
-item2_renda <- item2 %>%
-  mutate(aux2 = VD5011*V1032)
 
-item2_renda <- item2_renda %>%
+#######################################
+#    Rendimento dos 40% mais pobres   #
+#######################################
+
+item5 <- basededados %>%
   group_by(Ano) %>%
-  select(VD5011, Ano, V1032, aux1, aux2) %>%
-  mutate(aux3 = cumsum(aux2))
+  dplyr::arrange((VD5011)) %>%
+  select(VD5011, Ano, V1032) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  dplyr:: filter(aux1 <= pop$pop*0.4) %>%
+  mutate(aux2 = (VD5011*V1032)) %>%
+  summarise(renda40pobre = sum(aux2))
 
-renda50p <- item2_renda[210470,6]
-rendap50_total <- (renda50p/rendpc2)*100
+#######################################
+#    Rendimento dos 40% mais pobres   #
+#######################################
 
+item6 <- basededados %>%
+  group_by(Ano) %>%
+  dplyr::arrange((VD5011)) %>%
+  select(VD5011, Ano, V1032) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  dplyr:: filter(aux1 <= pop$pop*0.5) %>%
+  mutate(aux2 = (VD5011*V1032)) %>%
+  summarise(renda50pobre = sum(aux2))
 
 ####################################
 #       Rendimento dos Pobres      #    
 ####################################
-
 
 #   Em 2020, o Banco Mundial considerava pobre toda pessoa que vivia com menos 
 #   de US$5,50 por dia. Por mes, ao dolar equivalente a R$5,5, pobres no Brasil 
@@ -520,10 +541,6 @@ itm <- basededados %>%
          aux2 = (VD5011*V1032),
          aux3 = cumsum (aux2)) %>%
   dplyr:: filter(VD5011 < 907.5)
-
-
-
-
 
 
 
@@ -565,15 +582,26 @@ basefinal <- merge(basefinal, Segdesempregosul, by = c("UF","Ano"), all = TRUE)
 basefinal <- merge(basefinal, Segdesempregocentrooeste, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, Aposentadoria, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, Doacao, by = c("UF","Ano"), all = TRUE) 
-basefinal <- merge(basefinal, Aluguel, by = c("UF","Ano"), all = TRUE) 
-basefinal <- merge(basefinal, itm, by = c("UF","Ano"), all = TRUE) 
-basefinal <- merge(basefinal, item, by = c("UF","Ano"), all = TRUE) 
-basefinal <- merge(basefinal, item01, by = c("UF","Ano"), all = TRUE) 
-basefinal <- merge(basefinal, item1, by = c("UF","Ano"), all = TRUE) 
-basefinal <- merge(basefinal, item2, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, Aluguel, by = c("UF","Ano"), all = TRUE)
+basefinal <- merge(basefinal, giniefet, by = c("UF","Ano"), all = TRUE)
+basefinal <- merge(basefinal, ginihab, by = c("UF","Ano"), all = TRUE)
+
+
+baserenda <- pop
+baserenda <- merge(baserenda, rendatotal, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, item1, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, item2, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, item3, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, item4, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, item5, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, item6, by = c("Ano"), all = TRUE)
+
 
 # Salvando data frame no excel
 
-write.csv(basefinal, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/output/DadosVisitas", yr , ".csv"))
+write.csv(basefinal, paste0("C:/Users/rebec/Desktop/Monografia/Monografia/build/output/DadosVisitas", yr , ".csv"))
 
-#}
+write.csv(basefinal, paste0("C:/Users/rebec/Desktop/Monografia/Monografia/build/output/DadosRenda", yr , ".csv"))
+
+
+}
