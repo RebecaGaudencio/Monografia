@@ -52,11 +52,6 @@ lista_ano <-  c("PNADC_2016_visita1.txt",
                "PNADC_2019_visita1.txt",
                "PNADC_2019_visita5.txt")
 
-lista_ano_trabalho <- c("PNADC_2016_visita5",
-                        "PNADC_2017_visita5",
-                        "PNADC_2018_visita5",
-                        "PNADC_2019_visita5")
-
 
 lista_chave <- c("input_PNADC_2016_visita1.txt",
                  "input_PNADC_2016_visita5.txt",
