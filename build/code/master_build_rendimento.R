@@ -33,7 +33,7 @@ tmp_dir <- file.path(ROOT, "build", "tmp")
 code_dir <- file.path(ROOT, "build", "code")
 
 ...
-# Importacao dos dados e leitura da PNADc 
+# Importacao dos dados e leitura da PNADc - teste
 
 setwd(in_dir)
 
@@ -41,29 +41,44 @@ lista_ano <- c("PNADC_2016_visita1.txt")
 
 lista_chave <- c("input_PNADC_2016_visita1.txt")
 
-
-
-lista_ano <-  c("PNADC_2016_visita1.txt",
-                "PNADC_2016_visita5.txt",
-               "PNADC_2017_visita1.txt",
-               "PNADC_2017_visita5.txt",
-               "PNADC_2018_visita1.txt",
-               "PNADC_2018_visita5.txt",
-               "PNADC_2019_visita1.txt",
-               "PNADC_2019_visita5.txt")
-
-
-lista_chave <- c("input_PNADC_2016_visita1.txt",
-                 "input_PNADC_2016_visita5.txt",
-                 "input_PNADC_2017_visita1.txt",
-                 "input_PNADC_2017_visita5.txt",
-                 "input_PNADC_2018_visita1.txt",
-                 "input_PNADC_2018_visita5.txt",
-                 "input_PNADC_2019_visita1.txt",
-                 "input_PNADC_2019_visita5.txt",)
-
-
 basededados <- PNADcIBGE::read_pnadc(microdata = lista_ano, input_txt = lista_chave)
+basededados2 <- pnadc_design(basededados)
+
+
+# Importacao dos dados e leitura da PNADc 
+
+lista_ano <-  c("PNADC_2016_visita1",
+                "PNADC_2016_visita5",
+               "PNADC_2017_visita1",
+               "PNADC_2017_visita5",
+               "PNADC_2018_visita1",
+               "PNADC_2018_visita5",
+               "PNADC_2019_visita1",
+               "PNADC_2019_visita5"
+               )
+
+
+lista_chave <- c("input_PNADC_2016_visita1",
+                 "input_PNADC_2016_visita5",
+                 "input_PNADC_2017_visita1",
+                 "input_PNADC_2017_visita5",
+                 "input_PNADC_2018_visita1",
+                 "input_PNADC_2018_visita5",
+                 "input_PNADC_2019_visita1",
+                 "input_PNADC_2019_visita5"
+                 )
+
+
+# for (yr in lista_ano & lista_chave) {
+
+# setwd(in_dir)
+
+# lista_pnad <- list.files(pattern = yr)
+
+# chave_input <- list.files(pattern = yr)
+
+
+basededados <- PNADcIBGE::read_pnadc(microdata = lista_pnad, input_txt = chave_input)
 basededados2 <- pnadc_design(basededados)
 ##############################################
 #   Declarando a variável de peso amostral   #
@@ -424,7 +439,7 @@ renda_extra <- basededados %>%
 #####################################
 
 item <- basededados %>%
-  group_by(Ano) %>%
+  group_by(UF,Ano) %>%
   dplyr::arrange(desc(VD5011)) %>%
   select(VD5011, Ano, V1032) %>%
   mutate(aux1 = cumsum(V1032)) 
@@ -434,7 +449,7 @@ item <- basededados %>%
 ##################################
 
 item01 <- basededados %>%
-  group_by(Ano) %>%
+  group_by(UF,Ano) %>%
   dplyr::arrange(desc(VD5011)) %>%
   select(VD5011, Ano, V1032) %>%
   mutate(aux1 = cumsum(V1032),
@@ -448,7 +463,7 @@ item01 <- basededados %>%
 ##################################
 
 item1 <- basededados %>%
-  group_by(Ano) %>%
+  group_by(UF,Ano) %>%
   dplyr::arrange(desc(VD5011)) %>%
   select(VD5011, Ano, V1032) %>%
   mutate(aux1 = cumsum(V1032)) %>%
@@ -458,7 +473,7 @@ item1_renda <- item1 %>%
   mutate(aux2 = VD5011*V1032)
 
 item1_renda <- item1_renda %>%
-  group_by(Ano) %>%
+  group_by(UF,Ano) %>%
   select(VD5011, Ano, V1032, aux1, aux2) %>%
   mutate(aux3 = cumsum(aux2))
 
@@ -470,7 +485,7 @@ rendap1_total <- (renda10p/rendpc2)*100
 #######################################
 
 item2 <- basededados %>%
-  group_by(Ano) %>%
+  group_by(UF,Ano) %>%
   dplyr::arrange(desc(VD5011)) %>%
   select(VD5011, Ano, V1032) %>%
   mutate(aux1 = cumsum(V1032)) %>%
@@ -498,10 +513,67 @@ rendap50_total <- (renda50p/rendpc2)*100
 #   são aqueles que vivem com menos de R$907,5. 
 
 itm <- basededados %>%
-  group_by(Ano) %>%
+  group_by(UF,Ano) %>%
   dplyr::arrange(VD5011) %>%
   select(VD5011, Ano, V1032) %>%
   mutate(aux1 = cumsum(V1032),
          aux2 = (VD5011*V1032),
          aux3 = cumsum (aux2)) %>%
   dplyr:: filter(VD5011 < 907.5)
+
+
+
+
+
+
+
+#######################################################
+##                                                   ##        
+#  Juncao de todas as variaveis num data frame unico  #
+##                                                   ##
+#######################################################
+
+basefinal <- populacao
+basefinal <- merge(basefinal, rendtrahabit, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, rendtrabefet, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, rendtrabefetfontes, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, rendtrahabit, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, rendpc, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, rendpc2, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa1rendhab, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa2rendhab, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa3rendhab, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa4rendhab, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa5rendhab, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa6rendhab, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa7rendhab, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa1rendeft, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa2rendeft, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa3rendeft, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa4rendeft, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa5rendeft, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa6rendeft, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, faixa7rendeft, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, BPC, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, BF, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, PSocial, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, Segdesemprego, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, Segdesempregonorte, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, Segdesempregonordeste, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, Segdesempregosudeste, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, Segdesempregosul, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, Segdesempregocentrooeste, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, Aposentadoria, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, Doacao, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, Aluguel, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, itm, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, item, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, item01, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, item1, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, item2, by = c("UF","Ano"), all = TRUE) 
+
+# Salvando data frame no excel
+
+write.csv(basefinal, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/output/DadosVisitas", yr , ".csv"))
+
+#}
