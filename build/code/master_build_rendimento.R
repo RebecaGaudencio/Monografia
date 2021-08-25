@@ -12,6 +12,7 @@ library(magrittr)
 library(survey)
 library(convey)
 
+
 ############################################################
 #                          Folder Path                     #
 ############################################################
@@ -63,9 +64,9 @@ for (yr in lista) {
 
  setwd(in_dir)
 
- lista_pnad <- list.files(pattern = "dados_PNADC_20")
+ lista_pnad <- list.files(pattern = paste("dados_PNADC_", yr, sep = ""))
 
- chave_input <- list.files(pattern = "input_PNADC_20")
+ chave_input <- list.files(pattern = paste("input_PNADC_" , yr, sep = ""))
 
 
 basededados <- PNADcIBGE::read_pnadc(microdata = lista_pnad, input_txt = chave_input)
@@ -140,7 +141,7 @@ rendatotal <- basededados %>%
   mutate(aux = (V1032*VD5011),
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpc = mean(aux1))
-
+colnames(rendatotal) <- c("Ano", "rendapctotal")
 
 
 
@@ -391,25 +392,26 @@ basededados <- basededados %>%
   mutate(domicilio = paste0(UPA, V1008))
 
 #Fazer essa parte no analysis
-renda_ajuda_gov <- basededados %>%
-  group_by(Ano) %>%
-  mutate (aux1 = sum(BPC), 
-          aux2 = sum(BF), 
-          aux3 = sum(PSocial), 
-          aux4 = sum(Segdesemprego),
-          ajudagoverno = (aux1+aux2+aux3+aux4)) %>%
-  summarise(ajudagoverno = mean(ajudagoverno))
-
-
-renda_extra <- basededados %>%
-  group_by(Ano) %>%
-  mutate (aux1 = sum(Aposentadoria), 
-          aux2 = sum(Doacao), 
-          aux3 = sum(Aluguel), 
-          aux4 = sum(Segdesemprego),
-          ajudaextra = (aux1+aux2+aux3+aux4)) %>%
-  summarise(ajudaextra = mean(ajudaextra))
-
+#
+#renda_ajuda_gov <- basededados %>%
+#  group_by(Ano) %>%
+#  mutate (aux1 = sum(BPC), 
+#          aux2 = sum(BF), 
+#          aux3 = sum(PSocial), 
+#          aux4 = sum(Segdesemprego),
+#          ajudagoverno = (aux1+aux2+aux3+aux4)) %>%
+#  summarise(ajudagoverno = mean(ajudagoverno))
+#
+#
+#renda_extra <- basededados %>%
+#  group_by(Ano) %>%
+#  mutate (aux1 = sum(Aposentadoria), 
+#          aux2 = sum(Doacao), 
+#          aux3 = sum(Aluguel), 
+#          aux4 = sum(Segdesemprego),
+#          ajudaextra = (aux1+aux2+aux3+aux4)) %>%
+#  summarise(ajudaextra = mean(ajudaextra))
+#
 # Até esta linha fazer no analysis
 
 
@@ -533,7 +535,6 @@ basefinal <- merge(basefinal, rendtrabefet, by = c("UF","Ano"), all = TRUE)
 basefinal <- merge(basefinal, rendtrabefetfontes, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, rendtrahabit, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, rendpc, by = c("UF","Ano"), all = TRUE) 
-basefinal <- merge(basefinal, rendpc2, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, faixa1rendhab, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, faixa2rendhab, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, faixa3rendhab, by = c("UF","Ano"), all = TRUE) 
@@ -578,8 +579,6 @@ baserenda <- merge(baserenda, item6, by = c("Ano"), all = TRUE)
 
 write.csv(basefinal, paste0("C:/Users/rebec/Desktop/Monografia/Monografia/build/output/DadosVisitas", yr , ".csv"))
 
-write.csv(basefinal, paste0("C:/Users/rebec/Desktop/Monografia/Monografia/build/output/DadosRenda", yr , ".csv"))
+write.csv(baserenda, paste0("C:/Users/rebec/Desktop/Monografia/Monografia/build/output/DadosRenda", yr , ".csv"))
 
 }
-
-
