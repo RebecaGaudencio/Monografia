@@ -245,7 +245,7 @@ faixa4rendeft <- basededados %>%
   summarise(faixa4rendeft = mean(aux))
 
 #Faixa 5 
-faixa1rendeft <- basededados %>%
+faixa5rendeft <- basededados %>%
   select(UF, Trimestre, Ano, V1032, VD5006) %>%
   dplyr::filter(VD5006 == 5) %>%
   group_by(UF, Ano) %>%
@@ -379,10 +379,10 @@ Aluguel <- basededados %>%
 basededados2 <- convey_prep(basededados2)
 
 ginihab <- svyby(~VD4020, by = ~UF + Ano, basededados2, svygini, na.rm = TRUE)
-colnames(ginihab) <- c ("UF", "GiniHab", "SE1")
+colnames(ginihab) <- c ("UF", "Ano", "GiniHab", "SE1")
 
 giniefet <- svyby(~VD4019, by = ~UF + Ano , basededados2, svygini, na.rm = TRUE)
-colnames(giniefet) <- c ("UF", "GiniEfet", "SE2")
+colnames(giniefet) <- c ("UF", "Ano", "GiniEfet", "SE2")
 
 ######################################
 #  Adicao de variaveis no dataframe  #
@@ -512,14 +512,14 @@ item6 <- basededados %>%
 #   de US$5,50 por dia. Por mes, ao dolar equivalente a R$5,5, pobres no Brasil 
 #   são aqueles que vivem com menos de R$907,5. 
 
-itm <- basededados %>%
-  group_by(UF,Ano) %>%
-  dplyr::arrange(VD5011) %>%
-  select(VD5011, Ano, V1032) %>%
-  mutate(aux1 = cumsum(V1032),
-         aux2 = (VD5011*V1032),
-         aux3 = cumsum (aux2)) %>%
-  dplyr:: filter(VD5011 < 907.5)
+#itm <- basededados %>%
+#  group_by(UF,Ano) %>%
+#  dplyr::arrange(VD5011) %>%
+#  select(VD5011, Ano, V1032) %>%
+#  mutate(aux1 = cumsum(V1032),
+#         aux2 = (VD5011*V1032),
+#         aux3 = cumsum (aux2)) %>%
+#  dplyr:: filter(VD5011 < 907.5)
 
 
 
