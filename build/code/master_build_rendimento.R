@@ -134,7 +134,6 @@ rendpc <- basededados %>%
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpc = mean(aux1))
 
-
 rendatotal <- basededados %>%
   select(UF, Trimestre, Ano, V1032, VD5011) %>%
   group_by(Ano) %>%
@@ -144,7 +143,50 @@ rendatotal <- basededados %>%
 colnames(rendatotal) <- c("Ano", "rendapctotal")
 
 
+##################################################################
+#        Rendimento Domiciliar per capita - por Regiao           #
+##################################################################
 
+rendapcnordeste <- basededados %>%
+  select(UF, Ano, V1032, VD5011) %>%
+  dplyr:: filter(UF == "21" | UF == "22" | UF == "23"| UF == "24"| UF == "25"| UF == "26"| UF == "27"| UF == "28"| UF == "29") %>%
+  group_by(UF,Ano) %>%
+  mutate(aux = (V1032*VD5011),
+         aux1 = sum(aux, na.rm = TRUE)) %>%
+  summarise(rendpcnordeste = mean(aux1))
+  
+rendapcnorte <- basededados %>%
+  select(UF, Ano, V1032, VD5011) %>%
+  dplyr::filter(UF == "11" | UF == "12" | UF == "13"| UF == "14"| UF == "15"| UF == "16"| UF == "17") %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = (V1032*VD5011),
+         aux1 = sum(aux, na.rm = TRUE)) %>%
+  summarise(rendpcnorte = mean(aux1))
+
+rendapcsudeste <- basededados %>%
+  select(UF, Ano, V1032, VD5011) %>%
+  dplyr::filter(UF == "31" | UF == "32" | UF == "33"| UF == "34"| UF == "35") %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = (V1032*VD5011),
+         aux1 = sum(aux, na.rm = TRUE)) %>%
+  summarise(rendpcsudeste = mean(aux1))
+
+rendapcsul <- basededados %>%
+  select(UF, Ano, V1032, VD5011) %>%
+  dplyr::filter(UF == "41" | UF == "42" | UF == "43") %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = (V1032*VD5011),
+         aux1 = sum(aux, na.rm = TRUE)) %>%
+  summarise(rendpcsul = mean(aux1))
+
+rendapcentroeste <- basededados %>%
+  select(UF, Ano, V1032, VD5011) %>%
+  dplyr::filter(UF == "50" | UF == "51" | UF == "52"| UF == "53") %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = (V1032*VD5011),
+         aux1 = sum(aux, na.rm = TRUE)) %>%
+  summarise(rendpcentroeste = mean(aux1))
+  
 ######################################################
 #     Faixa de Rendimento domiciliar per capita      #
 #                      Habitual                      #
@@ -391,30 +433,6 @@ colnames(giniefet) <- c ("UF", "Ano", "GiniEfet", "SE2")
 basededados <- basededados %>%
   mutate(domicilio = paste0(UPA, V1008))
 
-#Fazer essa parte no analysis
-#
-#renda_ajuda_gov <- basededados %>%
-#  group_by(Ano) %>%
-#  mutate (aux1 = sum(BPC), 
-#          aux2 = sum(BF), 
-#          aux3 = sum(PSocial), 
-#          aux4 = sum(Segdesemprego),
-#          ajudagoverno = (aux1+aux2+aux3+aux4)) %>%
-#  summarise(ajudagoverno = mean(ajudagoverno))
-#
-#
-#renda_extra <- basededados %>%
-#  group_by(Ano) %>%
-#  mutate (aux1 = sum(Aposentadoria), 
-#          aux2 = sum(Doacao), 
-#          aux3 = sum(Aluguel), 
-#          aux4 = sum(Segdesemprego),
-#          ajudaextra = (aux1+aux2+aux3+aux4)) %>%
-#  summarise(ajudaextra = mean(ajudaextra))
-#
-# Até esta linha fazer no analysis
-
-
 #####################################
 ##     Concentracao de Renda       ##
 #####################################
@@ -535,6 +553,11 @@ basefinal <- merge(basefinal, rendtrabefet, by = c("UF","Ano"), all = TRUE)
 basefinal <- merge(basefinal, rendtrabefetfontes, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, rendtrahabit, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, rendpc, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, rendpcnordeste, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, rendpcnorte, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, rendpcsudeste, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, rendpcsul, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, rendpcentroeste, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, faixa1rendhab, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, faixa2rendhab, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, faixa3rendhab, by = c("UF","Ano"), all = TRUE) 
