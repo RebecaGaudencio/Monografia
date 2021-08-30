@@ -64,6 +64,22 @@ for (xx in lista_visita) {
 }
 
 
+###############################################################
+#                 Ajuste nas bases de dados                   #
+###############################################################
+
+
+baseproporcao <- baseproporcao %>%
+  group_by(Ano) %>%
+  summarise(pop = mean(pop),
+            rendapctotal = mean(rendapctotal),
+            renda1rico = mean(renda1rico),
+            renda5rico = mean(renda5rico),
+            renda10rico = mean(renda10rico),
+            renda50seguinte = mean(renda50seguinte),
+            renda40pobre = mean(renda40pobre),
+            renda50pobre = mean(renda50pobre))
+
 
 ####################################################
 #       Renda Domiciliar per capita - Brasil       #
@@ -183,12 +199,12 @@ item6 <- baseproporcao %>%
          aux5 = sum(renda40pobre),
          aux6 = sum(renda50pobre),
          aux7 = sum(rendapctotal),
-         rico1 <- (aux1/aux7)*100,
-         rico5 <- (aux2/aux7)*100,
-         rico10 <- (aux3/aux7)*100,
-         seguinte50 <- (aux4/aux7)*100,
-         pobre40 <- (aux5/aux7)*100,
-         pobre50 <- (aux6/aux7)*100) %>%
+         rico1 = (aux1/aux7)*100,
+         rico5 = (aux2/aux7)*100,
+         rico10 = (aux3/aux7)*100,
+         seguinte50 = (aux4/aux7)*100,
+         pobre40 = (aux5/aux7)*100,
+         pobre50 = (aux6/aux7)*100) %>%
   summarise(rico1 = mean(rico1),
             rico5 = mean(rico5),
             rico10 = mean(rico10),
@@ -196,22 +212,21 @@ item6 <- baseproporcao %>%
             pobre40 = mean(pobre40),
             pobre50 = mean(pobre50))
 
-
-#Figura5 <- ggplot(item6, aes(x = Tempo)) +
-#  geom_line(aes(y = rico1, col = "1% mais rico"), size = 1.2) +
-#  geom_line(aes(y = rico2, col = "5% mais ricos"), size = 1.2) +
-#  geom_line(aes(y = rico10, col = "10% mais ricos"), size = 1.2) +
-#  geom_line(aes(y = seguinte50, col = "50% seguintes"), size = 1.2) +
-#  geom_line(aes(y = , col = "Centro Oeste"), size = 1.2) +
-#  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
-#  theme_bw() +
-#  scale_linetype_manual(values = c("twodash", "dotted")) +
-#  scale_color_manual(values = c("bisque3", "black", "gray69", "tan4", "forestgreen")) +
-#  labs(x = "Trimestre",
-#       y = "Em %",
-#       title = "Evolução do Desemprego por Região",
-#       color = "") +
-#  theme(legend.position = 'bottom')
+Figura6 <- geom_bar(item6, aes(x = Ano)) +
+  geom_bar(aes(y = rico1, col = "1% mais rico"), size = 1.2) +
+  geom_bar(aes(y = rico2, col = "5% mais ricos"), size = 1.2) +
+  geom_bar(aes(y = rico10, col = "10% mais ricos"), size = 1.2) +
+  geom_bar(aes(y = seguinte50, col = "50% seguintes"), size = 1.2) +
+  geom_bar(aes(y = , col = "Centro Oeste"), size = 1.2) +
+  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  theme_bw() +
+  scale_linetype_manual(values = c("twodash", "dotted")) +
+  scale_color_manual(values = c("bisque3", "black", "gray69", "tan4", "forestgreen")) +
+  labs(x = "Ano",
+       y = "Em %",
+       title = "Renda apropriada pelos",
+       color = "") +
+  theme(legend.position = 'bottom')
 #         
 #(baseproporcao$renda1rico[1]/baseproporcao$rendapctotal[1])*100
 

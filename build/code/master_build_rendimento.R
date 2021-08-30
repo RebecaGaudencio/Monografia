@@ -147,7 +147,7 @@ colnames(rendatotal) <- c("Ano", "rendapctotal")
 #        Rendimento Domiciliar per capita - por Regiao           #
 ##################################################################
 
-rendapcnordeste <- basededados %>%
+rendpcnordeste <- basededados %>%
   select(UF, Ano, V1032, VD5011) %>%
   dplyr:: filter(UF == "21" | UF == "22" | UF == "23"| UF == "24"| UF == "25"| UF == "26"| UF == "27"| UF == "28"| UF == "29") %>%
   group_by(UF,Ano) %>%
@@ -155,7 +155,7 @@ rendapcnordeste <- basededados %>%
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpcnordeste = mean(aux1))
   
-rendapcnorte <- basededados %>%
+rendpcnorte <- basededados %>%
   select(UF, Ano, V1032, VD5011) %>%
   dplyr::filter(UF == "11" | UF == "12" | UF == "13"| UF == "14"| UF == "15"| UF == "16"| UF == "17") %>%
   group_by(UF, Ano) %>%
@@ -163,7 +163,7 @@ rendapcnorte <- basededados %>%
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpcnorte = mean(aux1))
 
-rendapcsudeste <- basededados %>%
+rendpcsudeste <- basededados %>%
   select(UF, Ano, V1032, VD5011) %>%
   dplyr::filter(UF == "31" | UF == "32" | UF == "33"| UF == "34"| UF == "35") %>%
   group_by(UF, Ano) %>%
@@ -171,7 +171,7 @@ rendapcsudeste <- basededados %>%
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpcsudeste = mean(aux1))
 
-rendapcsul <- basededados %>%
+rendpcsul <- basededados %>%
   select(UF, Ano, V1032, VD5011) %>%
   dplyr::filter(UF == "41" | UF == "42" | UF == "43") %>%
   group_by(UF, Ano) %>%
@@ -179,7 +179,7 @@ rendapcsul <- basededados %>%
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpcsul = mean(aux1))
 
-rendapcentroeste <- basededados %>%
+rendpcentroeste <- basededados %>%
   select(UF, Ano, V1032, VD5011) %>%
   dplyr::filter(UF == "50" | UF == "51" | UF == "52"| UF == "53") %>%
   group_by(UF, Ano) %>%
