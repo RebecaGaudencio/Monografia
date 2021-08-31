@@ -526,18 +526,18 @@ item6 <- basededados %>%
 #       Rendimento dos Pobres      #    
 ####################################
 
-#   Em 2020, o Banco Mundial considerava pobre toda pessoa que vivia com menos 
-#   de US$5,50 por dia. Por mes, ao dolar equivalente a R$5,5, pobres no Brasil 
-#   são aqueles que vivem com menos de R$907,5. 
+   Em 2020, o Banco Mundial considerava pobre toda pessoa que vivia com menos 
+   de US$5,50 por dia. Por mes, ao dolar equivalente a R$5,5, pobres no Brasil 
+   são aqueles que vivem com menos de R$907,5. 
 
-#itm <- basededados %>%
-#  group_by(UF,Ano) %>%
-#  dplyr::arrange(VD5011) %>%
-#  select(VD5011, Ano, V1032) %>%
-#  mutate(aux1 = cumsum(V1032),
-#         aux2 = (VD5011*V1032),
-#         aux3 = cumsum (aux2)) %>%
-#  dplyr:: filter(VD5011 < 907.5)
+itm <- basededados %>%
+  group_by(UF,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  select(VD5011, Ano, V1032) %>%
+  mutate(aux1 = cumsum(V1032),
+         aux2 = (VD5011*V1032),
+         aux3 = cumsum (aux2)) %>%
+  dplyr:: filter(VD5011 < 907.5)
 
 
 
