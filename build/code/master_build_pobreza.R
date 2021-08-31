@@ -97,6 +97,36 @@ rendadompc <- basededados %>%
   summarise(rendadompc = mean(aux1))
 
 
+################################################
+#            Proporção de Pobres               #
+################################################
 
+#Linha de Pobreza: valor pobreza (US$) * Taxa de Cambio (2020) * Dias (em um mes) 
+LinhaPobreza = 5.5*(1.66)*30
 
+Pobreza <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*1)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(Pobreza = sum(V1032))
 
+(sum(Pobreza$Pobreza)/sum(populacao$populacao))*100
+
+#Linha de Pobreza: valor extrema pobreza (US$) * Taxa de Cambio (2020) * Dias (em um mes) 
+LinhaExtremaPobreza = 1.9*(1.66)*30
+
+ExtremaPobreza <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaExtremaPobreza) %>%
+  summarise(PobrezaExtrema = sum(V1032))
+
+(sum(ExtremaPobreza$PobrezaExtrema)/sum(populacao$populacao))*100
