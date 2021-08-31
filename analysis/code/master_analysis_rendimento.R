@@ -68,8 +68,8 @@ for (xx in lista_visita) {
 #                 Ajuste nas bases de dados                   #
 ###############################################################
 
-basededados <- basededados %>%
-  group_by(UF,Ano) %>%
+basededados1 <- basededados %>%
+  group_by(Ano) %>%
   summarise(populacao = mean(populacao),
             rendtrabhabit.x = mean(rendtrabhabit.x),
             rendtrabeft.x = mean(rendtrabeft.x),
@@ -109,8 +109,6 @@ basededados <- basededados %>%
             Aluguel = mean(Aluguel),
             GiniEfet = mean(GiniEfet),
             GiniHab = mean(GiniHab))
-
-
 
 
 baseproporcao <- baseproporcao %>%
@@ -160,25 +158,24 @@ dev.off()
 
 basededados[is.na(basededados)] <- 0
 
-# item2 <- basededados %>%
-#  group_by(Ano) %>%
-#  mutate(aux1 = sum(rendpcnordeste),
-#         aux2 = sum(rendpcnorte),
-#         aux3 = sum(rendpcsudeste),
-#         aux4 = sum(rendpcsul),
-#         aux5 = sum(rendpcentrooeste)
-#         aux6 = sum(populacao),
-#         rendadompcnordeste = (aux1/aux6),
-#         rendadompcnorte = (aux2/aux6),
-#         rendadompcsudeste = (aux3/aux6),
-#         rendadompcsul = (aux4/aux6),
-#         rendadompcentroeste = (aux5/aux6)) %>%
-#  summarise(rendadompcnordeste = mean(rendadompcnordeste),
-#            rendadompcnorte = mean(rendadompcnorte),
-#            rendadompcsudeste = mean(rendadompcsudeste),
-#            rendadompcsul = mean(rendadompcsul),
-#            rendadompcentroeste = mean(rendadompcentroeste))
-
+item2 <- basededados %>%
+  group_by(Ano) %>%
+  mutate(aux1 = sum(rendpcnordeste),
+         aux2 = sum(rendpcnorte),
+         aux3 = sum(rendpcsudeste),
+         aux4 = sum(rendpcsul),
+         aux5 = sum(rendpcentrooeste),
+         aux6 = sum(populacao),
+         rendadompcnordeste = (aux1/aux6),
+         rendadompcnorte = (aux2/aux6),
+         rendadompcsudeste = (aux3/aux6),
+         rendadompcsul = (aux4/aux6),
+         rendadompcentroeste = (aux5/aux6)) %>%
+  summarise(rendadompcnordeste = mean(rendadompcnordeste),
+            rendadompcnorte = mean(rendadompcnorte),
+            rendadompcsudeste = mean(rendadompcsudeste),
+            rendadompcsul = mean(rendadompcsul),
+            rendadompcentroeste = mean(rendadompcentroeste))
 
 
 Figura2 <- ggplot(item2, aes(x = Ano)) + 
@@ -192,7 +189,7 @@ Figura2 <- ggplot(item2, aes(x = Ano)) +
   scale_linetype_manual(values = c("twodash", "dotted")) +
   scale_color_manual(values = c("bisque3", "black", "gray69", "tan4", "forestgreen")) +
   labs(x = "Ano",
-       y = "Em %",
+       y = "Em R$",
        color = "") +
   theme(legend.position = 'bottom')
 
