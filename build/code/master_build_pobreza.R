@@ -74,4 +74,29 @@ lista <- c("2016_visita1",
 
 
   
-  
+##############################################
+#   Declarando a variável de peso amostral   #
+##############################################
+
+populacao <- basededados %>%
+  select(UF, Trimestre, Ano, V1032) %>%
+  group_by(UF, Trimestre, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(populacao = mean(aux))
+
+
+######################################################
+#    Rendimento Domiciliar (habitual)per capita      #
+######################################################
+
+rendadompc <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5011,CO2) %>%
+  group_by(UF, Trimestre, Ano) %>%
+  mutate(aux = (V1032*VD5011*CO2),
+         aux1 = sum(aux, na.rm = TRUE)) %>%
+  summarise(rendadompc = mean(aux1))
+
+
+
+
+
