@@ -34,16 +34,6 @@ tmp_dir <- file.path(ROOT, "build", "tmp")
 code_dir <- file.path(ROOT, "build", "code")
 
 
-# Importacao dos dados e leitura da PNADc - teste
-
-setwd(in_dir)
-
-lista_ano <- c("dados_PNADC_2016_visita1.txt")
-
-lista_chave <- c("input_PNADC_2016_visita1.txt")
-
-basededados <- PNADcIBGE::read_pnadc(microdata = lista_ano, input_txt = lista_chave)
-basededados2 <- pnadc_design(basededados)
 
 
 # Importacao dos dados e leitura da PNADc 
@@ -521,24 +511,6 @@ item6 <- basededados %>%
   dplyr:: filter(aux1 <= pop$pop*0.5) %>%
   mutate(aux2 = (VD5011*V1032)) %>%
   summarise(renda50pobre = sum(aux2))
-
-####################################
-#       Rendimento dos Pobres      #    
-####################################
-
-   Em 2020, o Banco Mundial considerava pobre toda pessoa que vivia com menos 
-   de US$5,50 por dia. Por mes, ao dolar equivalente a R$5,5, pobres no Brasil 
-   são aqueles que vivem com menos de R$907,5. 
-
-itm <- basededados %>%
-  group_by(UF,Ano) %>%
-  dplyr::arrange(VD5011) %>%
-  select(VD5011, Ano, V1032) %>%
-  mutate(aux1 = cumsum(V1032),
-         aux2 = (VD5011*V1032),
-         aux3 = cumsum (aux2)) %>%
-  dplyr:: filter(VD5011 < 907.5)
-
 
 
 #######################################################
