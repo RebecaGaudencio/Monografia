@@ -68,6 +68,50 @@ for (xx in lista_visita) {
 #                 Ajuste nas bases de dados                   #
 ###############################################################
 
+basededados <- basededados %>%
+  group_by(UF,Ano) %>%
+  summarise(populacao = mean(populacao),
+            rendtrabhabit.x = mean(rendtrabhabit.x),
+            rendtrabeft.x = mean(rendtrabeft.x),
+            rendtrabeft.y = mean(rendtrabeft.y),
+            rendpc = mean(rendpc),
+            rendpcnordeste = mean(rendpcnordeste),
+            rendpcnorte = mean(rendpcnorte),
+            rendpcsudeste = mean(rendpcsudeste),
+            rendpcsul = mean(rendpcsul),
+            rendpcentroeste = mean(rendpcentroeste),
+            faixa1rendhab = mean(faixa1rendhab),
+            faixa2rendhab = mean(faixa2rendhab),
+            faixa3rendhab = mean(faixa3rendhab),
+            faixa4rendhab = mean(faixa4rendhab),
+            faixa5rendhab = mean(faixa5rendhab),
+            faixa6rendhab = mean(faixa6rendhab),
+            faixa7rendhab = mean(faixa7rendhab),
+            faixa1rendeft = mean(faixa1rendeft),
+            faixa2rendeft = mean(faixa2rendeft),
+            faixa3rendeft = mean(faixa3rendeft),
+            faixa4rendeft = mean(faixa4rendeft),
+            faixa5rendeft = mean(faixa5rendeft),
+            faixa6rendeft = mean(faixa5rendeft),
+            faixa6rendeft = mean(faixa6rendeft),
+            faixa7endeft = mean(faixa7endeft),
+            BPC = mean(BPC),
+            BF = mean(BF),
+            PSocial = mean(PSocial),
+            Segdesemprego = mean(Segdesemprego),
+            Segdesempregonorte = mean(Segdesempregonorte),
+            Segdesempregonordeste = mean(Segdesempregonordeste),
+            Segdesempregosudeste = mean(Segdesempregosudeste),
+            Segdesempregosul = mean(Segdesempregosul),
+            Segdesempregocentrooeste = mean(Segdesempregocentrooeste),
+            Aposentadoria = mean(Aposentadoria),
+            Doacao = mean(Doacao),
+            Aluguel = mean(Aluguel),
+            GiniEfet = mean(GiniEfet),
+            GiniHab = mean(GiniHab))
+
+
+
 
 baseproporcao <- baseproporcao %>%
   group_by(Ano) %>%
