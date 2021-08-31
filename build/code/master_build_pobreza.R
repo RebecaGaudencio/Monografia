@@ -43,6 +43,7 @@ lista_ano <- c("dados_PNADC_2016_visita1.txt")
 lista_chave <- c("input_PNADC_2016_visita1.txt")
 
 basededados <- PNADcIBGE::read_pnadc(microdata = lista_ano, input_txt = lista_chave)
+basededados <- PNADcIBGE::pnadc_deflator(data_pnadc = basededados, deflator.file = "deflator_PNADC_2019.xls")
 basededados2 <- pnadc_design(basededados)
 
 
@@ -60,19 +61,17 @@ lista <- c("2016_visita1",
            "2019_visita5"
 )
 
-for (yr in lista) {
+#for (yr in lista) {
+#  
+#  setwd(in_dir)
   
-  setwd(in_dir)
-  
-  lista_pnad <- list.files(pattern = paste("dados_PNADC_", yr, sep = ""))
-  
-  chave_input <- list.files(pattern = paste("input_PNADC_" , yr, sep = ""))
-  
-  
-basededados <- PNADcIBGE::read_pnadc(microdata = lista_pnad, input_txt = chave_input)
+#  lista_pnad <- list.files(pattern = paste("dados_PNADC_", yr, sep = ""))
+#  
+#  chave_input <- list.files(pattern = paste("input_PNADC_" , yr, sep = ""))
+#  
+#  
+#basededados <- PNADcIBGE::read_pnadc(microdata = lista_pnad, input_txt = chave_input)
 
-deflator <- 
-basededados <-   
-  
+
   
   
