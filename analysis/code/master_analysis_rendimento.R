@@ -207,26 +207,26 @@ item6 <- baseproporcao %>%
          pobre50 = (aux6/aux7)*100) %>%
   summarise(rico1 = mean(rico1),
             rico5 = mean(rico5),
-            rico10 = mean(rico10),
+            rico10 = mean(rico10), 
             seguinte50 = mean(seguinte50),
             pobre40 = mean(pobre40),
             pobre50 = mean(pobre50))
 
 Figura6 <- ggplot(item6, aes(x = Ano)) +
-  geom_bar(aes(y = rico1, col = "1% mais rico"), stat = "identity", width = .15, fill = "bisque3", position = position_nudge(x = .0)) +
-  geom_bar(aes(y = rico5, col = "5% mais ricos"), stat = "identity", width = .15, fill = "black", position = position_nudge(x = .15)) +
-  geom_bar(aes(y = rico10, col = "10% mais ricos"), stat = "identity", width = .15, fill = "gray69", position = position_nudge(x = .3) ) +
-  geom_bar(aes(y = seguinte50, col = "50% seguintes"), stat = "identity", width = .15, fill = "tan4", position = position_nudge(x = .45)) +
-  geom_bar(aes(y = pobre40, col = "40% mais pobres"), stat = "identity", width = .15, fill = "forestgreen", position = position_nudge(x = .60)) +
-  geom_bar(aes(y = pobre50, col = "50% mais pobres"), stat = "identity", width = .15, fill = "lightcyan4", position = position_nudge(x = .75)) +
+  geom_bar(aes(y = rico1, color = "1% mais rico"), stat = "identity", width = .15, fill = "darksalmon" , position = position_nudge(x = .0)) +
+  geom_bar(aes(y = rico5, color = "5% mais ricos"), stat = "identity", width = .15, fill = "black", position = position_nudge(x = .15)) +
+  geom_bar(aes(y = rico10, color = "10% mais ricos"), stat = "identity", width = .15, fill = "orangered4" ,position = position_nudge(x = .3) ) +
+  geom_bar(aes(y = seguinte50, color = "50% seguintes" ), stat = "identity", width = .15, fill = "tan4", position = position_nudge(x = .45)) +
   theme_bw() +
-  scale_linetype_manual(values = c("twodash", "dotted")) +
-  scale_color_manual(values = c("bisque3", "black","gray69", "tan4", "forestgreen", "lightcyan4")) +
+  scale_color_manual(values = c("darksalmon", "black", "tan4", "orangered4")) +
+  scale_fill_manual(values = c("rico1" = "darksalmon", "black", "orangered4","50% seguintes")) + 
   labs(x = "Ano",
        y = "Em %",
-       title = "Renda apropriada pelos",
        color = "") +
   theme(legend.position = 'bottom')
+
+plot(Figura6)
+
 
 #         
 #(baseproporcao$renda1rico[1]/baseproporcao$rendapctotal[1])*100
