@@ -101,22 +101,285 @@ rendadompc <- basededados %>%
 #            Proporção de Pobres               #
 ################################################
 
+
+#                POBREZA                   #
 #Linha de Pobreza: valor pobreza (US$) * Taxa de Cambio (2020) * Dias (em um mes) 
+
 LinhaPobreza = 5.5*(1.66)*30
 
-Pobreza <- basededados %>%
+PobrezaBrasil <- basededados %>%
   select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
   group_by(UF,Trimestre,Ano) %>%
   dplyr::arrange(VD5011) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   mutate(aux2 = (VD5011*V1032*CO3)) %>%
-  mutate(aux3 = (VD5011*1)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
   dplyr::filter(aux3 <= LinhaPobreza) %>%
-  summarise(Pobreza = sum(V1032))
+  summarise(PobrezaBrasil = sum(V1032))
 
 (sum(Pobreza$Pobreza)/sum(populacao$populacao))*100
 
+###############################################
+#             Probreza por Região             #
+###############################################
+
+PobrezaNorte <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(UF =="11" | UF == "12" | UF == "13"| UF == "14"| UF == "15"| UF == "16"| UF == "17") %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaNorte = sum(V1032))
+
+
+PobrezaNordeste <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(UF == "21" | UF == "22" | UF == "23"| UF == "24"| UF == "25"| UF == "26"| UF == "27"| UF == "28"| UF == "29") %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaNordeste = sum(V1032))
+
+
+PobrezaSudeste <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(UF == "31" | UF == "32" | UF == "33"| UF == "35") %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaSudeste = sum(V1032))
+
+
+PobrezaSul <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(UF == "41" | UF == "42" | UF == "43") %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaSull = sum(V1032))
+
+
+
+PobrezaCentroOeste <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(UF == "50" | UF == "51" | UF == "52"| UF == "53") %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaCentroOeste = sum(V1032))
+
+
+##############################################
+#            Pobreza por Sexo                #
+##############################################
+
+PobrezaMulher <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2007) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2007 = 2) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaMulher = sum(V1032))
+
+PobrezaHomem <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2007) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2007 = 2) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaMulher = sum(V1032))
+
+
+##############################################
+#            Pobreza por Cor                #
+##############################################
+
+PobrezaPretos <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2010) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2010 = 2) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaPretos = sum(V1032))
+
+
+PobrezaPardos <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2010) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2010 = 4) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaPardos = sum(V1032))
+
+
+PobrezaBrancos <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2010) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2010 = 1) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaBrancos = sum(V1032))
+
+
+#############################################
+#        Pobreza por Sexo e Cor             #
+#############################################
+
+PobrezaMulherPreta <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2007, V2010) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2007 = 2 & V2010 = 2) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaMulherPreta = sum(V1032))
+
+
+PobrezaMulherParda <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2007, V2010) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2007 = 2 & V2010 = 4) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaMulherParda = sum(V1032))
+
+PobrezaMulherBranca <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2007, V2010) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2007 = 2 & V2010 = 1) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaMulherBranca = sum(V1032))
+
+
+
+PobrezaHomemPreto <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2007, V2010) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2007 = 1 & V2010 = 2) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaHomemPreto = sum(V1032))
+
+PobrezaHomemPardo <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2007, V2010) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2007 = 1 & V2010 = 4) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaHomemPardo = sum(V1032))
+
+PobrezaHomemBranco <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2007, V2010) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2007 = 1 & V2010 = 1) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaHomemBranco = sum(V1032))
+
+
+#############################################
+#            Pobreza por Idade              #
+#############################################
+
+PobrezaGrupo1 <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2009) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2009>= 0 & V2009<= 14) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaGrupo1 = sum(V1032))
+
+
+PobrezaGrupo2 <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2009) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2009>= 15 & V2009<= 29) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaGrupo2 = sum(V1032))
+
+
+PobrezaGrupo3 <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2009) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2009>= 30 & V2009<= 59) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaGrupo3 = sum(V1032))
+
+
+PobrezaGrupo4 <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3, V2009) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2009>= 60) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaPobreza) %>%
+  summarise(PobrezaGrupo4 = sum(V1032))
+
+
+#                EXTREMA POBREZA              #
 #Linha de Pobreza: valor extrema pobreza (US$) * Taxa de Cambio (2020) * Dias (em um mes) 
+
 LinhaExtremaPobreza = 1.9*(1.66)*30
 
 ExtremaPobreza <- basededados %>%
