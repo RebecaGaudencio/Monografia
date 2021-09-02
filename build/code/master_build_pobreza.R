@@ -73,8 +73,30 @@ lista <- c("2016_visita1",
 #basededados <- PNADcIBGE::read_pnadc(microdata = lista_pnad, input_txt = chave_input)
 
 
-  
-##############################################
+
+#########################################################
+#  Incluindo Linha de Pobreza e Extrema Pobreza no DF   #
+#########################################################
+
+
+basededados <- basededados %>%
+  mutate(LinhaPobreza = ifelse(Ano == 2016, ..., 
+                ifelse(Ano == 2017, ...,
+                       ifelse(Ano == 2018, ..., 
+                              ifelse(Ano == 2019, ...,
+                                     ifelse(Ano == 2020, ...,))))))
+
+
+
+basededados <- basededados %>%
+  mutate(LinhaExtremaPobreza = ifelse(Ano == 2016, ..., 
+                               ifelse(Ano == 2017, ...,
+                                      ifelse(Ano == 2018, ..., 
+                                             ifelse(Ano == 2019, ...,
+                                                    ifelse(Ano == 2020, ...,))))))
+
+
+###############################################
 #   Declarando a variável de peso amostral   #
 ##############################################
 
@@ -101,8 +123,10 @@ rendadompc <- basededados %>%
 #            Proporção de Pobres               #
 ################################################
 
+###########################################
+#            1. POBREZA                   #
+###########################################
 
-#                POBREZA                   #
 #Linha de Pobreza: valor pobreza (US$) * Taxa de Cambio (2020) * Dias (em um mes) 
 
 LinhaPobreza = 5.5*(1.66)*30
@@ -377,12 +401,15 @@ PobrezaGrupo4 <- basededados %>%
   summarise(PobrezaGrupo4 = sum(V1032))
 
 
-#                EXTREMA POBREZA              #
+###############################################
+#              2.EXTREMA POBREZA              #
+###############################################
+
 #Linha de Pobreza: valor extrema pobreza (US$) * Taxa de Cambio (2020) * Dias (em um mes) 
 
 LinhaExtremaPobreza = 1.9*(1.66)*30
 
-ExtremaPobreza <- basededados %>%
+ExtremaPobrezaBrasil <- basededados %>%
   select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
   group_by(UF,Trimestre,Ano) %>%
   dplyr::arrange(VD5011) %>%
@@ -390,6 +417,134 @@ ExtremaPobreza <- basededados %>%
   mutate(aux2 = (VD5011*V1032*CO3)) %>%
   mutate(aux3 = (VD5011*CO3)) %>%
   dplyr::filter(aux3 <= LinhaExtremaPobreza) %>%
-  summarise(PobrezaExtrema = sum(V1032))
+  summarise(ExtremaPobrezaBrasil = sum(V1032))
 
-(sum(ExtremaPobreza$PobrezaExtrema)/sum(populacao$populacao))*100
+(sum(ExtremaPobrezaBrazil$ExtremaPobrezaBrasil)/sum(populacao$populacao))*100
+
+
+###############################################
+#         Extrema Pobreza por Região          #
+###############################################
+
+ExtremaPobrezaNorte <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(UF =="11" | UF == "12" | UF == "13"| UF == "14"| UF == "15"| UF == "16"| UF == "17") %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaExtremaPobreza) %>%
+  summarise(ExtremaPobrezaNorte = sum(V1032))
+
+
+ExtremaPobrezaNordeste <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(UF == "21" | UF == "22" | UF == "23"| UF == "24"| UF == "25"| UF == "26"| UF == "27"| UF == "28"| UF == "29") %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaExtremaPobreza) %>%
+  summarise(ExtremaPobrezaNordeste = sum(V1032))
+
+
+ExtremaPobrezaSudeste <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(UF == "31" | UF == "32" | UF == "33"| UF == "35") %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaExtremaPobreza) %>%
+  summarise(ExtremaPobrezaSudeste = sum(V1032))
+
+
+ExtremaPobrezaSul <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(UF == "41" | UF == "42" | UF == "43") %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaExtremaPobreza) %>%
+  summarise(ExtremaPobrezaSull = sum(V1032))
+
+
+
+ExtremaPobrezaCentroOeste <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(UF == "50" | UF == "51" | UF == "52"| UF == "53") %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO3)) %>%
+  mutate(aux3 = (VD5011*CO3)) %>%
+  dplyr::filter(aux3 <= LinhaExtremaPobreza) %>%
+  summarise(ExtremaPobrezaCentroOeste = sum(V1032))
+
+
+################################################
+#         3. COMPOSIÇÃO DA RENDA               #
+################################################
+
+#################################################
+#         Decompor a renda em 5 grupos:         # 
+#           1. Trabalho                         #
+#           2. Ajuda do Governo - Sem Auxílio   #
+#           3. Auxílio Emergencial              #
+#           4. Aposentadoria ou Pensão          #
+#           5. Doação                           #
+#################################################
+
+
+
+
+#################################################
+#                    4. HIATO                   # 
+#################################################
+
+
+#################################################
+#               Hiatos de Renda                 #
+#################################################
+
+HiatoRenda <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  mutate(aux1 = (VD5011*V1032*CO3)) %>%
+  mutate(aux2 = (VD5011*CO3)) %>%
+  dplyr::filter(aux2 <= LinhaPobreza) %>%
+  mutate(aux3 = (LinhaPobreza - aux2)) %>%
+  summarise(HiatoRenda = mean(aux3))
+  
+
+#################################################
+#                 Hiato Agregado                # 
+#################################################
+
+
+HiatoAgregado <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  mutate(aux1 = (VD5011*V1032*CO3)) %>%
+  mutate(aux2 = (VD5011*CO3)) %>%
+  dplyr::filter(aux2 <= LinhaPobreza) %>%
+  mutate(aux3 = (LinhaPobreza - aux2)) %>%
+  summarise(HiatoAgregado = sum(aux3))
+
+# No analysis, dividir o hiato agregado pelo tamanho médio
+# da população, para chegar no hiato médio de pobreza. 
+
+
+
+
+
+
+
+
