@@ -80,20 +80,20 @@ lista <- c("2016_visita1",
 
 
 basededados <- basededados %>%
-  mutate(LinhaPobreza = ifelse(Ano == 2016, ..., 
-                ifelse(Ano == 2017, ...,
-                       ifelse(Ano == 2018, ..., 
-                              ifelse(Ano == 2019, ...,
-                                     ifelse(Ano == 2020, ...,))))))
+  mutate(LinhaPobreza = ifelse(Ano == 2016, (1.66*30*CO3*5.5), 
+                ifelse(Ano == 2017, (1.66*30*CO3*5.5),
+                       ifelse(Ano == 2018, (1.66*30*CO3*5.5), 
+                              ifelse(Ano == 2019, (1.66*30*CO3*5.5),
+                                     ifelse(Ano == 2020, (1.66*30*CO3*5.5),))))))
 
 
 
 basededados <- basededados %>%
-  mutate(LinhaExtremaPobreza = ifelse(Ano == 2016, ..., 
-                               ifelse(Ano == 2017, ...,
-                                      ifelse(Ano == 2018, ..., 
-                                             ifelse(Ano == 2019, ...,
-                                                    ifelse(Ano == 2020, ...,))))))
+  mutate(LinhaExtremaPobreza = ifelse(Ano == 2016, (1.66*30*CO3*1.9), 
+                                      ifelse(Ano == 2017, (1.66*30*CO3*1.9),
+                                             ifelse(Ano == 2018, (1.66*30*CO3*1.9), 
+                                                    ifelse(Ano == 2019, (1.66*30*CO3*1.9),
+                                                           ifelse(Ano == 2020, (1.66*30*CO3*1.9),))))))
 
 
 ###############################################
@@ -128,8 +128,6 @@ rendadompc <- basededados %>%
 ###########################################
 
 #Linha de Pobreza: valor pobreza (US$) * Taxa de Cambio (2020) * Dias (em um mes) 
-
-LinhaPobreza = 5.5*(1.66)*30
 
 PobrezaBrasil <- basededados %>%
   select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
@@ -406,8 +404,6 @@ PobrezaGrupo4 <- basededados %>%
 ###############################################
 
 #Linha de Pobreza: valor extrema pobreza (US$) * Taxa de Cambio (2020) * Dias (em um mes) 
-
-LinhaExtremaPobreza = 1.9*(1.66)*30
 
 ExtremaPobrezaBrasil <- basededados %>%
   select(VD5011, Trimestre, UF, Ano, V1032, CO3) %>%
