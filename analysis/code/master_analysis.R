@@ -74,7 +74,8 @@ lista_ano <- c("PNADC_012012",
                "PNADC_022020",
                "PNADC_032020",
                "PNADC_042020",
-               "PNADC_012021"
+               "PNADC_012021",
+               "PNADC_022021"
                )
 
 basededados <- data.frame( UF = character(),Trimestre = character(),Ano = character())
