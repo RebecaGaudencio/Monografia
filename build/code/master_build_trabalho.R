@@ -17,7 +17,7 @@ library(magrittr)
 user <- Sys.info()[["user"]]
 message(sprintf("Current User: %s\n"))
 if (user == "rebec") {
-  ROOT <- "C:/Users/rebec/Documents/GitHub/Monografia"
+  ROOT <- "C:/Users/rebec/Desktop/Monografia/Monografia"
 } else if (user == "f.cavalcanti") {
   ROOT <- "C:/Users/Francisco/Dropbox"
 } else {
@@ -68,9 +68,12 @@ lista_ano <- c("PNADC_012012",
                "PNADC_022020",
                "PNADC_032020",
                "PNADC_042020",
-               "PNADC_012021"
+               "PNADC_012021",
+               "PNADC_022021"
                )
 
+
+lista_ano <- c("PNADC_022021")
 
 for (yr in lista_ano) {
   
@@ -78,7 +81,7 @@ for (yr in lista_ano) {
   
   lista_pnad <- list.files(pattern = yr)
   
-  chave_input <- list.files(pattern = "input_PNADC_trimestral.sas")
+  chave_input <- list.files(pattern = "input_PNADCtrimestral")
   
   pnadc_df <- read_pnadc(microdata = lista_pnad, input_txt = chave_input)
 
@@ -1409,6 +1412,6 @@ basefinal <- basefinal %>% mutate(year = yr)
 
 # Salvando data frame no excel
 
-write.csv(basefinal, paste0("C:/Users/rebec/Documents/GitHub/Monografia/build/output/DadosBrutos", yr , ".csv"))
+write.csv(basefinal, paste0("C:/Users/rebec/Desktop/Monografia/Monografia/build/output/DadosBrutos", yr , ".csv"))
 
 }
