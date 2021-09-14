@@ -515,7 +515,7 @@ RendaPobresPSocial <-  basededados %>%
   summarise(RendaPobresPSocial = sum(aux1, na.rm = TRUE))
 
 RendaPobresSegdesemprego <- basededados %>%
-  select(VD5011, Trimestre, UF, Ano, V1032, CO2, LinhaPobreza, V5005A, V5005A2) %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO2, CO2e, LinhaPobreza, V5005A, V5005A2) %>%
   group_by(UF,Trimestre,Ano) %>%
   dplyr::arrange(VD5011) %>%
   dplyr::filter(V5005A == 1) %>%
@@ -525,7 +525,7 @@ RendaPobresSegdesemprego <- basededados %>%
   summarise(RendaPobresSegdesemprego = sum(aux1, na.rm = TRUE))
 
 RendaPobresAposentadoria <- basededados %>%
-  select(VD5011, Trimestre, UF, Ano, V1032, CO2, LinhaPobreza, V5004A, V5004A2) %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO2, CO2e, LinhaPobreza, V5004A, V5004A2) %>%
   group_by(UF,Trimestre,Ano) %>%
   dplyr::arrange(VD5011) %>%
   dplyr::filter(V5004A == 1) %>%
@@ -535,7 +535,7 @@ RendaPobresAposentadoria <- basededados %>%
   summarise(RendaPobresAposentadoria = sum(aux1, na.rm = TRUE))
 
 RendaPobresDoacao <- basededados %>%
-  select(VD5011, Trimestre, UF, Ano, V1032, CO2, LinhaPobreza, V5006A, V5006A2) %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO2, CO2e, LinhaPobreza, V5006A, V5006A2) %>%
   group_by(UF,Trimestre,Ano) %>%
   dplyr::arrange(VD5011) %>%
   dplyr::filter(V5006A == 1) %>%
@@ -545,13 +545,13 @@ RendaPobresDoacao <- basededados %>%
   summarise(RendaPobresDoacao = sum(aux1, na.rm = TRUE))
 
 RendaPobresAluguel <- basededados %>%
-  select(VD5011, Trimestre, UF, Ano, V1032, CO2, LinhaPobreza, V5007A, V5007A2) %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO2, CO2e, LinhaPobreza, V5007A, V5007A2) %>%
   group_by(UF,Trimestre,Ano) %>%
   dplyr::arrange(VD5011) %>%
   dplyr::filter(V5007A == 1) %>%
   mutate(aux1 = (V5007A2*CO2e*V1032)) %>%
-  mutate(aux3 = (VD5011*CO2)) %>%
-  dplyr::filter(aux3 < LinhaPobreza) %>%
+  mutate(aux2 = (VD5011*CO2)) %>%
+  dplyr::filter(aux2 < LinhaPobreza) %>%
   summarise(RendaPobresAluguel = sum(aux1, na.rm = TRUE))
 
 ###############################################################
@@ -596,43 +596,39 @@ RendaPSocial <-  basededados %>%
   summarise(RendaPSocial = sum(aux1, na.rm = TRUE))
 
 RendaSegdesemprego <- basededados %>%
-  select(VD5011, Trimestre, UF, Ano, V1032, CO2, V5005A, V5005A2) %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO2, CO2e, V5005A, V5005A2) %>%
   group_by(UF,Trimestre,Ano) %>%
   dplyr::arrange(VD5011) %>%
   dplyr::filter(V5005A == 1) %>%
   mutate(aux1 = (V5005A2*CO2e*V1032)) %>%
   mutate(aux2 = (VD5011*CO2)) %>%
-  dplyr::filter(aux2 < LinhaPobreza) %>%
   summarise(RendaSegdesemprego = sum(aux1, na.rm = TRUE))
 
 RendaAposentadoria <- basededados %>%
-  select(VD5011, Trimestre, UF, Ano, V1032, CO2, LinhaPobreza, V5004A, V5004A2) %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO2, CO2e, LinhaPobreza, V5004A, V5004A2) %>%
   group_by(UF,Trimestre,Ano) %>%
   dplyr::arrange(VD5011) %>%
   dplyr::filter(V5004A == 1) %>%
   mutate(aux1 = (V5004A2*CO2e*V1032)) %>%
   mutate(aux2 = (VD5011*CO2)) %>%
-  dplyr::filter(aux2 < LinhaPobreza) %>%
   summarise(RendaAposentadoria = sum(aux1, na.rm = TRUE))
 
 RendaDoacao <- basededados %>%
-  select(VD5011, Trimestre, UF, Ano, V1032, CO2, LinhaPobreza, V5006A, V5006A2) %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO2, CO2e, LinhaPobreza, V5006A, V5006A2) %>%
   group_by(UF,Trimestre,Ano) %>%
   dplyr::arrange(VD5011) %>%
   dplyr::filter(V5006A == 1) %>%
   mutate(aux1 = (V5006A2*CO2e*V1032)) %>%
   mutate(aux2 = (VD5011*CO2)) %>%
-  dplyr::filter(aux2 < LinhaPobreza) %>%
   summarise(RendaDoacao = sum(aux1, na.rm = TRUE))
 
 RendaAluguel <- basededados %>%
-  select(VD5011, Trimestre, UF, Ano, V1032, CO2, LinhaPobreza, V5007A, V5007A2) %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO2, CO2e, LinhaPobreza, V5007A, V5007A2) %>%
   group_by(UF,Trimestre,Ano) %>%
   dplyr::arrange(VD5011) %>%
   dplyr::filter(V5007A == 1) %>%
   mutate(aux1 = (V5007A2*CO2e*V1032)) %>%
   mutate(aux3 = (VD5011*CO2)) %>%
-  dplyr::filter(aux3 < LinhaPobreza) %>%
   summarise(RendaAluguel = sum(aux1, na.rm = TRUE))
 
 
