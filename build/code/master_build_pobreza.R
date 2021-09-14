@@ -101,9 +101,9 @@ rendadompc <- basededados %>%
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendadompc = mean(aux1))
 
-###########################################
-#            1. POBREZA                   #
-###########################################
+#############################################################################
+#                                   1. POBREZA                              #
+#############################################################################
 
 PobrezaBrasil <- basededados %>%
   select(VD5011, Trimestre, UF, Ano, V1032, CO2, LinhaPobreza) %>%
@@ -367,11 +367,10 @@ PobrezaGrupo4 <- basededados %>%
   summarise(PobrezaGrupo4 = sum(V1032))
 
 
-###############################################
-#              2.EXTREMA POBREZA              #
-###############################################
+############################################################################
+#                               2.EXTREMA POBREZA                          #
+############################################################################
 
-#Linha de Pobreza: valor extrema pobreza (US$) * Taxa de Cambio (2020) * Dias (em um mes) 
 
 ExtremaPobrezaBrasil <- basededados %>%
   select(VD5011, Trimestre, UF, Ano, V1032, CO2, LinhaExtremaPobreza) %>%
@@ -450,18 +449,18 @@ ExtremaPobrezaCentroOeste <- basededados %>%
   summarise(ExtremaPobrezaCentroOeste = sum(V1032))
 
 
-################################################
-#         3. COMPOSIÇÃO DA RENDA               #
-################################################
+############################################################################
+#                          3. COMPOSIÇÃO DA RENDA                          #
+############################################################################
 
-#################################################
-#         Decompor a renda em 5 grupos:         # 
-#           1. Trabalho                         #
-#           2. Ajuda do Governo - Sem Auxílio   #
-#           3. Auxílio Emergencial              #
-#           4. Aposentadoria ou Pensão          #
-#           5. Doação                           #
-#################################################
+ #################################################
+ #         Decompor a renda em 5 grupos:         # 
+ #           1. Trabalho                         #
+ #           2. Ajuda do Governo - Sem Auxílio   #
+ #           3. Auxílio Emergencial              #
+ #           4. Aposentadoria ou Pensão          #
+ #           5. Doação                           #
+ #################################################
 
 
 RendaPobres <- basededados %>%
@@ -638,9 +637,9 @@ RendaAluguel <- basededados %>%
 
 
 
-#################################################
-#                    4. HIATO                   # 
-#################################################
+#########################################################################
+#                                4. HIATO                               # 
+#########################################################################
 
 
 #################################################
@@ -727,5 +726,8 @@ basefinal <- merge(basefinal, HiatoRenda, by = c("UF","Trimestre","Ano"), all = 
 basefinal <- merge(basefinal, HiatoAgregado, by = c("UF","Trimestre","Ano"), all = TRUE) 
 
 
+# Salvando data frame no excel
 
+write.csv(basefinal, paste0("C:/Users/rebec/Desktop/Monografia/Monografia/build/output/DadosPobreza", yr , ".csv"))
 
+}
