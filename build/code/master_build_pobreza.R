@@ -160,9 +160,72 @@ Pretos <- basededados %>%
   mutate(aux = sum(V1032)) %>%
   summarise(Pretos = mean(aux, na.rm = TRUE))
 
+PretosePardos <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V2010) %>%
+  dplyr::filter(V2010 == 2 | V2010 == 4 ) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(PretosePardos = mean(aux, na.rm = TRUE))
+
+Homensbrancos <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V2007, V2010) %>%
+  dplyr::filter(V2007 == 1 & V2010 == 1) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Homensbrancos = mean(aux, na.rm = TRUE))
+
+Homenspretos <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V2007, V2010) %>%
+  dplyr::filter(V2007 == 1 & V2010 == 2) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Homenspretos = mean(aux, na.rm = TRUE))
+
+Homenspardos <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V2007, V2010) %>%
+  dplyr::filter(V2007 == 1 & V2010 == 4) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Homenspardos = mean(aux, na.rm = TRUE))
+
+Homenspretosepardos <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V2007, V2010) %>%
+  dplyr::filter(V2007 == 1 & V2010 == 2 | V2007 == 1 & V2010 == 4) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Homenspretosepardos = mean(aux, na.rm = TRUE))
+
+Mulheresbrancas <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V2007, V2010) %>%
+  dplyr::filter(V2007 == 2 & V2010 == 1) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Mulheresbrancas = mean(aux, na.rm = TRUE))
+
+Mulherespretas <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V2007, V2010) %>%
+  dplyr::filter(V2007 == 2 & V2010 == 2) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Mulherespretas = mean(aux, na.rm = TRUE))
+
+Mulherespardas <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V2007, V2010) %>%
+  dplyr::filter(V2007 == 2 & V2010 == 4) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Mulherespardas = mean(aux, na.rm = TRUE))
+
+Mulherespretasepardas <- basededados %>%
+  select(UF, Trimestre, Ano, V1032, V2007, V2010) %>%
+  dplyr::filter(V2007 == 2 & V2010 == 2 | V2007 == 2 & V2010 == 4) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(Mulherespretasepardas = mean(aux, na.rm = TRUE))
+
 Grupo1 <- basededados %>%
   select(VD5011, Trimestre, UF, Ano, V1032, CO2, V2009, LinhaPobreza) %>%
-  dplyr::filter(V2009>= 0 & V2009<= 14) %>%
+  dplyr::filter(V2009 >= 0 & V2009 <= 14) %>%
   group_by(UF,Trimestre,Ano) %>%
   mutate(aux = sum(V1032)) %>%
   summarise(Grupo1 = mean(aux, na.rm = TRUE))
@@ -785,11 +848,20 @@ basefinal <- merge(basefinal, Homens, by = c("UF","Trimestre","Ano"), all = TRUE
 basefinal <- merge(basefinal, Mulheres, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, Brancos, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, Pardos, by = c("UF","Trimestre","Ano"), all = TRUE) 
-basefinal <- merge(basefinal, Pretos, by = c("UF","Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, Pretos, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, Homensbrancos, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, Homenspardos, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, Homenspretos, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, Homenspretosepardos, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, Mulheresbrancas, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, Mulherespardas, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, Mulherespretas, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, Mulherespretasepardas, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, Grupo1, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, Grupo2, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, Grupo3, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, Grupo4, by = c("UF","Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, rendadompc, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, PobrezaBrasil, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaNorte, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaNordeste, by = c("UF","Trimestre","Ano"), all = TRUE) 
@@ -818,6 +890,7 @@ basefinal <- merge(basefinal, ExtremaPobrezaSudeste, by = c("UF","Trimestre","An
 basefinal <- merge(basefinal, ExtremaPobrezaSul, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, ExtremaPobrezaCentroOeste, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, RendaPobres, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, RendaPobresTrabalho, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, RendaPobresBPC, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, RendaPobresBF, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, RendaPobresPSocial, by = c("UF","Trimestre","Ano"), all = TRUE)
@@ -825,6 +898,7 @@ basefinal <- merge(basefinal, RendaPobresSegdesemprego, by = c("UF","Trimestre",
 basefinal <- merge(basefinal, RendaPobresAposentadoria, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, RendaPobresDoacao, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, RendaPobresAluguel, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, RendaTrabalho, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, RendaBPC, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, RendaBF, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, RendaPSocial, by = c("UF","Trimestre","Ano"), all = TRUE)
