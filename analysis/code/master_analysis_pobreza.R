@@ -187,5 +187,71 @@ item6 <- basededados %>%
             Pgrupo4 = mean(Pgrupo4))
 
 
+###########################################################
+#                    Composição da Renda                  #
+###########################################################
 
+item7 <- basededados %>%
+  group_by(Ano) %>%
+  mutate(aux1 = sum(RendaPobres),
+         aux2 = sum(RendaPobresTrabalho),
+         aux3 = sum(RendaPobresBPC),
+         aux4 = sum(RendaPobresBF),
+         aux5 = sum(RendaPobresPSocial),
+         aux6 = sum(RendaPobresSegdesemprego),
+         aux7 = sum(RendaPobresAposentadoria),
+         aux8 = sum(RendaPobresDoacao),
+         aux9 = sum(RendaPobresAluguel),
+         Ptrabalho = sum((aux2/aux1)*100),
+         Pajuda = sum(((aux3+aux4)/aux1)*100),
+         Papoaluguel = sum(((aux7+aux9)/aux1)*100),
+         Pdoacao = sum((aux8/aux1)*100)) %>%
+  summarise(Ptrabalho = mean(Ptrabalho),
+            Pajuda = mean(Pajuda),
+            Papoaluguel = mean(Papoaluguel),
+            Pdoacao = mean(Pdoacao))
+
+Figura7 <- ggplot(item7, aes(x = Ano))+
+  geom_bar(aes(y = Ptrabalho, col = "Trbalho")) +
+  geom_bar()
+
+
+
+
+
+
+
+item8 <- basededados %>%
+  group_by(Ano) %>%
+  mutate(aux1 = sum(rendadompc),
+         aux2 = sum(RendaTrabalho),
+         aux3 = sum(RendaBPC),
+         aux4 = sum(RendaBF),
+         aux5 = sum(RendaPSocial),
+         aux6 = sum(RendaSegdesemprego),
+         aux7 = sum(RendaAposentadoria),
+         aux8 = sum(RendaDoacao),
+         aux9 = sum(RendaAluguel),
+         Rtrabalho = sum((aux2/aux1)*100),
+         Rajuda = sum(((aux3+aux4)/aux1)*100),
+         Rapoaluguel = sum(((aux7+aux9)/aux1)*100),
+         Rdoacao = sum((aux8/aux1)*100)) %>%
+  summarise(Rtrabalho = mean(Rtrabalho),
+            Rajuda = mean(Rajuda),
+            Rapoaluguel = mean(Rapoaluguel),
+            Rdoacao = mean(Rdoacao))
+
+
+
+###########################################################
+#                     Hiato da Pobreza                    #
+###########################################################
+
+item9 <- basededados %>%
+  group_by(Ano) %>%
+  mutate(aux1 = sum(HiatoRenda),
+         aux2 = sum(HiatoAgregado),
+         aux3 = sum(populacao),
+         HAgregado = sum((aux2/aux4)*100))
+  
 
