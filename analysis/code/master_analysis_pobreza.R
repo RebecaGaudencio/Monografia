@@ -139,34 +139,53 @@ item4 <- basededados %>%
          aux4 = sum(Pardos), 
          aux5 = sum(PobrezaPretos),
          aux6 = sum(Pretos),
+         aux7 = sum(PobrezaPretosePardos),
+         aux8 = sum(PretosePardos),
          Pbrancos = ((aux1/aux2)*100),
          Ppardos = ((aux3/aux4)*100),
          Ppretos = ((aux5/aux6)*100)) %>%
   summarise(Pbrancos = mean(Pbrancos),
             Ppardos = mean(Ppardos),
-            Ppretos = mean(Ppretos))
+            Ppretos = mean(Ppretos),
+            Ppretosepardos = mean(Ppretosepardos))
+
 
 item5 <- basededados %>%
   group_by(Ano) %>%
   mutate(aux1 = sum(PobrezaHomemBranco),
          aux2 = sum(Homensbrancos),
          aux3 = sum(PobrezaHomemPardo),
-         aux4 = sum(HomensPardos),
+         aux4 = sum(Homenspardos),
          aux5 = sum(PobrezaHomemPreto),
-         aux6 = sum(HomensPretos), 
-         aux7 = sum(PobrezaMulherBranca),
-         aux8 = sum(MulheresBrancas),
-         aux9 = sum(PobrezaMulherParda),
-         aux10 = sum(MulheresPardas),
-         aux10 = sum(PobrezaMulherPreta),
-         aux11 = sum(MulheresPretas),
+         aux6 = sum(Homenspretos),
+         aux7 = sum(PobrezaHomemPretoePardo),
+         aux8 = sum(Homenspretosepardos),
+         aux9 = sum(PobrezaMulherBranca),
+         aux10 = sum(Mulheresbrancas),
+         aux11 = sum(PobrezaMulherParda),
+         aux12 = sum(Mulherespardas),
+         aux13 = sum(PobrezaMulherPreta),
+         aux14 = sum(Mulherespretas),
+         aux15 = sum(PobrezaMulherPretaeParda),
+         aux16 = sum(Mulherespretasepardas), 
          PHomembranco = ((aux1/aux2)*100),
          PHomempardo = ((aux3/aux4)*100),
          PHomempreto = ((aux5/aux6)*100),
-         PMulherbranca = ((aux7/aux8)*100),
-         PMulherparda = ((aux9/aux10)*100),
-         PMulhernegra = ((aux11/aux12)*100))
-  
+         PHomempretoepardo = ((aux7/aux8)*100),
+         PMulherbranca = ((aux9/aux10)*100),
+         PMulherparda = ((aux11/aux12)*100),
+         PMulhernegra = ((aux13/aux14)*100),
+         PMulherpretaaeparda = ((aux15/aux16)*100)) %>%
+  summarise(PHomembranco = mean(PHomembranco),
+            PHomempardo = mean(PHomempardo),
+            PHomempreto = mean(PHomempreto),
+            PHomempretoepardo = mean(PHomempretoepardo),
+            PMulherbranca = mean(PMulherbranca),
+            PMulherparda = mean(PMulherparda),
+            PMulhernegra = mean(PMulhernegra),
+            PMulherpretaaeparda = mean(PMulherpretaaeparda))
+
+
 item6 <- basededados %>%
   group_by(Ano) %>%
   mutate(aux1 = sum(PobrezaGrupo1),
@@ -203,7 +222,7 @@ item7 <- basededados %>%
          aux8 = sum(RendaPobresDoacao),
          aux9 = sum(RendaPobresAluguel),
          Ptrabalho = sum((aux2/aux1)*100),
-         Pajuda = sum(((aux3+aux4)/aux1)*100),
+         Pajuda = sum(((aux3+aux4+aux5)/aux1)*100),
          Papoaluguel = sum(((aux7+aux9)/aux1)*100),
          Pdoacao = sum((aux8/aux1)*100)) %>%
   summarise(Ptrabalho = mean(Ptrabalho),
@@ -214,10 +233,6 @@ item7 <- basededados %>%
 Figura7 <- ggplot(item7, aes(x = Ano))+
   geom_bar(aes(y = Ptrabalho, col = "Trbalho")) +
   geom_bar()
-
-
-
-
 
 
 
@@ -233,7 +248,7 @@ item8 <- basededados %>%
          aux8 = sum(RendaDoacao),
          aux9 = sum(RendaAluguel),
          Rtrabalho = sum((aux2/aux1)*100),
-         Rajuda = sum(((aux3+aux4)/aux1)*100),
+         Rajuda = sum(((aux3+aux4+aux5)/aux1)*100),
          Rapoaluguel = sum(((aux7+aux9)/aux1)*100),
          Rdoacao = sum((aux8/aux1)*100)) %>%
   summarise(Rtrabalho = mean(Rtrabalho),
