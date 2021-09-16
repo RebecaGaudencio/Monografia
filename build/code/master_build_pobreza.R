@@ -243,7 +243,7 @@ Grupo3 <- basededados %>%
   dplyr::filter(V2009>= 30 & V2009<= 59) %>%
   group_by(UF,Trimestre,Ano) %>%
   mutate(aux = sum(V1032)) %>%
-  summarise(Grupo2 = mean(aux, na.rm = TRUE))
+  summarise(Grupo3 = mean(aux, na.rm = TRUE))
 
 Grupo4 <- basededados %>%
   select(UF, Trimestre, Ano, V1032, V2009) %>%
@@ -445,6 +445,16 @@ PobrezaMulherBranca <- basededados %>%
   dplyr::filter(aux3 < LinhaPobreza) %>%
   summarise(PobrezaMulherBranca = sum(V1032))
 
+PobrezaMulherPretaeParda <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO2, V2007, V2010, LinhaPobreza) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2007 == 2 & V2010 == 2|V2007 == 2 & V2010 == 4) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO2)) %>%
+  mutate(aux3 = (VD5011*CO2)) %>%
+  dplyr::filter(aux3 < LinhaPobreza) %>%
+  summarise(PobrezaMulherPretaeParda = sum(V1032))
 
 
 PobrezaHomemPreto <- basededados %>%
@@ -480,6 +490,16 @@ PobrezaHomemBranco <- basededados %>%
   dplyr::filter(aux3 < LinhaPobreza) %>%
   summarise(PobrezaHomemBranco = sum(V1032))
 
+PobrezaHomemPretoePardo <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO2, V2007, V2010, LinhaPobreza) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2007 == 1 & V2010 == 2|V2007 == 1 & V2010 == 4) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO2)) %>%
+  mutate(aux3 = (VD5011*CO2)) %>%
+  dplyr::filter(aux3 < LinhaPobreza) %>%
+  summarise(PobrezaHomemPretoePardo = sum(V1032))
 
 #############################################
 #            Pobreza por Idade              #
@@ -875,10 +895,12 @@ basefinal <- merge(basefinal, PobrezaPardos, by = c("UF","Trimestre","Ano"), all
 basefinal <- merge(basefinal, PobrezaBrancos, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaMulherPreta, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaMulherParda, by = c("UF","Trimestre","Ano"), all = TRUE) 
-basefinal <- merge(basefinal, PobrezaMulherBranca, by = c("UF","Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, PobrezaMulherBranca, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, PobrezaMulherPretaeParda , by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, PobrezaHomemPreto, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaHomemPardo, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaHomemBranco, by = c("UF","Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, PobrezaHomemPretoePardo, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaGrupo1, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaGrupo2, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaGrupo3, by = c("UF","Trimestre","Ano"), all = TRUE) 
