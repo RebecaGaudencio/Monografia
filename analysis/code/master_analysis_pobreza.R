@@ -210,10 +210,13 @@ item6 <- basededados %>%
 ###########################################################
 #                    Composição da Renda                  #
 ###########################################################
+basededados[is.na(basededados)] <- 0
 
-item7 <- basededados %>%ibge
+item8 <- basededados %>%
   group_by(Ano) %>%
-  mutate(aux1 = sum(RendaPobres),
+  mutate(outros = RendaPobres - (RendaPobresTrabalho + RendaPobresBPC + RendaPobresBF + RendaPobresPSocial +
+                                  RendaPobresSegdesemprego + RendaPobresAposentadoria + RendaPobresDoacao + RendaPobresAluguel), 
+         aux1 = sum(RendaPobres),
          aux2 = sum(RendaPobresTrabalho),
          aux3 = sum(RendaPobresBPC),
          aux4 = sum(RendaPobresBF),
@@ -222,22 +225,36 @@ item7 <- basededados %>%ibge
          aux7 = sum(RendaPobresAposentadoria),
          aux8 = sum(RendaPobresDoacao),
          aux9 = sum(RendaPobresAluguel),
-         Ptrabalho = sum((aux2/aux1)*100),
-         Pajuda = sum(((aux3+aux4+aux5)/aux1)*100),
-         Papoaluguel = sum(((aux7+aux9)/aux1)*100),
-         Pdoacao = sum((aux8/aux1)*100)) %>%
-  summarise(Ptrabalho = mean(Ptrabalho),
+         aux10 = sum(outros),
+         Poutrasfontes = ((aux10/aux1)*100),
+         Ptrabalho = ((aux2/aux1)*100),
+         Pajuda = (((aux3+aux4+aux5+aux6)/aux1)*100),
+         Papoaluguel = (((aux7+aux9)/aux1)*100),
+         Pdoacao = ((aux8/aux1)*100)) %>%
+  summarise(Poutrasfontes = mean(Poutrasfontes),
+            PTrabalho = mean(Ptrabalho),
             Pajuda = mean(Pajuda),
             Papoaluguel = mean(Papoaluguel),
             Pdoacao = mean(Pdoacao))
 
-Figura7 <- ggplot(item7, aes(x = Ano))+
-  geom_bar(aes(y = Ptrabalho, col = "Trabalho")) +
-  geom_bar()
+item9 <- item8 %>%
+  dplyr::filter(Ano == 2019) %>%
+  pivot_longer(cols = c(Poutrasfontes, Ptrabalho, Pajuda, Papoaluguel, Pdoacao), 
+               names_to = "Fonte")
+
+item9 <- 
+  
+Figura9 <- item9 %>%
+  ggplot(aes(x = "", y = value, fill = pizza)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 0) +
+  scale_fill_manual(values = c("blue", "red", "black", "brown", "yellow"))
+
+plot(Figura9)
 
 
 
-item8 <- basededados %>%
+item10 <- basededados %>%
   group_by(Ano) %>%
   mutate(aux1 = sum(rendadompc),
          aux2 = sum(RendaTrabalho),
@@ -263,11 +280,43 @@ item8 <- basededados %>%
 #                     Hiato da Pobreza                    #
 ###########################################################
 
-item9 <- basededados %>%
+item11 <- basededados %>%
   group_by(Ano) %>%
-  mutate(aux1 = sum(HiatoRenda),
+  mutate(aux1 = mean(HiatoRenda),
          aux2 = sum(HiatoAgregado),
-         aux3 = sum(populacao),
-         HAgregado = sum((aux2/aux4)*100))
+         aux3 = sum(populacao)) %>%
+  summarise(HRenda = mean(aux1),
+            HAgregado = mean(aux2),
+            Hagregadopop = mean(aux1/aux3))
   
 
+Figura11 <- ggplot(item11, aes(Ano, HRenda)) +
+  geom_line(color = "gray20") +
+  geom_point(shape = 21, color = "black", fill = "indianred", size = 3) +
+  theme_bw() +
+  labs (x = "Ano",
+        y = "Em R$") +
+  theme(plot.title = element_text(family = "Times"))
+
+
+setwd(out_dir)
+
+png("Evolução_Média_Hiatos_Renda.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura11)
+dev.off()
+
+
+Figura12 <- ggplot(item11, aes(Ano, HAgregado)) +
+  geom_line(color = "gray20") +
+  geom_point(shape = 21, color = "black", fill = "indianred", size = 3) +
+  theme_bw() +
+  labs (x = "Ano",
+        y = "Em R$") +
+  theme(plot.title = element_text(family = "Times"))
+
+
+setwd(out_dir)
+
+png("Evolução_Hiato_Agregado.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura12)
+dev.off()

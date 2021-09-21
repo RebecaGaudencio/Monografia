@@ -264,6 +264,59 @@ renda_extra <- basededados %>%
   summarise(ajudaextra = mean(ajudaextra))
 
 
+#################################################
+#                Faixas de Renda                #
+#################################################
+
+item5 <- basededados %>%
+  group_by(Ano) %>%
+  mutate(aux1 = sum(faixa1rendhab),
+         aux2 = sum(faixa2rendhab),
+         aux3 = sum(faixa3rendhab),
+         aux4 = sum(faixa4rendhab),
+         aux5 = sum(faixa5rendhab),
+         aux6 = sum(faixa6rendhab),
+         aux7 = sum(faixa7rendhab),
+         aux8 = sum(populacao),
+         faixa1 = (aux1/aux8)*100,
+         faixa2 = (aux2/aux8)*100,
+         faixa3 = (aux3/aux8)*100,
+         faixa4 = (aux4/aux8)*100,
+         faixa5 = (aux5/aux8)*100,
+         faixa6 = (aux6/aux8)*100,
+         faixa7 = (aux7/aux8)*100) %>%
+  summarise(faixa1 = mean(faixa1),
+            faixa2 = mean(faixa2),
+            faixa3 = mean(faixa3), 
+            faixa4 = mean(faixa4),
+            faixa5 = mean(faixa5),
+            faixa6 = mean(faixa6),
+            faixa7 = mean(faixa7))
+
+
+Figura5 <- ggplot(item5, aes(x = Ano)) +
+  geom_line(aes(y = faixa1, col = "Faixa 1"), size = 1.2) +
+  geom_line(aes(y = faixa2, col = "Faixa 2"), size = 1.2) +
+  geom_line(aes(y = faixa3, col = "Faixa 3"), size = 1.2) +
+  geom_line(aes(y = faixa4, col = "Faixa 4"), size = 1.2) +
+  geom_line(aes(y = faixa5, col = "Faixa 5"), size = 1.2) +
+  geom_line(aes(y = faixa6, col = "Faixa 6"), size = 1.2) +
+  geom_line(aes(y = faixa7, col = "Faixa 7"), size = 1.2) +
+  theme_bw() +
+  scale_linetype_manual(values = c("twodash", "dotted")) +
+  scale_color_manual(values = c("bisque3", "gray69", "khaki4", "black", "tan4", "red", "blue")) +
+  labs(x = "Ano",
+       y = "Em %",
+       color = "") +
+  theme(legend.position = 'bottom')
+  
+  
+  plot(Figura5)
+
+
+
+
+
 
 #################################################
 #      % Renda apropriada por percentis         #
@@ -329,9 +382,6 @@ item8 <- basededados %>%
          Gini = aux1) %>%
   summarise(Gini = mean(Gini))
 
-
-#         
-#(baseproporcao$renda1rico[1]/baseproporcao$rendapctotal[1])*100
 
 
 
