@@ -35,13 +35,11 @@ code_dir <- file.path(ROOT, "analysis", "code")
 # Importacao dos dados e leitura da PNADc Anual
 
 lista_visita <- c("2016_visita1",
-                  "2016_visita5",
                   "2017_visita1",
-                  "2017_visita5",
                   "2018_visita1",
                   "2018_visita5",
-                  "2019_visita1",
-                  "2019_visita5")
+                  "2019_visita1"
+                  )
 
 basededados <- data.frame(UF = character(), Ano = character())
 baseproporcao <- data.frame(Ano = character())
@@ -307,6 +305,29 @@ Figura6 <- ggplot(item6, aes(x = Ano)) +
   theme(legend.position = 'bottom')
 
 plot(Figura6)
+
+Figura7 <- ggplot(item6, aes(x = Ano)) +
+  geom_bar(aes(y = rico1, color = "1% mais rico"), stat = "identity", width = .15, fill = "darksalmon" , position = position_nudge(x = .0)) +
+  geom_bar(aes(y = rico5, color = "5% mais ricos"), stat = "identity", width = .15, fill = "black", position = position_nudge(x = .15)) +
+  geom_bar(aes(y = rico10, color = "10% mais ricos"), stat = "identity", width = .15, fill = "orangered4" ,position = position_nudge(x = .3)) +
+  geom_bar(aes(y = pobre40, color = "40% mais pobres" ), stat = "identity", width = .15, fill = "tan4", position = position_nudge(x = .45)) +
+    geom_bar(aes(y = pobre50, color = "50% mais pobres" ), stat = "identity", width = .15, fill = "red", position = position_nudge(x = .45)) +
+  theme_bw() +
+  scale_color_manual(values = c("darksalmon", "black", "tan4", "orangered4", "red")) +
+  scale_fill_manual(values = c("rico1" = "darksalmon", "black", "orangered4","50% seguintes")) + 
+  labs(x = "Ano",
+       y = "Em %",
+       color = "") +
+  theme(legend.position = 'bottom')
+
+plot(Figura7)
+
+
+item8 <- basededados %>%
+  group_by(Ano) %>%
+  mutate(aux1 = sum(GiniHab),
+         Gini = aux1) %>%
+  summarise(Gini = mean(Gini))
 
 
 #         
