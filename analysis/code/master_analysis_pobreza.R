@@ -139,11 +139,12 @@ item4 <- basededados %>%
          aux4 = sum(Pardos), 
          aux5 = sum(PobrezaPretos),
          aux6 = sum(Pretos),
-         aux7 = sum(PobrezaPretosePardos),
+         aux7 = sum(PobrezaPretosPardos),
          aux8 = sum(PretosePardos),
          Pbrancos = ((aux1/aux2)*100),
          Ppardos = ((aux3/aux4)*100),
-         Ppretos = ((aux5/aux6)*100)) %>%
+         Ppretos = ((aux5/aux6)*100),
+         Ppretosepardos = ((aux7/aux8)*100)) %>%
   summarise(Pbrancos = mean(Pbrancos),
             Ppardos = mean(Ppardos),
             Ppretos = mean(Ppretos),
@@ -196,10 +197,10 @@ item6 <- basededados %>%
          aux6 = sum(Grupo3),
          aux7 = sum(PobrezaGrupo4),
          aux8 = sum(Grupo4),
-         Pgrupo1 = sum((aux1/aux2)*100),
-         Pgrupo2 = sum((aux3/aux4)*100),
-         Pgrupo3 = sum((aux5/aux6)*100),
-         Pgrupo4 = sum((aux7/aux8)*100)) %>%
+         Pgrupo1 = ((aux1/aux2)*100),
+         Pgrupo2 = ((aux3/aux4)*100),
+         Pgrupo3 = ((aux5/aux6)*100),
+         Pgrupo4 = ((aux7/aux8)*100)) %>%
   summarise(Pgrupo1 = mean(Pgrupo1),
             Pgrupo2 = mean(Pgrupo2),
             Pgrupo3 = mean(Pgrupo3),
@@ -210,7 +211,7 @@ item6 <- basededados %>%
 #                    Composição da Renda                  #
 ###########################################################
 
-item7 <- basededados %>%
+item7 <- basededados %>%ibge
   group_by(Ano) %>%
   mutate(aux1 = sum(RendaPobres),
          aux2 = sum(RendaPobresTrabalho),
@@ -231,7 +232,7 @@ item7 <- basededados %>%
             Pdoacao = mean(Pdoacao))
 
 Figura7 <- ggplot(item7, aes(x = Ano))+
-  geom_bar(aes(y = Ptrabalho, col = "Trbalho")) +
+  geom_bar(aes(y = Ptrabalho, col = "Trabalho")) +
   geom_bar()
 
 

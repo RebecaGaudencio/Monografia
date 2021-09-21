@@ -407,6 +407,19 @@ PobrezaBrancos <- basededados %>%
   summarise(PobrezaBrancos = sum(V1032))
 
 
+PobrezaPretosaPardos <- basededados %>%
+  select(VD5011, Trimestre, UF, Ano, V1032, CO2, V2010, LinhaPobreza) %>%
+  group_by(UF,Trimestre,Ano) %>%
+  dplyr::arrange(VD5011) %>%
+  dplyr::filter(V2010 == 4|V2010 == 2) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  mutate(aux2 = (VD5011*V1032*CO2)) %>%
+  mutate(aux3 = (VD5011*CO2)) %>%
+  dplyr::filter(aux3 < LinhaPobreza) %>%
+  summarise(PobrezaPretosPardos = sum(V1032))
+
+
+
 #############################################
 #        Pobreza por Sexo e Cor             #
 #############################################
@@ -869,6 +882,7 @@ basefinal <- merge(basefinal, Mulheres, by = c("UF","Trimestre","Ano"), all = TR
 basefinal <- merge(basefinal, Brancos, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, Pardos, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, Pretos, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, PretosePardos, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, Homensbrancos, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, Homenspardos, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, Homenspretos, by = c("UF","Trimestre","Ano"), all = TRUE)
@@ -893,6 +907,7 @@ basefinal <- merge(basefinal, PobrezaHomem, by = c("UF","Trimestre","Ano"), all 
 basefinal <- merge(basefinal, PobrezaPretos, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaPardos, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaBrancos, by = c("UF","Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, PobrezaPretosaPardos, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaMulherPreta, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaMulherParda, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaMulherBranca, by = c("UF","Trimestre","Ano"), all = TRUE)
