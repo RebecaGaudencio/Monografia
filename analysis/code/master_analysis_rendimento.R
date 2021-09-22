@@ -61,106 +61,6 @@ for (xx in lista_visita) {
   baseproporcao <- rbind(baseproporcao, db2)
 }
 
-
-###############################################################
-#                 Ajuste nas bases de dados                   #
-###############################################################
-basededados2 <- basededados %>%
-  group_by(Ano, UF) %>% 
-  summarise(populacao = mean(populacao),
-                      rendtrabhabit.x = mean(rendtrabhabit.x),
-                      rendtrabeft.x = mean(rendtrabeft.x),
-                      rendtrabeft.y = mean(rendtrabeft.y),
-                      rendpc = mean(rendpc),
-                      rendpcnordeste = mean(rendpcnordeste),
-                      rendpcnorte = mean(rendpcnorte),
-                      rendpcsudeste = mean(rendpcsudeste),
-                      rendpcsul = mean(rendpcsul),
-                      rendpcentroeste = mean(rendpcentroeste),
-                      faixa1rendhab = mean(faixa1rendhab),
-                      faixa2rendhab = mean(faixa2rendhab),
-                      faixa3rendhab = mean(faixa3rendhab),
-                      faixa4rendhab = mean(faixa4rendhab),
-                      faixa5rendhab = mean(faixa5rendhab),
-                      faixa6rendhab = mean(faixa6rendhab),
-                      faixa7rendhab = mean(faixa7rendhab),
-                      faixa1rendeft = mean(faixa1rendeft),
-                      faixa2rendeft = mean(faixa2rendeft),
-                      faixa3rendeft = mean(faixa3rendeft),
-                      faixa4rendeft = mean(faixa4rendeft),
-                      faixa5rendeft = mean(faixa5rendeft),
-                      faixa6rendeft = mean(faixa5rendeft),
-                      faixa6rendeft = mean(faixa6rendeft),
-                      faixa7endeft = mean(faixa7endeft),
-                      BPC = mean(BPC),
-                      BF = mean(BF),
-                      PSocial = mean(PSocial),
-                      Segdesemprego = mean(Segdesemprego),
-                      Segdesempregonorte = mean(Segdesempregonorte),
-                      Segdesempregonordeste = mean(Segdesempregonordeste),
-                      Segdesempregosudeste = mean(Segdesempregosudeste),
-                      Segdesempregosul = mean(Segdesempregosul),
-                      Segdesempregocentrooeste = mean(Segdesempregocentrooeste),
-                      Aposentadoria = mean(Aposentadoria),
-                      Doacao = mean(Doacao),
-                      Aluguel = mean(Aluguel),
-                      GiniEfet = mean(GiniEfet),
-                      GiniHab = mean(GiniHab))
-
-basededados1 <- basededados2 %>%
-  group_by(Ano) %>%
-  summarise(populacao = sum(populacao),
-            rendtrabhabit.x = sum(rendtrabhabit.x),
-            rendtrabeft.x = sum(rendtrabeft.x),
-            rendtrabeft.y = sum(rendtrabeft.y),
-            rendpc = sum(rendpc),
-            rendpcnordeste = sum(rendpcnordeste),
-            rendpcnorte = sum(rendpcnorte),
-            rendpcsudeste = sum(rendpcsudeste),
-            rendpcsul = sum(rendpcsul),
-            rendpcentroeste = sum(rendpcentroeste),
-            faixa1rendhab = sum(faixa1rendhab),
-            faixa2rendhab = sum(faixa2rendhab),
-            faixa3rendhab = sum(faixa3rendhab),
-            faixa4rendhab = sum(faixa4rendhab),
-            faixa5rendhab = sum(faixa5rendhab),
-            faixa6rendhab = sum(faixa6rendhab),
-            faixa7rendhab = sum(faixa7rendhab),
-            faixa1rendeft = sum(faixa1rendeft),
-            faixa2rendeft = sum(faixa2rendeft),
-            faixa3rendeft = sum(faixa3rendeft),
-            faixa4rendeft = sum(faixa4rendeft),
-            faixa5rendeft = sum(faixa5rendeft),
-            faixa6rendeft = sum(faixa5rendeft),
-            faixa6rendeft = sum(faixa6rendeft),
-            faixa7endeft = sum(faixa7endeft),
-            BPC = sum(BPC),
-            BF = sum(BF),
-            PSocial = sum(PSocial),
-            Segdesemprego = sum(Segdesemprego),
-            Segdesempregonorte = sum(Segdesempregonorte),
-            Segdesempregonordeste = sum(Segdesempregonordeste),
-            Segdesempregosudeste = sum(Segdesempregosudeste),
-            Segdesempregosul = sum(Segdesempregosul),
-            Segdesempregocentrooeste = sum(Segdesempregocentrooeste),
-            Aposentadoria = sum(Aposentadoria),
-            Doacao = sum(Doacao),
-            Aluguel = sum(Aluguel),
-            GiniEfet = sum(GiniEfet),
-            GiniHab = sum(GiniHab))
-
-baseproporcao <- baseproporcao %>%
-  group_by(Ano) %>%
-  summarise(pop = mean(pop),
-            rendapctotal = mean(rendapctotal),
-            renda1rico = mean(renda1rico),
-            renda5rico = mean(renda5rico),
-            renda10rico = mean(renda10rico),
-            renda50seguinte = mean(renda50seguinte),
-            renda40pobre = mean(renda40pobre),
-            renda50pobre = mean(renda50pobre))
-
-
 ####################################################
 #       Renda Domiciliar per capita - Brasil       #
 ####################################################
@@ -314,10 +214,6 @@ Figura5 <- ggplot(item5, aes(x = Ano)) +
   plot(Figura5)
 
 
-
-
-
-
 #################################################
 #      % Renda apropriada por percentis         #
 #################################################
@@ -378,7 +274,7 @@ plot(Figura7)
 
 item8 <- basededados %>%
   group_by(Ano) %>%
-  mutate(aux1 = sum(GiniHab),
+  mutate(aux1 = mean(GiniHab),
          Gini = aux1) %>%
   summarise(Gini = mean(Gini))
 
