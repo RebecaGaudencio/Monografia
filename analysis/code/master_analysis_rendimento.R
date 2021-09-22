@@ -9,6 +9,7 @@ library(magrittr)
 library(haven)
 library(hrbrthemes)
 library(zoo)
+library(wesanderson)
 
 ############################################################
 #                          Folder Path                     #
@@ -99,16 +100,20 @@ basededados[is.na(basededados)] <- 0
 item2 <- basededados %>%
   group_by(Ano) %>%
   mutate(aux1 = sum(rendpcnordeste),
-         aux2 = sum(rendpcnorte),
-         aux3 = sum(rendpcsudeste),
-         aux4 = sum(rendpcsul),
-         aux5 = sum(rendpcentrooeste),
-         aux6 = sum(populacao),
-         rendadompcnordeste = (aux1/aux6),
-         rendadompcnorte = (aux2/aux6),
-         rendadompcsudeste = (aux3/aux6),
-         rendadompcsul = (aux4/aux6),
-         rendadompcentroeste = (aux5/aux6)) %>%
+         aux2 = sum(popNordeste),
+         aux3 = sum(rendpcnorte),
+         aux4 = sum(popNorte),
+         aux5 = sum(rendpcsudeste),
+         aux6 = sum(popSudeste),
+         aux7 = sum(rendpcsul),
+         aux8 = sum(popSul),
+         aux9 = sum(rendpcentroeste),
+         aux10 = sum(popCentroOeste),
+         rendadompcnordeste = (aux1/aux2),
+         rendadompcnorte = (aux3/aux4),
+         rendadompcsudeste = (aux5/aux6),
+         rendadompcsul = (aux7/aux8),
+         rendadompcentroeste = (aux9/aux10)) %>%
   summarise(rendadompcnordeste = mean(rendadompcnordeste),
             rendadompcnorte = mean(rendadompcnorte),
             rendadompcsudeste = mean(rendadompcsudeste),
@@ -121,8 +126,7 @@ Figura2 <- ggplot(item2, aes(x = Ano)) +
   geom_line(aes(y = rendadompcnorte, col = "Norte"), size = 1.2) +
   geom_line(aes(y = rendadompcsudeste, col = "Sudeste"), size = 1.2) +
   geom_line(aes(y = rendadompcsul, col = "Sul"), size = 1.2) +
-  geom_line(aes(y = rendadompcentrooeste, col = "Centro Oeste"), size = 1.2) +
-  geom_vline(xintercept = item1$Tempo[32], linetype = 8) +
+  geom_line(aes(y = rendadompcentroeste, col = "Centro Oeste"), size = 1.2) +
   theme_bw() +
   scale_linetype_manual(values = c("twodash", "dotted")) +
   scale_color_manual(values = c("bisque3", "black", "gray69", "tan4", "forestgreen")) +
@@ -211,7 +215,7 @@ Figura5 <- ggplot(item5, aes(x = Ano)) +
   theme(legend.position = 'bottom')
   
   
-  plot(Figura5)
+plot(Figura5)
 
 
 #################################################
@@ -240,6 +244,11 @@ item6 <- baseproporcao %>%
             pobre40 = mean(pobre40),
             pobre50 = mean(pobre50))
 
+item6_aux <- item6 %>%
+  pivot_longer(cols = c(rico1, rico5, rico10, pobre40, pobre50),
+               names_to = "Percentil")
+
+
 Figura6 <- ggplot(item6, aes(x = Ano)) +
   geom_bar(aes(y = rico1, color = "1% mais rico"), stat = "identity", width = .15, fill = "darksalmon" , position = position_nudge(x = .0)) +
   geom_bar(aes(y = rico5, color = "5% mais ricos"), stat = "identity", width = .15, fill = "black", position = position_nudge(x = .15)) +
@@ -255,15 +264,27 @@ Figura6 <- ggplot(item6, aes(x = Ano)) +
 
 plot(Figura6)
 
+
+Figura8 <- ggplot(item6_aux, aes(y = value, x = Ano, fill = Percentil))+
+  geom_bar(stat = "identity")
+
+plot(Figura8)
+
+
+
 Figura7 <- ggplot(item6, aes(x = Ano)) +
-  geom_bar(aes(y = rico1, color = "1% mais rico"), stat = "identity", width = .15, fill = "darksalmon" , position = position_nudge(x = .0)) +
-  geom_bar(aes(y = rico5, color = "5% mais ricos"), stat = "identity", width = .15, fill = "black", position = position_nudge(x = .15)) +
-  geom_bar(aes(y = rico10, color = "10% mais ricos"), stat = "identity", width = .15, fill = "orangered4" ,position = position_nudge(x = .3)) +
-  geom_bar(aes(y = pobre40, color = "40% mais pobres" ), stat = "identity", width = .15, fill = "tan4", position = position_nudge(x = .45)) +
-    geom_bar(aes(y = pobre50, color = "50% mais pobres" ), stat = "identity", width = .15, fill = "red", position = position_nudge(x = .45)) +
+  geom_bar(aes(y = rico1, color = "1% mais rico"), 
+           fill = "dodgerblue4", stat = "identity", width = .15, position = position_nudge(x = .0)) +
+  geom_bar(aes(y = rico5, color = "5% mais ricos"), 
+           fill = "deepskyblue3", stat = "identity", width = .15, position = position_nudge(x = .15)) +
+  geom_bar(aes(y = rico10, color = "10% mais ricos"), 
+           fill = "darkseagreen", stat = "identity", width = .15, position = position_nudge(x = .3)) +
+  geom_bar(aes(y = pobre50, color = "40% mais pobres" ), 
+           fill = "khaki", stat = "identity", width = .15, position = position_nudge(x = .45)) +
+  geom_bar(aes(y = pobre40, color = "50% mais pobres" ),
+           fill = "khaki3", stat = "identity", width = .15, position = position_nudge(x = .60)) +
   theme_bw() +
-  scale_color_manual(values = c("darksalmon", "black", "tan4", "orangered4", "red")) +
-  scale_fill_manual(values = c("rico1" = "darksalmon", "black", "orangered4","50% seguintes")) + 
+  scale_linetype_manual(values = c("dodgerblue4", "deepskyblue3", "darkseagreen", "khaki4", "khaki1")) +
   labs(x = "Ano",
        y = "Em %",
        color = "") +
@@ -272,11 +293,36 @@ Figura7 <- ggplot(item6, aes(x = Ano)) +
 plot(Figura7)
 
 
-item8 <- basededados %>%
+Figura7 <- ggplot(item6, aes(x = Ano)) +
+  geom_bar(aes(y = rico1, color = "1% mais rico"), 
+           fill = "dodgerblue4", stat = "identity", width = .15, position = position_nudge(x = .0)) +
+  geom_bar(aes(y = rico5, color = "5% mais ricos"), 
+           fill = "deepskyblue3", stat = "identity", width = .15, position = position_nudge(x = .15)) +
+  geom_bar(aes(y = rico10, color = "10% mais ricos"), 
+           fill = "darkseagreen", stat = "identity", width = .15, position = position_nudge(x = .3)) +
+  geom_bar(aes(y = pobre50, color = "40% mais pobres" ), 
+           fill = "khaki", stat = "identity", width = .15, position = position_nudge(x = .45)) +
+  geom_bar(aes(y = pobre40, color = "50% mais pobres" ),
+           fill = "khaki3", stat = "identity", width = .15, position = position_nudge(x = .60)) +
+  theme_bw() +
+  labs(x = "Ano",
+       y = "Em %",
+       color = "") +
+  theme(legend.position = 'bottom')
+
+plot(Figura7)
+
+#################################################
+#                 Indice de Gini                #
+#################################################
+
+item8 <- baseproporcao %>%
   group_by(Ano) %>%
-  mutate(aux1 = mean(GiniHab),
-         Gini = aux1) %>%
-  summarise(Gini = mean(Gini))
+  summarise(Gini = mean(GiniBR))
+
+
+  
+
 
 
 
