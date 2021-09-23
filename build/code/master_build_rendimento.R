@@ -71,6 +71,41 @@ populacao <- basededados %>%
   mutate(aux = sum(V1032)) %>%
   summarise(populacao = mean(aux))
 
+popNorte <- basededados %>%
+  select(UF, Trimestre, Ano, V1032) %>%
+  group_by(UF, Ano) %>%
+  dplyr::filter(UF =="11" | UF == "12" | UF == "13"| UF == "14"| UF == "15"| UF == "16"| UF == "17") %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(popNorte = mean(aux, na.rm = TRUE))
+
+popNordeste <- basededados %>%
+  select(UF, Trimestre, Ano, V1032) %>%
+  dplyr::filter(UF == "21" | UF == "22" | UF == "23"| UF == "24"| UF == "25"| UF == "26"| UF == "27"| UF == "28"| UF == "29") %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(popNordeste = mean(aux, na.rm = TRUE))
+
+popSudeste <- basededados %>%
+  select(UF, Trimestre, Ano, V1032) %>%
+  dplyr::filter(UF == "31" | UF == "32" | UF == "33"| UF == "35") %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(popSudeste = mean(aux, na.rm = TRUE))
+
+popSul <- basededados %>%
+  select(UF, Trimestre, Ano, V1032) %>%
+  dplyr::filter(UF == "41" | UF == "42" | UF == "43") %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(popSul = mean(aux, na.rm = TRUE))
+
+popCentroOeste <- basededados %>%
+  select(UF, Trimestre, Ano, V1032) %>%
+  dplyr::filter(UF == "50" | UF == "51" | UF == "52"| UF == "53") %>%
+  group_by(UF, Ano) %>%
+  mutate(aux = sum(V1032)) %>%
+  summarise(popCentroOeste = mean(aux, na.rm = TRUE))
+
 
 pop <- basededados %>%
   select(UF, Trimestre, Ano, V1032) %>%
@@ -410,6 +445,9 @@ Aluguel <- basededados %>%
 
 basededados2 <- convey_prep(basededados2)
 
+gini <- svyby(~VD4020, by = ~Ano, basededados2, svygini, na.rm = TRUE)
+colnames(gini) <- c("Ano", "GiniBR", "SE")
+
 ginihab <- svyby(~VD4020, by = ~UF + Ano, basededados2, svygini, na.rm = TRUE)
 colnames(ginihab) <- c ("UF", "Ano", "GiniHab", "SE1")
 
@@ -520,6 +558,11 @@ item6 <- basededados %>%
 #######################################################
 
 basefinal <- populacao
+basefinal <- merge(basefinal, popNorte, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, popNordeste, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, popSudeste, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, popSul, by = c("UF","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, popCentroOeste, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, rendtrahabit, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, rendtrabefet, by = c("UF","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, rendtrabefetfontes, by = c("UF","Ano"), all = TRUE) 
@@ -561,6 +604,7 @@ basefinal <- merge(basefinal, ginihab, by = c("UF","Ano"), all = TRUE)
 
 
 baserenda <- pop
+baserenda <- merge(baserenda, gini, by = c("Ano"), all = TRUE)
 baserenda <- merge(baserenda, rendatotal, by = c("Ano"), all = TRUE)
 baserenda <- merge(baserenda, item1, by = c("Ano"), all = TRUE)
 baserenda <- merge(baserenda, item2, by = c("Ano"), all = TRUE)
