@@ -125,36 +125,11 @@ plot(Figura1)
 dev.off()
 
 
-####################################################
-#                   Beneficios                     #
-####################################################
-
-
-renda_ajuda_gov <- basededados %>%
-  group_by(Ano) %>%
-  mutate (aux1 = sum(BPC), 
-          aux2 = sum(BF), 
-          aux3 = sum(PSocial), 
-          aux4 = sum(Segdesemprego),
-          ajudagoverno = (aux1+aux2+aux3+aux4)) %>%
-  summarise(ajudagoverno = mean(ajudagoverno))
-
-
-renda_extra <- basededados %>%
-  group_by(Ano) %>%
-  mutate (aux1 = sum(Aposentadoria), 
-          aux2 = sum(Doacao), 
-          aux3 = sum(Aluguel), 
-          aux4 = sum(Segdesemprego),
-          ajudaextra = (aux1+aux2+aux3+aux4)) %>%
-  summarise(ajudaextra = mean(ajudaextra))
-
-
 #################################################
 #                Faixas de Renda                #
 #################################################
 
-item4 <- basededados %>%
+item2 <- basededados %>%
   group_by(Ano) %>%
   mutate(aux1 = sum(faixa1rendhab),
          aux2 = sum(faixa2rendhab),
@@ -180,31 +155,40 @@ item4 <- basededados %>%
             faixa7 = mean(faixa7))
 
 
-Figura4 <- ggplot(item4, aes(x = Ano)) +
-  geom_line(aes(y = faixa1, col = "Faixa 1"), size = 1.2) +
-  geom_line(aes(y = faixa2, col = "Faixa 2"), size = 1.2) +
-  geom_line(aes(y = faixa3, col = "Faixa 3"), size = 1.2) +
-  geom_line(aes(y = faixa4, col = "Faixa 4"), size = 1.2) +
-  geom_line(aes(y = faixa5, col = "Faixa 5"), size = 1.2) +
-  geom_line(aes(y = faixa6, col = "Faixa 6"), size = 1.2) +
-  geom_line(aes(y = faixa7, col = "Faixa 7"), size = 1.2) +
+Figura2 <- ggplot(item2, aes(x = Ano)) +
+  geom_line(aes(y = faixa1, col = "Até 1/4 do SM"), size = 1.0) +
+  geom_line(aes(y = faixa2, col = "Mais de 1/4 até 1/2 SM"), size = 1.0) +
+  geom_line(aes(y = faixa3, col = "Mais de 1/2 até 1 SM"), size = 1.0) +
+  geom_line(aes(y = faixa4, col = "Mais de 1 até 2 SM"), size = 1.0) +
+  geom_line(aes(y = faixa5, col = "Mais de 2 até 3 SM"), size = 1.0) +
+  geom_line(aes(y = faixa6, col = "Mais de 3 até 5 SM"), size = 1.0) +
+  geom_line(aes(y = faixa7, col = "Mais de 5 SM"), size = 1.0) +
+  geom_point(aes(y = faixa1, col = "Até 1/4 do SM"), color = "sandybrown", shape = 16, size = 2.5 ) +
+  geom_point(aes(y = faixa2, col = "Mais de 1/4 até 1/2 SM"), color = "khaki", shape = 16, size = 2.5 ) +
+  geom_point(aes(y = faixa3, col = "Mais de 1/2 até 1 SM"), color = "darkgreen", shape = 16 , size = 2.5) +
+  geom_point(aes(y = faixa4, col = "Mais de 1 até 2 SM"), color = "lightgreen", shape = 16, size = 2.5) +
+  geom_point(aes(y = faixa5, col = "Mais de 2 até 3 SM"), color = "orangered2", shape = 16, size = 2.5) +
+  geom_point(aes(y = faixa6, col = "Mais de 3 até 5 SM"), color = "saddlebrown", shape = 16, size = 2.5) +
+  geom_point(aes(y = faixa7, col = "Mais de 5 SM"), color = "black", shape = 16, size = 2.5) +
   theme_bw() +
   scale_linetype_manual(values = c("twodash", "dotted")) +
-  scale_color_manual(values = c("bisque3", "gray69", "khaki4", "black", "tan4", "red", "blue")) +
+  scale_color_manual(values = c("sandybrown", "lightgreen", "darkgreen", "khaki", "orangered", "saddlebrown", "black")) +
   labs(x = "Ano",
        y = "Em %",
        color = "") +
   theme(legend.position = 'bottom')
-  
-  
-plot(Figura4)
 
+setwd(out_dir)
+
+png("Faixas_Salariais", units = "px", width = 850, height = 536, res = 110)
+plot(Figura2)
+dev.off()
 
 #################################################
 #      % Renda apropriada por percentis         #
 #################################################
 
-item6 <- baseproporcao %>%
+item3 <- baseproporcao %>%
   group_by(Ano) %>%
   mutate(aux1 = sum(renda1rico),
          aux2 = sum(renda5rico),
@@ -226,73 +210,79 @@ item6 <- baseproporcao %>%
             pobre40 = mean(pobre40),
             pobre50 = mean(pobre50))
 
-item6_aux <- item6 %>%
+item3_aux <- item5 %>%
   pivot_longer(cols = c(rico1, rico5, rico10, pobre40, pobre50),
                names_to = "Percentil")
 
 
-Figura6 <- ggplot(item6, aes(x = Ano)) +
-  geom_bar(aes(y = rico1, color = "1% mais rico"), stat = "identity", width = .15, fill = "darksalmon" , position = position_nudge(x = .0)) +
-  geom_bar(aes(y = rico5, color = "5% mais ricos"), stat = "identity", width = .15, fill = "black", position = position_nudge(x = .15)) +
-  geom_bar(aes(y = rico10, color = "10% mais ricos"), stat = "identity", width = .15, fill = "orangered4" ,position = position_nudge(x = .3) ) +
-  geom_bar(aes(y = seguinte50, color = "50% seguintes" ), stat = "identity", width = .15, fill = "tan4", position = position_nudge(x = .45)) +
+Figura3 <- ggplot(item5, aes(x = Ano)) +
+  geom_bar(aes(y = rico1, col = "1% mais rico"), 
+           fill = "darksalmon", stat = "identity", width = .15, position = position_nudge(x = .0)) +
+  geom_bar(aes(y = rico5, col = "5% mais ricos"), 
+           fill = "black", stat = "identity", width = .15, position = position_nudge(x = .15)) +
+  geom_bar(aes(y = rico10, col = "10% mais ricos"), 
+           fill = "orangered4", stat = "identity", width = .15, position = position_nudge(x = .3)) +
+  geom_bar(aes(y = pobre50, col = "40% mais pobres"), 
+           fill = "tan4", stat = "identity", width = .15, position = position_nudge(x = .45)) +
+  geom_bar(aes(y = pobre40, col = "50% mais pobres"),
+           fill = "goldenrod3", stat = "identity", width = .15, position = position_nudge(x = .60)) +
   theme_bw() +
-  scale_color_manual(values = c("darksalmon", "black", "tan4", "orangered4")) +
-  scale_fill_manual(values = c("rico1" = "darksalmon", "black", "orangered4","50% seguintes")) + 
   labs(x = "Ano",
        y = "Em %",
        color = "") +
   theme(legend.position = 'bottom')
 
-plot(Figura6)
+plot(Figura3)
 
 
-Figura8 <- ggplot(item6_aux, aes(y = value, x = Ano, fill = Percentil))+
-  geom_bar(stat = "identity")
-
-plot(Figura8)
-
-
-
-Figura7 <- ggplot(item6, aes(x = Ano)) +
+Figura4 <- ggplot(item5, aes(x = Ano)) +
   geom_bar(aes(y = rico1, color = "1% mais rico"), 
-           fill = "dodgerblue4", stat = "identity", width = .15, position = position_nudge(x = .0)) +
+           fill = "darksalmon", stat = "identity", width = .15, position = position_nudge(x = .0)) +
   geom_bar(aes(y = rico5, color = "5% mais ricos"), 
-           fill = "deepskyblue3", stat = "identity", width = .15, position = position_nudge(x = .15)) +
+           fill = "black", stat = "identity", width = .15, position = position_nudge(x = .15)) +
   geom_bar(aes(y = rico10, color = "10% mais ricos"), 
-           fill = "darkseagreen", stat = "identity", width = .15, position = position_nudge(x = .3)) +
-  geom_bar(aes(y = pobre50, color = "40% mais pobres" ), 
-           fill = "khaki", stat = "identity", width = .15, position = position_nudge(x = .45)) +
-  geom_bar(aes(y = pobre40, color = "50% mais pobres" ),
-           fill = "khaki3", stat = "identity", width = .15, position = position_nudge(x = .60)) +
+           fill = "orangered4", stat = "identity", width = .15, position = position_nudge(x = .3)) +
+  geom_bar(aes(y = pobre50, color = "50% mais pobres" ), 
+           fill = "tan4", stat = "identity", width = .15, position = position_nudge(x = .45)) +
+  geom_bar(aes(y = pobre40, color = "40% mais pobres" ),
+           fill = "goldenrod3", stat = "identity", width = .15, position = position_nudge(x = .60)) +
   theme_bw() +
-  scale_linetype_manual(values = c("dodgerblue4", "deepskyblue3", "darkseagreen", "khaki4", "khaki1")) +
+  scale_linetype_manual(values = c("darksalmon", "black", "orangered4", "goldenrod3", "tan4")) +
   labs(x = "Ano",
        y = "Em %",
        color = "") +
   theme(legend.position = 'bottom')
 
-plot(Figura7)
+plot(Figura4)
+
+####################################################
+#                   Beneficios                     #
+####################################################
 
 
-Figura7 <- ggplot(item6, aes(x = Ano)) +
-  geom_bar(aes(y = rico1, color = "1% mais rico"), 
-           fill = "dodgerblue4", stat = "identity", width = .15, position = position_nudge(x = .0)) +
-  geom_bar(aes(y = rico5, color = "5% mais ricos"), 
-           fill = "deepskyblue3", stat = "identity", width = .15, position = position_nudge(x = .15)) +
-  geom_bar(aes(y = rico10, color = "10% mais ricos"), 
-           fill = "darkseagreen", stat = "identity", width = .15, position = position_nudge(x = .3)) +
-  geom_bar(aes(y = pobre50, color = "40% mais pobres" ), 
-           fill = "khaki", stat = "identity", width = .15, position = position_nudge(x = .45)) +
-  geom_bar(aes(y = pobre40, color = "50% mais pobres" ),
-           fill = "khaki3", stat = "identity", width = .15, position = position_nudge(x = .60)) +
-  theme_bw() +
-  labs(x = "Ano",
-       y = "Em %",
-       color = "") +
-  theme(legend.position = 'bottom')
+renda_ajuda_gov <- basededados %>%
+  group_by(Ano) %>%
+  mutate (aux1 = sum(BPC), 
+          aux2 = sum(BF), 
+          aux3 = sum(PSocial), 
+          aux4 = sum(Segdesemprego),
+          ajudagoverno = (aux1+aux2+aux3+aux4)) %>%
+  summarise(ajudagoverno = mean(ajudagoverno))
 
-plot(Figura7)
+
+renda_extra <- basededados %>%
+  group_by(Ano) %>%
+  mutate (aux1 = sum(Aposentadoria), 
+          aux2 = sum(Doacao), 
+          aux3 = sum(Aluguel), 
+          aux4 = sum(Segdesemprego),
+          ajudaextra = (aux1+aux2+aux3+aux4)) %>%
+  summarise(ajudaextra = mean(ajudaextra))
+
+
+
+
+
 
 #################################################
 #                 Indice de Gini                #
