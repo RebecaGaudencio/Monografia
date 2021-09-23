@@ -62,42 +62,13 @@ for (xx in lista_visita) {
   baseproporcao <- rbind(baseproporcao, db2)
 }
 
-####################################################
-#       Renda Domiciliar per capita - Brasil       #
-####################################################
-
-item1 <- basededados %>%
-  group_by(Ano) %>%
-  mutate(aux1 = sum(rendpc),
-         aux2 = sum(populacao),
-         rendapc = (aux1/aux2)) %>%
-  summarise(rendapc = mean(rendapc))
-         
-
-windowsFonts(Times=windowsFont("Times New Roman"))
-
-Figura1 <- ggplot(data = item1, aes(Ano, rendapc)) +
-  geom_line(color = "gray20") + 
-  geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
-  geom_vline(xintercept = item1$Ano[4], linetype = 8) +
-  theme_bw() +
-  labs(x = "Ano",
-       y = "Em %")
-
-setwd(out_dir)
-
-png("Renda_domiciliar_pc.png", units = "px", width = 850, height = 536, res = 100)
-plot(Figura1)
-dev.off()
-
-
 #####################################################
-#       Renda Domiciliar per capita - Regioes       #
+#    Renda Domiciliar per capita - BR e Regioes     #
 #####################################################
 
 basededados[is.na(basededados)] <- 0
 
-item2 <- basededados %>%
+item1 <- basededados %>%
   group_by(Ano) %>%
   mutate(aux1 = sum(rendpcnordeste),
          aux2 = sum(popNordeste),
@@ -109,27 +80,38 @@ item2 <- basededados %>%
          aux8 = sum(popSul),
          aux9 = sum(rendpcentroeste),
          aux10 = sum(popCentroOeste),
+         aux11 = sum(rendpc),
+         aux12 = sum(populacao),
+         rendapc = (aux11/aux12),
          rendadompcnordeste = (aux1/aux2),
          rendadompcnorte = (aux3/aux4),
          rendadompcsudeste = (aux5/aux6),
          rendadompcsul = (aux7/aux8),
          rendadompcentroeste = (aux9/aux10)) %>%
-  summarise(rendadompcnordeste = mean(rendadompcnordeste),
+  summarise(rendapc = mean(rendapc),
+            rendadompcnordeste = mean(rendadompcnordeste),
             rendadompcnorte = mean(rendadompcnorte),
             rendadompcsudeste = mean(rendadompcsudeste),
             rendadompcsul = mean(rendadompcsul),
             rendadompcentroeste = mean(rendadompcentroeste))
 
 
-Figura2 <- ggplot(item2, aes(x = Ano)) + 
-  geom_line(aes(y = rendadompcnordeste, col = "Nordeste"), size = 1.2) +
-  geom_line(aes(y = rendadompcnorte, col = "Norte"), size = 1.2) +
-  geom_line(aes(y = rendadompcsudeste, col = "Sudeste"), size = 1.2) +
-  geom_line(aes(y = rendadompcsul, col = "Sul"), size = 1.2) +
-  geom_line(aes(y = rendadompcentroeste, col = "Centro Oeste"), size = 1.2) +
+Figura1 <- ggplot(item1, aes(x = Ano)) + 
+  geom_line(aes(y = rendapc, col = "Brasil"), size = 1.0) +
+  geom_line(aes(y = rendadompcnordeste, col = "Nordeste"), size = 1.0) +
+  geom_line(aes(y = rendadompcnorte, col = "Norte"), size = 1.0) +
+  geom_line(aes(y = rendadompcsudeste, col = "Sudeste"), size = 1.0) +
+  geom_line(aes(y = rendadompcsul, col = "Sul"), size = 1.0) +
+  geom_line(aes(y = rendadompcentroeste, col = "Centro Oeste"), size = 1.0) +
+  geom_point(aes(y = rendapc , col = "Brasil"), color = "black", shape = 16, size = 2.5 ) +
+  geom_point(aes(y = rendadompcnordeste , col = "Nordeste"), color = "burlywood4", shape = 16, size = 2.5 ) +
+  geom_point(aes(y = rendadompcnorte , col = "Norte"), color = "burlywood", shape = 16 , size = 2.5) +
+  geom_point(aes(y = rendadompcsudeste, col = "Sudeste"), color = "bisque3", shape = 16, size = 2.5) +
+  geom_point(aes(y = rendadompcsul, col = "Sul"), color = "tan4", shape = 16, size = 2.5) +
+  geom_point(aes(y = rendadompcentroeste, col = "Centro Oeste"), color = "tomato3", shape = 16, size = 2.5) +
   theme_bw() +
   scale_linetype_manual(values = c("twodash", "dotted")) +
-  scale_color_manual(values = c("bisque3", "black", "gray69", "tan4", "forestgreen")) +
+  scale_color_manual(values = c("black", "tomato3", "burlywood4", "burlywood", "bisque3", "tan4")) +
   labs(x = "Ano",
        y = "Em R$",
        color = "") +
@@ -138,8 +120,8 @@ Figura2 <- ggplot(item2, aes(x = Ano)) +
 # Salvando a imagem #
 setwd(out_dir)
 
-png("Renda_domiciliar_pc_Regiao.png", units = "px", width = 850, height = 536, res = 100)
-plot(Figura2)
+png("Renda_domiciliar_pc_BR_Regio.png", units = "px", width = 850, height = 536, res = 110)
+plot(Figura1)
 dev.off()
 
 
@@ -172,7 +154,7 @@ renda_extra <- basededados %>%
 #                Faixas de Renda                #
 #################################################
 
-item5 <- basededados %>%
+item4 <- basededados %>%
   group_by(Ano) %>%
   mutate(aux1 = sum(faixa1rendhab),
          aux2 = sum(faixa2rendhab),
@@ -198,7 +180,7 @@ item5 <- basededados %>%
             faixa7 = mean(faixa7))
 
 
-Figura5 <- ggplot(item5, aes(x = Ano)) +
+Figura4 <- ggplot(item4, aes(x = Ano)) +
   geom_line(aes(y = faixa1, col = "Faixa 1"), size = 1.2) +
   geom_line(aes(y = faixa2, col = "Faixa 2"), size = 1.2) +
   geom_line(aes(y = faixa3, col = "Faixa 3"), size = 1.2) +
@@ -215,7 +197,7 @@ Figura5 <- ggplot(item5, aes(x = Ano)) +
   theme(legend.position = 'bottom')
   
   
-plot(Figura5)
+plot(Figura4)
 
 
 #################################################
