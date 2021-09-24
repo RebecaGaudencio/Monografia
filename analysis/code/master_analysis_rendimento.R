@@ -255,6 +255,57 @@ Figura4 <- ggplot(item5, aes(x = Ano)) +
 
 plot(Figura4)
 
+########################################################
+#      Rendimento do Trabalho - habitual e efetivo     #
+########################################################
+
+item4 <- basededados %>%
+  group_by(Ano) %>%
+  mutate(aux1 = sum(rendtrabhabit.x),
+         aux2 = sum(rendtrabeft.x),
+         aux3 = sum(populacao),
+         trabhabitpc = (aux1/aux3),
+         trabefetpc = (aux2/aux3),
+         trabhab = aux1,
+         trabefe = aux2) %>%
+  summarise(trabhabitpc = mean(trabhabitpc),
+            trabefetpc = mean(trabefetpc),
+            vartrabpc = mean(((trabefetpc-trabhabitpc)/trabhabitpc)*100), 
+            trabhab = mean(trabhab), 
+            trabefe = mean(trabefe))
+
+
+Figura5 <- ggplot(item4, aes(x = Ano)) +
+  geom_line(aes(y = trabhabitpc, col = "Habitual"), size = 1.0) +
+  geom_line(aes(y = trabefetpc, col = "Efetivo"), size = 1.0) +
+  geom_point(aes(y = trabhabitpc, col = "Habitual"), color = "tomato3", shape = 16, size = 2.5 ) +
+  geom_point(aes(y = trabefetpc, col = "Efetivo"), color = "black", shape = 16, size = 2.5 ) +
+  theme_bw() +
+  scale_linetype_manual(values = c("twodash", "dotted")) +
+  scale_color_manual(values = c("black", "tomato3")) +
+  labs(x = "Ano",
+       y = "Em R$",
+       color = "") +
+  theme(legend.position = 'bottom')
+  
+plot(Figura5)
+
+setwd(out_dir)
+
+png("Rendimento_Trabalho.png", units = "px", width = 850, height = 536, res = 110)
+plot(Figura5)
+dev.off()
+
+Figura6 <- ggplot(item4, aes(x = Ano)) +
+  geom_line(aes(y = vartrabpc, col = "Variação %"), size = 1.0) +
+  labs(x = "Ano",
+       y = "Em %",
+       color = "") +
+  theme(legend.position = 'bottom')
+  
+plot(Figura6)
+
+
 ####################################################
 #                   Beneficios                     #
 ####################################################
