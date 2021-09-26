@@ -264,6 +264,13 @@ rendadompc <- basededados %>%
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendadompc = mean(aux1))
 
+rendatotal <-  basededados %>%
+  select(UF, Trimestre, Ano, V1032, VD5011,CO2) %>%
+  group_by(UF, Trimestre, Ano) %>%
+  mutate(aux = (VD5011*CO2*V1032),
+         aux1 = sum(aux, na.rm = TRUE)) %>%
+  summarise(rendatotal = mean(aux1))
+
 #############################################################################
 #                                   1. POBREZA                              #
 #############################################################################
@@ -758,7 +765,7 @@ RendaTrabalho <- basededados %>%
   select(VD5011, Trimestre, UF, Ano, V1032, CO2, VD4019) %>%
   group_by(UF,Trimestre,Ano) %>%
   dplyr::arrange(VD5011) %>%
-  mutate(aux1 = (VD4019*CO2)) %>%
+  mutate(aux1 = (VD4019*CO2*V1032)) %>%
   mutate(aux2 = (VD5011*CO2)) %>%
   summarise(RendaTrabalho = sum(aux1, na.rm = TRUE))
 
@@ -896,6 +903,7 @@ basefinal <- merge(basefinal, Grupo2, by = c("UF","Trimestre","Ano"), all = TRUE
 basefinal <- merge(basefinal, Grupo3, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, Grupo4, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, rendadompc, by = c("UF","Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, rendatotal, by = c("UF","Trimestre","Ano"), all = TRUE)
 basefinal <- merge(basefinal, PobrezaBrasil, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaNorte, by = c("UF","Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, PobrezaNordeste, by = c("UF","Trimestre","Ano"), all = TRUE) 
