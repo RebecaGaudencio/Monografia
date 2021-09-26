@@ -53,8 +53,6 @@ for (xx in lista_visita) {
   basededados <- rbind(basededados, db1)
 }
 
-
-
 ###########################################################
 #              Pobreza e Extrema Pobreza                  #
 ###########################################################
@@ -212,7 +210,7 @@ item6 <- basededados %>%
 ###########################################################
 basededados[is.na(basededados)] <- 0
 
-item8 <- basededados %>%
+item7 <- basededados %>%
   group_by(Ano) %>%
   mutate(outros = RendaPobres - (RendaPobresTrabalho + RendaPobresBPC + RendaPobresBF + RendaPobresPSocial +
                                   RendaPobresSegdesemprego + RendaPobresAposentadoria + RendaPobresDoacao + RendaPobresAluguel), 
@@ -231,32 +229,47 @@ item8 <- basededados %>%
          Pajuda = (((aux3+aux4+aux5+aux6)/aux1)*100),
          Papoaluguel = (((aux7+aux9)/aux1)*100),
          Pdoacao = ((aux8/aux1)*100)) %>%
-  summarise(Poutrasfontes = mean(Poutrasfontes),
-            PTrabalho = mean(Ptrabalho),
-            Pajuda = mean(Pajuda),
-            Papoaluguel = mean(Papoaluguel),
-            Pdoacao = mean(Pdoacao))
+  summarise("Outras Fontes" = mean(Poutrasfontes),
+            "Trabalho" = mean(Ptrabalho),
+            "Ajuda Governamental" = mean(Pajuda),
+            "Aposentadoria e Aluguel" = mean(Papoaluguel),
+            "Doação" = mean(Pdoacao))
 
-item9 <- item8 %>%
+item8 <- item7 %>%
   dplyr::filter(Ano == 2019) %>%
-  pivot_longer(cols = c(Poutrasfontes, Ptrabalho, Pajuda, Papoaluguel, Pdoacao), 
+  pivot_longer(cols = c("Outras Fontes",
+                        "Trabalho", 
+                        "Ajuda Governamental", 
+                        "Aposentadoria e Aluguel", 
+                        "Doação"), 
                names_to = "Fonte")
 
-item9 <- 
-  
-Figura9 <- item9 %>%
-  ggplot(aes(x = "", y = value, fill = pizza)) +
+colnames(item8) = c("Ano", "Fonte","Percentual")
+
+Figura8 <- item8 %>%
+  ggplot(aes(x = "", y = Percentual, fill = Fonte)) +
   geom_bar(width = 1, stat = "identity") +
   coord_polar("y", start = 0) +
-  scale_fill_manual(values = c("blue", "red", "black", "brown", "yellow"))
+  scale_fill_manual(values = c("coral4", "coral2", "tan1", "tan", "black"))+
+  labs(x = "Em %",
+       y = "2019",
+       title = "Decomposição da Renda - Renda de pessoas em condição de pobreza")
 
-plot(Figura9)
+plot(Figura8)
+
+setwd(out_dir)
+png("Decomposição_Renda_Pobres.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura8)
+dev.off()
 
 
-
-item10 <- basededados %>%
+item9 <- basededados %>%
   group_by(Ano) %>%
-  mutate(aux1 = sum(rendadompc),
+  mutate(outros = rendatotal - (RendaTrabalho + RendaBPC + RendaBF + 
+                                  RendaPSocial + RendaSegdesemprego + 
+                                  RendaAposentadoria + RendaDoacao + 
+                                  RendaAluguel),
+         aux1 = sum(rendatotal),
          aux2 = sum(RendaTrabalho),
          aux3 = sum(RendaBPC),
          aux4 = sum(RendaBF),
@@ -265,16 +278,45 @@ item10 <- basededados %>%
          aux7 = sum(RendaAposentadoria),
          aux8 = sum(RendaDoacao),
          aux9 = sum(RendaAluguel),
-         Rtrabalho = sum((aux2/aux1)*100),
-         Rajuda = sum(((aux3+aux4+aux5)/aux1)*100),
-         Rapoaluguel = sum(((aux7+aux9)/aux1)*100),
-         Rdoacao = sum((aux8/aux1)*100)) %>%
-  summarise(Rtrabalho = mean(Rtrabalho),
-            Rajuda = mean(Rajuda),
-            Rapoaluguel = mean(Rapoaluguel),
-            Rdoacao = mean(Rdoacao))
+         aux10 = sum(outros),
+         Routrasfontes = ((aux10/aux1)*100),
+         Rtrabalho = ((aux2/aux1)*100),
+         Rajuda = (((aux3+aux4+aux5+aux6)/aux1)*100),
+         Rapoaluguel = (((aux7+aux9)/aux1)*100),
+         Rdoacao = ((aux8/aux1)*100),
+         Soma = (((aux2+aux3+aux4+aux5+aux6+aux7+aux8+aux9+aux10)/aux1)*100))%>%
+  summarise("Outras Fontes" = mean(Routrasfontes),
+            "Trabalho" = mean(Rtrabalho),
+            "Ajuda Governamental" = mean(Rajuda),
+            "Aposentadoria e Aluguel" = mean(Rapoaluguel),
+            "Doação" = mean(Rdoacao))
 
+item10 <- item9 %>%
+  dplyr::filter(Ano == 2019) %>%
+  pivot_longer(cols = c("Outras Fontes",
+                        "Trabalho", 
+                        "Ajuda Governamental", 
+                        "Aposentadoria e Aluguel", 
+                        "Doação"), 
+               names_to = "Fonte")
 
+colnames(item10) = c("Ano","Fonte","Percentual")
+
+Figura9 <- item10 %>%
+  ggplot(aes(x = "", y = Percentual, fill = Fonte)) +
+  geom_bar(width = 1, stat = "identity") +
+  coord_polar("y", start = 0) +
+  scale_fill_manual(values = c("coral4", "coral2", "tan1", "tan", "black"))+
+  labs(x = "Em %",
+       y = "2019",
+       title = "Decomposição da Renda - Renda Total")
+
+plot(Figura9)
+
+setwd(out_dir)
+png("Decomposição_Renda_Todos.png", units = "px", width = 850, height = 536, res = 100)
+plot(Figura9)
+dev.off()
 
 ###########################################################
 #                     Hiato da Pobreza                    #
