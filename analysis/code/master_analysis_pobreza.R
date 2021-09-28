@@ -253,7 +253,7 @@ Figura8 <- item8 %>%
   scale_fill_manual(values = c("coral4", "coral2", "tan1", "tan", "black"))+
   labs(x = "Em %",
        y = "2019",
-       title = "Decomposição da Renda - Renda de pessoas em condição de pobreza")
+       title = "Decomposição da Renda - Renda de pessoas pobres")
 
 plot(Figura8)
 
@@ -362,3 +362,16 @@ setwd(out_dir)
 png("Evolução_Hiato_Agregado.png", units = "px", width = 850, height = 536, res = 100)
 plot(Figura12)
 dev.off()
+
+
+
+item <- basededados %>%
+  group_by(Ano) %>%
+  mutate(aux1 = sum(PobrezaBrasil),
+         aux2 = sum(ExtremaPobrezaBrasil),
+         Pobres = aux1,
+         EPobres = aux2) %>%
+  summarise(Pobres = mean(Pobres),
+            EPobres = mean (EPobres))
+
+
