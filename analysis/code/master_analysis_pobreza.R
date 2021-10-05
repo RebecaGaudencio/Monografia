@@ -253,7 +253,8 @@ Figura8 <- item8 %>%
   scale_fill_manual(values = c("coral4", "coral2", "tan1", "tan", "black"))+
   labs(x = "Em %",
        y = "2019",
-       title = "Decomposição da Renda - Renda de pessoas pobres")
+       title = "Renda de pessoas pobres") +
+  theme(legend.position = 'bottom')
 
 plot(Figura8)
 
@@ -309,7 +310,8 @@ Figura9 <- item10 %>%
   scale_fill_manual(values = c("coral4", "coral2", "tan1", "tan", "black"))+
   labs(x = "Em %",
        y = "2019",
-       title = "Decomposição da Renda - Renda Total")
+       title = "Renda Total") +
+  theme(legend.position = 'bottom')
 
 plot(Figura9)
 
@@ -318,18 +320,25 @@ png("Decomposição_Renda_Todos.png", units = "px", width = 850, height = 536, res
 plot(Figura9)
 dev.off()
 
+
+Figura9 + Figura8 
+
 ###########################################################
 #                     Hiato da Pobreza                    #
 ###########################################################
 
-item11 <- basededados %>%
+basededados <- basededados %>%
+  mutate(LinhaPobreza = (1.66*5.5*30*1.57088710))
+
+item12 <- basededados %>%
   group_by(Ano) %>%
   mutate(aux1 = mean(HiatoRenda),
          aux2 = sum(HiatoAgregado),
          aux3 = sum(populacao)) %>%
   summarise(HRenda = mean(aux1),
-            HAgregado = mean(aux2),
-            Hagregadopop = mean(aux1/aux3))
+            HAgregado = mean(aux2))
+
+
   
 
 Figura11 <- ggplot(item11, aes(Ano, HRenda)) +
@@ -340,9 +349,9 @@ Figura11 <- ggplot(item11, aes(Ano, HRenda)) +
         y = "Em R$") +
   theme(plot.title = element_text(family = "Times"))
 
+plot(Figura11)
 
 setwd(out_dir)
-
 png("Evolução_Média_Hiatos_Renda.png", units = "px", width = 850, height = 536, res = 100)
 plot(Figura11)
 dev.off()
@@ -364,14 +373,23 @@ plot(Figura12)
 dev.off()
 
 
+#############################################################
 
 item <- basededados %>%
   group_by(Ano) %>%
   mutate(aux1 = sum(PobrezaBrasil),
          aux2 = sum(ExtremaPobrezaBrasil),
+         aux3 = sum(RendaPobres),
+         aux4 = sum(populacao),
+         aux5 = mean(LinhaPobreza),
          Pobres = aux1,
-         EPobres = aux2) %>%
+         EPobres = aux2,
+         RMedia = (aux3/aux1), 
+         LP = aux5,
+         Pop = aux4,
+         Hiato = (((((aux5 -(aux3/aux1))/aux5)*aux1)/aux4)*100)) %>%
   summarise(Pobres = mean(Pobres),
-            EPobres = mean (EPobres))
+            EPobres = mean (EPobres),
+            Hiato = mean(Hiato))
 
 
