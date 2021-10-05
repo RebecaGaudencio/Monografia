@@ -62,6 +62,13 @@ for (xx in lista_visita) {
   baseproporcao <- rbind(baseproporcao, db2)
 }
 
+
+year = zoo::as.Date(as.yearmon(baseproporcao$Ano))
+baseproporcao = baseproporcao %>%
+  mutate(Year = zoo::as.Date(as.yearmon(Ano)))
+
+
+
 #####################################################
 #    Renda Domiciliar per capita - BR e Regioes     #
 #####################################################
@@ -193,61 +200,57 @@ item3 <- baseproporcao %>%
   mutate(aux1 = sum(renda1rico),
          aux2 = sum(renda5rico),
          aux3 = sum(renda10rico),
-         aux4 = sum(renda50seguinte),
          aux5 = sum(renda40pobre),
          aux6 = sum(renda50pobre),
          aux7 = sum(rendapctotal),
          rico1 = (aux1/aux7)*100,
          rico5 = (aux2/aux7)*100,
          rico10 = (aux3/aux7)*100,
-         seguinte50 = (aux4/aux7)*100,
          pobre40 = (aux5/aux7)*100,
          pobre50 = (aux6/aux7)*100) %>%
   summarise(rico1 = mean(rico1),
             rico5 = mean(rico5),
             rico10 = mean(rico10), 
-            seguinte50 = mean(seguinte50),
             pobre40 = mean(pobre40),
             pobre50 = mean(pobre50))
 
-item3_aux <- item5 %>%
-  pivot_longer(cols = c(rico1, rico5, rico10, pobre40, pobre50),
-               names_to = "Percentil")
 
-
-Figura3 <- ggplot(item5, aes(x = Ano)) +
-  geom_bar(aes(y = rico1, col = "1% mais rico"), 
-           fill = "darksalmon", stat = "identity", width = .15, position = position_nudge(x = .0)) +
-  geom_bar(aes(y = rico5, col = "5% mais ricos"), 
-           fill = "black", stat = "identity", width = .15, position = position_nudge(x = .15)) +
-  geom_bar(aes(y = rico10, col = "10% mais ricos"), 
-           fill = "orangered4", stat = "identity", width = .15, position = position_nudge(x = .3)) +
-  geom_bar(aes(y = pobre50, col = "40% mais pobres"), 
-           fill = "tan4", stat = "identity", width = .15, position = position_nudge(x = .45)) +
-  geom_bar(aes(y = pobre40, col = "50% mais pobres"),
-           fill = "goldenrod3", stat = "identity", width = .15, position = position_nudge(x = .60)) +
+Figura4 <- ggplot(item3, aes(x = Ano)) +
+  scale_color_brewer(palette = 5, name = "% Renda", type = "seq") +
+  scale_fill_brewer(palette = 5, name = "% Renda", type = "seq") +
+  geom_bar(aes(y = rico1, color = "1% mais rico"),
+           stat = "identity", width = .15, position = position_nudge(x = .0)) +
+  geom_bar(aes(y = rico5, color = "5% mais ricos"), 
+           stat = "identity", width = .15, position = position_nudge(x = .15)) +
+  geom_bar(aes(y = rico10, color = "10% mais ricos"), 
+           stat = "identity", width = .15, position = position_nudge(x = .3)) +
+  geom_bar(aes(y = pobre50, color = "50% mais pobres" ), 
+           stat = "identity", width = .15, position = position_nudge(x = .45)) +
+  geom_bar(aes(y = pobre40, color = "40% mais pobres" ),
+           stat = "identity", width = .15, position = position_nudge(x = .60)) +
   theme_bw() +
+  scale_linetype_manual(values = c("twodash", "dotted")) +
+  scale_color_manual(values = c("bisque3", "gray69", "khaki4", "black", "tan4")) +
   labs(x = "Ano",
        y = "Em %",
        color = "") +
   theme(legend.position = 'bottom')
 
-plot(Figura3)
+plot(Figura4)
 
-
-Figura4 <- ggplot(item5, aes(x = Ano)) +
-  geom_bar(aes(y = rico1, color = "1% mais rico"), 
-           fill = "darksalmon", stat = "identity", width = .15, position = position_nudge(x = .0)) +
-  geom_bar(aes(y = rico5, color = "5% mais ricos"), 
-           fill = "black", stat = "identity", width = .15, position = position_nudge(x = .15)) +
-  geom_bar(aes(y = rico10, color = "10% mais ricos"), 
-           fill = "orangered4", stat = "identity", width = .15, position = position_nudge(x = .3)) +
-  geom_bar(aes(y = pobre50, color = "50% mais pobres" ), 
-           fill = "tan4", stat = "identity", width = .15, position = position_nudge(x = .45)) +
-  geom_bar(aes(y = pobre40, color = "40% mais pobres" ),
-           fill = "goldenrod3", stat = "identity", width = .15, position = position_nudge(x = .60)) +
+Figura4 <- ggplot(item3, aes(x = Ano)) +
+    geom_bar(aes(y = rico1, fill = "(1) 1% mais rico"),
+           stat = "identity", width = .15, position = position_nudge(x = .0)) +
+  geom_bar(aes(y = rico5, fill = "(2) 5% mais ricos"), 
+           stat = "identity", width = .15, position = position_nudge(x = .15)) +
+  geom_bar(aes(y = rico10, fill = "(3) 10% mais rico"), 
+           stat = "identity", width = .15, position = position_nudge(x = .3)) +
+  geom_bar(aes(y = pobre50, fill = "(4) 50% mais pobres"), 
+           stat = "identity", width = .15, position = position_nudge(x = .45)) +
+  geom_bar(aes(y = pobre40, fill = "(5) 40% mais pobres"),
+           stat = "identity", width = .15, position = position_nudge(x = .60)) +
   theme_bw() +
-  scale_linetype_manual(values = c("darksalmon", "black", "orangered4", "goldenrod3", "tan4")) +
+  scale_fill_brewer(palette = 9) +
   labs(x = "Ano",
        y = "Em %",
        color = "") +
