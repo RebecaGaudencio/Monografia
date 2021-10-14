@@ -100,26 +100,43 @@ item1 <- basededados %>%
             rendadompcentroeste = mean(rendadompcentroeste))
 
 
-Figura1 <- ggplot(item1, aes(x = Ano)) + 
-  geom_line(aes(y = rendapc, col = "Brasil"), size = 1.0) +
-  geom_line(aes(y = rendadompcnordeste, col = "Nordeste"), size = 1.0) +
-  geom_line(aes(y = rendadompcnorte, col = "Norte"), size = 1.0) +
-  geom_line(aes(y = rendadompcsudeste, col = "Sudeste"), size = 1.0) +
-  geom_line(aes(y = rendadompcsul, col = "Sul"), size = 1.0) +
-  geom_line(aes(y = rendadompcentroeste, col = "Centro Oeste"), size = 1.0) +
-  geom_point(aes(y = rendapc , col = "Brasil"), color = "black", shape = 16, size = 2.5 ) +
-  geom_point(aes(y = rendadompcnordeste , col = "Nordeste"), color = "burlywood4", shape = 16, size = 2.5 ) +
-  geom_point(aes(y = rendadompcnorte , col = "Norte"), color = "burlywood", shape = 16 , size = 2.5) +
-  geom_point(aes(y = rendadompcsudeste, col = "Sudeste"), color = "bisque3", shape = 16, size = 2.5) +
-  geom_point(aes(y = rendadompcsul, col = "Sul"), color = "tan4", shape = 16, size = 2.5) +
-  geom_point(aes(y = rendadompcentroeste, col = "Centro Oeste"), color = "tomato3", shape = 16, size = 2.5) +
+Figura1 <- ggplot(item1, aes(x = Ano)) +
+  geom_line(aes(y = rendadompcnordeste, col = "Nordeste"), size = 1.05) +
+  geom_line(aes(y = rendadompcnorte, col = "Norte"), size = 1.05) +
+  geom_line(aes(y = rendapc, col = "Brasil"), size = 1.05) +
+  geom_line(aes(y = rendadompcsudeste, col = "Sudeste"), size = 1.05) +
+  geom_line(aes(y = rendadompcsul, col = "Sul"), size = 1.05) +
+  geom_line(aes(y = rendadompcentroeste, col = "Centro Oeste"), size = 1.05) +
   theme_bw() +
-  scale_linetype_manual(values = c("twodash", "dotted")) +
-  scale_color_manual(values = c("black", "tomato3", "burlywood4", "burlywood", "bisque3", "tan4")) +
+  scale_color_manual(values = c("#56B4E9", "mediumblue", "tan2", "gray55", "gray76", "black"),
+                     breaks = c("Norte", "Nordeste", "Brasil", "Centro Oeste", "Sul", "Sudeste")) +
   labs(x = "Ano",
        y = "Em R$",
        color = "") +
+  ylab("Em R$\n") +
   theme(legend.position = 'bottom')
+
+plot(Figura1)
+
+ teste <- ggplot(item1, aes(x = Ano)) +
+  geom_bar(aes(y = rendadompcnordeste, fill = "Nordeste"), stat = "identity") +
+  geom_bar(aes(y = rendadompcnorte, fill = "Norte"), stat = "identity") +
+  geom_bar(aes(y = rendapc, fill = "Brasil"), stat = "identity") +
+  geom_bar(aes(y = rendadompcsudeste, fill = "Sudeste"), stat = "identity") +
+  geom_bar(aes(y = rendadompcsul, fill = "Sul"), stat = "identity") +
+  geom_bar(aes(y = rendadompcentroeste, fill = "Centro Oeste"), stat = "identity") +
+  theme_bw() +
+  scale_fill_manual(values = c("#56B4E9", "mediumblue", "tan2", "gray55", "gray76", "black"),
+                     breaks = c("Norte", "Nordeste", "Brasil", "Centro Oeste", "Sul", "Sudeste")) +
+  guides(fill = guide_legend(title = " ")) +
+  labs(x = "Ano",
+       y = "Em R$",
+       color = "") +
+  ylab("Em R$\n") +
+  theme(legend.position = 'bottom')
+
+teste + coord_flip()
+
 
 # Salvando a imagem #
 
@@ -127,7 +144,6 @@ setwd(out_dir)
 png("Renda_domiciliar_pc_BR_Regio.png", units = "px", width = 850, height = 536, res = 110)
 plot(Figura1)
 dev.off()
-
 
 #################################################
 #                Faixas de Renda                #
@@ -157,7 +173,6 @@ item2 <- basededados %>%
             faixa5 = mean(faixa5),
             faixa6 = mean(faixa6),
             faixa7 = mean(faixa7))
-
 
 Figura2 <- ggplot(item2, aes(x = Ano)) +
   geom_bar(aes(y = faixa1, fill = "Até 1/4 do SM"), size = 1.2) +
@@ -208,15 +223,15 @@ item3 <- baseproporcao %>%
 
 Figura3 <- ggplot(item3, aes(x = Ano)) +
   geom_bar(aes(y = rico1, fill = "1% mais rico"),
-           stat = "identity", width = .15, position = position_nudge(x = .15)) +
+           stat = "identity", width = .15, position = position_nudge(x = -0.25)) +
     geom_bar(aes(y = rico5, fill = "5% mais ricos"), 
-           stat = "identity", width = .15, position = position_nudge(x = .3)) +
+           stat = "identity", width = .15, position = position_nudge(x = -0.1)) +
     geom_bar(aes(y = rico10, fill = "10% mais ricos"), 
-           stat = "identity", width = .15, position = position_nudge(x = .45)) +
+           stat = "identity", width = .15, position = position_nudge(x = 0.05)) +
     geom_bar(aes(y = pobre50, fill = "50% mais pobres"), 
-           stat = "identity", width = .15, position = position_nudge(x = .6)) +
+           stat = "identity", width = .15, position = position_nudge(x = 0.2)) +
     geom_bar(aes(y = pobre40, fill = "40% mais pobres"),
-           stat = "identity", width = .15, position = position_nudge(x = .75)) +
+           stat = "identity", width = .15, position = position_nudge(x = 0.35)) +
     theme_bw() +
   scale_fill_manual(values = c("#000000", "#736F6E", "#C0C0C0", "#98AFC7", "#6698FF"),
                     breaks = c("1% mais rico",
