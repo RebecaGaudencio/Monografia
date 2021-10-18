@@ -38,7 +38,6 @@ code_dir <- file.path(ROOT, "analysis", "code")
 lista_visita <- c("2016_visita1",
                   "2017_visita1",
                   "2018_visita1",
-                  "2018_visita5",
                   "2019_visita1"
                   )
 
@@ -292,7 +291,6 @@ Figura5 <- ggplot(item4, aes(x = Ano)) +
 plot(Figura5)
 
 setwd(out_dir)
-
 png("Rendimento_Trabalho.png", units = "px", width = 850, height = 536, res = 110)
 plot(Figura5)
 dev.off()
@@ -353,8 +351,64 @@ Figura7 <- ggplot(item7, aes(Ano, Gini)) +
 plot(Figura7)
   
   
+##################################################
+#     Desocupação por Percentis de Renda         #
+##################################################
 
-  
+
+item8 <- baseproporcao %>%
+  group_by(Ano) %>%
+  mutate(aux1 = sum(desitem1),
+         aux2 = sum(desitem2),
+         aux3 = sum(desitem3),
+         aux5 = sum(desitem5),
+         aux6 = sum(desitem6),
+         aux7 = sum(pop*0.01),
+         aux8 = sum(pop*0.05),
+         aux9 = sum(pop*0.1),
+         aux10 = sum(pop*0.4),
+         aux11 = sum(pop*0.5),
+         desocup1 = (aux1/aux7)*100,
+         desocup2 = (aux2/aux8)*100,
+         desocup3 = (aux3/aux9)*100,
+         desocup4 = (aux5/aux10)*100,
+         desocup5 = (aux6/aux11)*100) %>%
+  summarise(desocup1 = mean(desocup1),
+            desocup2 = mean(desocup2),
+            desocup3 = mean(desocup3),
+            desocup4 = mean(desocup4),
+            desocup5 = mean(desocup5))
 
 
+Figura8 <- ggplot(item8, aes(x = Ano)) +
+  geom_bar(aes(y = desocup1, fill = "1% mais rico"),
+           stat = "identity", width = .15, position = position_nudge(x = -0.25)) +
+  geom_bar(aes(y = desocup2, fill = "5% mais ricos"), 
+           stat = "identity", width = .15, position = position_nudge(x = -0.1)) +
+  geom_bar(aes(y = desocup3, fill = "10% mais ricos"), 
+           stat = "identity", width = .15, position = position_nudge(x = 0.05)) +
+  geom_bar(aes(y = desocup4, fill = "50% mais pobres"), 
+           stat = "identity", width = .15, position = position_nudge(x = 0.2)) +
+  geom_bar(aes(y = desocup5, fill = "40% mais pobres"),
+           stat = "identity", width = .15, position = position_nudge(x = 0.35)) +
+  theme_bw() +
+  scale_fill_manual(values = c("#000000", "#736F6E", "#C0C0C0", "#98AFC7", "#6698FF"),
+                    breaks = c("1% mais rico",
+                               "5% mais ricos",
+                               "10% mais ricos",
+                               "50% mais pobres",
+                               "40% mais pobres"
+                    )) +
+  guides(fill = guide_legend(title = "Percentis")) +
+  labs(x = "Ano",
+       y = "Em %",
+       color = "") +
+  theme(legend.position = 'bottom')
 
+plot(Figura8)
+
+
+setwd(out_dir)
+png("Desocupacao_Perecentis_Renda.png", units = "px", width = 850, height = 536, res = 110)
+plot(Figura8)
+dev.off()
