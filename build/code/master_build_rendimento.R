@@ -12,7 +12,6 @@ library(magrittr)
 library(survey)
 library(convey)
 
-
 ############################################################
 #                          Folder Path                     #
 ############################################################
@@ -34,20 +33,14 @@ tmp_dir <- file.path(ROOT, "build", "tmp")
 code_dir <- file.path(ROOT, "build", "code")
 
 
-
-
 # Importacao dos dados e leitura da PNADc 
 
 lista <- c("2016_visita1")
 
 lista <- c("2016_visita1",
-            "2016_visita5",
             "2017_visita1",
-            "2017_visita5",
             "2018_visita1",
-            "2018_visita5",
-            "2019_visita1",
-            "2019_visita5"
+            "2019_visita1"
             )
 
 for (yr in lista) {
@@ -551,6 +544,65 @@ item6 <- basededados %>%
   summarise(renda50pobre = sum(aux2))
 
 
+###########################################
+#   Desocupação por percentis de Renda    #
+###########################################
+
+desitem1 <- basededados %>%
+  group_by(Ano) %>%
+  dplyr::arrange(desc(VD5011)) %>%
+  select(VD5011, Ano, V1032, VD4002) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  dplyr:: filter(aux1 <= pop$pop*0.01) %>%
+  dplyr:: filter(VD4002 == 2) %>%
+  mutate(aux2 = cumsum(V1032)) %>%
+  mutate(aux3 = sum(V1032)) %>%
+  summarise(desitem1 = mean(aux3))
+  
+desitem2 <- basededados %>%
+  group_by(Ano) %>%
+  dplyr::arrange(desc(VD5011)) %>%
+  select(VD5011, Ano, V1032, VD4002) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  dplyr:: filter(aux1 <= pop$pop*0.05) %>%
+  dplyr:: filter(VD4002 == 2) %>%
+  mutate(aux2 = cumsum(V1032)) %>%
+  mutate(aux3 = sum(V1032)) %>%
+  summarise(desitem2 = mean(aux3))
+
+desitem3 <- basededados %>%
+  group_by(Ano) %>%
+  dplyr::arrange(desc(VD5011)) %>%
+  select(VD5011, Ano, V1032, VD4002) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  dplyr:: filter(aux1 <= pop$pop*0.1) %>%
+  dplyr:: filter(VD4002 == 2) %>%
+  mutate(aux2 = cumsum(V1032)) %>%
+  mutate(aux3 = sum(V1032)) %>%
+  summarise(desitem3 = mean(aux3))
+
+desitem5 <- basededados %>%
+  group_by(Ano) %>%
+  dplyr::arrange((VD5011)) %>%
+  select(VD5011, Ano, V1032, VD4002) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  dplyr:: filter(aux1 <= pop$pop*0.4) %>%
+  dplyr:: filter(VD4002 == 2) %>%
+  mutate(aux2 = cumsum(V1032)) %>%
+  mutate(aux3 = sum(V1032)) %>%
+  summarise(desitem5 = mean(aux3))
+
+desitem6 <- basededados %>%
+  group_by(Ano) %>%
+  dplyr::arrange((VD5011)) %>%
+  select(VD5011, Ano, V1032, VD4002) %>%
+  mutate(aux1 = cumsum(V1032)) %>%
+  dplyr:: filter(aux1 <= pop$pop*0.5) %>%
+  dplyr:: filter(VD4002 == 2) %>%
+  mutate(aux2 = cumsum(V1032)) %>%
+  mutate(aux3 = sum(V1032)) %>%
+  summarise(desitem6 = mean(aux3))
+
 #######################################################
 ##                                                   ##        
 #  Juncao de todas as variaveis num data frame unico  #
@@ -612,6 +664,11 @@ baserenda <- merge(baserenda, item3, by = c("Ano"), all = TRUE)
 baserenda <- merge(baserenda, item4, by = c("Ano"), all = TRUE)
 baserenda <- merge(baserenda, item5, by = c("Ano"), all = TRUE)
 baserenda <- merge(baserenda, item6, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, desitem1, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, desitem2, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, desitem3, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, desitem5, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, desitem6, by = c("Ano"), all = TRUE)
 
 
 # Salvando data frame no excel
