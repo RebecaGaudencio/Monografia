@@ -9,6 +9,7 @@ library(magrittr)
 library(haven)
 library(hrbrthemes)
 library(zoo)
+library(cowplot)
 
 ############################################################
 #                          Folder Path                     #
@@ -250,7 +251,13 @@ Figura8 <- item8 %>%
   ggplot(aes(x = "", y = Percentual, fill = Fonte)) +
   geom_bar(width = 1, stat = "identity") +
   coord_polar("y", start = 0) +
-  scale_fill_manual(values = c("coral4", "coral2", "tan1", "tan", "black"))+
+  scale_fill_manual(values = c("#000000", "#736F6E", "#C0C0C0", "#98AFC7", "#6698FF"),
+                    breaks = c("Trabalho",
+                               "Ajuda Governamental",
+                               "Aposentadoria e Aluguel",
+                               "Doação",
+                               "Outras Fontes"
+                               ))+
   labs(x = "Em %",
        y = "2019",
        title = "Renda de pessoas pobres") +
@@ -259,10 +266,12 @@ Figura8 <- item8 %>%
 plot(Figura8)
 
 setwd(out_dir)
-png("Decomposição_Renda_Pobres.png", units = "px", width = 850, height = 536, res = 100)
+png("Decomposição_Renda_Pobres.png", units = "px", width = 850, height = 536, res = 110)
 plot(Figura8)
 dev.off()
 
+
+basededados[is.na(basededados)] <- 0
 
 item9 <- basededados %>%
   group_by(Ano) %>%
@@ -307,7 +316,13 @@ Figura9 <- item10 %>%
   ggplot(aes(x = "", y = Percentual, fill = Fonte)) +
   geom_bar(width = 1, stat = "identity") +
   coord_polar("y", start = 0) +
-  scale_fill_manual(values = c("coral4", "coral2", "tan1", "tan", "black"))+
+  scale_fill_manual(values = c("#000000", "#736F6E", "#C0C0C0", "#98AFC7", "#6698FF"),
+                    breaks = c("Trabalho",
+                               "Ajuda Governamental",
+                               "Aposentadoria e Aluguel",
+                               "Doação",
+                               "Outras Fontes"
+                    ))+
   labs(x = "Em %",
        y = "2019",
        title = "Renda Total") +
@@ -316,12 +331,19 @@ Figura9 <- item10 %>%
 plot(Figura9)
 
 setwd(out_dir)
-png("Decomposição_Renda_Todos.png", units = "px", width = 850, height = 536, res = 100)
+png("Decomposição_Renda_Todos.png", units = "px", width = 850, height = 536, res = 110)
 plot(Figura9)
 dev.off()
 
 
-Figura9 + Figura8 
+novo <- plot_grid(Figura9, Figura8, labels = "AUTO")
+novo
+
+setwd(out_dir)
+png("Decomposição_Renda.png", units = "px", width = 850, height = 536, res = 110)
+plot(novo)
+dev.off()
+
 
 ###########################################################
 #                     Hiato da Pobreza                    #
@@ -338,8 +360,6 @@ item12 <- basededados %>%
   summarise(HRenda = mean(aux1),
             HAgregado = mean(aux2))
 
-
-  
 
 Figura11 <- ggplot(item11, aes(Ano, HRenda)) +
   geom_line(color = "gray20") +
