@@ -73,8 +73,6 @@ lista_ano <- c("PNADC_012012",
                )
 
 
-lista_ano <- c("PNADC_022021")
-
 for (yr in lista_ano) {
   
   setwd(in_dir)
@@ -215,9 +213,9 @@ desocupcentrooeste <- pnadc_df %>%
 ##########################################################
 ##       Ocupacao e Desocupacao por Faixa Etaria        ##
 #                                                        #
-#        1. Adolescentes --> 14 a 19 anos                #
-#        2. Jovens --> 20 a 24 anos                      #
-#        3. Adultos --> 25 a 59 anos                     #
+#        1. Adolescentes --> 14 a 17 anos                #
+#        2. Jovens --> 18 a 29 anos                      #
+#        3. Adultos --> 30 a 59 anos                     #
 #        4. Idosos --> 60+                               #
 ##                                                      ## 
 ##########################################################
@@ -225,16 +223,15 @@ desocupcentrooeste <- pnadc_df %>%
 
 ocup1 <- pnadc_df %>%
   select(UF, Trimestre, Ano, V1028, VD4002, V2009) %>%
-  dplyr::filter(VD4002 == 1 & V2009 >= 14 & V2009 <= 19) %>%
+  dplyr::filter(VD4002 == 1 & V2009 >= 14 & V2009 <= 17) %>%
   group_by(UF,Trimestre, Ano) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (ocup1 = mean(aux))
 
 
-
 ocup2 <- pnadc_df %>%
   select(UF, Trimestre, Ano, V1028, VD4002, V2009) %>%
-  dplyr::filter(VD4002 == 1 & V2009 >= 20 & V2009 <= 24) %>%
+  dplyr::filter(VD4002 == 1 & V2009 >= 18 & V2009 <= 29) %>%
   group_by(UF,Trimestre, Ano) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (ocup2 = mean(aux))
@@ -242,7 +239,7 @@ ocup2 <- pnadc_df %>%
 
 ocup3 <- pnadc_df %>%
   select(UF, Trimestre, Ano, V1028, VD4002, V2009) %>%
-  dplyr::filter(VD4002 == 1 & V2009 >= 25 & V2009 <= 59) %>%
+  dplyr::filter(VD4002 == 1 & V2009 >= 30 & V2009 <= 59) %>%
   group_by(UF,Trimestre,Ano) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (ocup3 = mean(aux))
@@ -258,7 +255,7 @@ ocup4 <- pnadc_df %>%
 
 desocup1 <- pnadc_df %>%
   select(UF, Trimestre, Ano, V1028, VD4002, V2009) %>%
-  dplyr::filter(VD4002 == 2 & V2009 >= 14 & V2009 <= 19) %>%
+  dplyr::filter(VD4002 == 2 & V2009 >= 14 & V2009 <= 17) %>%
   group_by(UF,Trimestre, Ano) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (desocup1 = mean(aux))
@@ -266,7 +263,7 @@ desocup1 <- pnadc_df %>%
 
 desocup2 <- pnadc_df %>%
   select(UF, Trimestre, Ano, V1028, VD4002, V2009) %>%
-  dplyr::filter(VD4002 == 2 & V2009 >= 20 & V2009 <= 24) %>%
+  dplyr::filter(VD4002 == 2 & V2009 >= 18 & V2009 <= 29) %>%
   group_by(UF,Trimestre,Ano) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (desocup2 = mean(aux))
@@ -274,7 +271,7 @@ desocup2 <- pnadc_df %>%
 
 desocup3 <- pnadc_df %>%
   select(UF, Trimestre, Ano, V1028, VD4002, V2009) %>%
-  dplyr::filter(VD4002 == 2 & V2009 >= 25 & V2009 <= 59) %>%
+  dplyr::filter(VD4002 == 2 & V2009 >= 30 & V2009 <= 59) %>%
   group_by(UF,Trimestre, Ano) %>%
   mutate(aux = sum(V1028)) %>%
   summarise (desocup3 = mean(aux))
@@ -1250,19 +1247,48 @@ nemnem <- rbind(item2, item3)
 
 # 8. No. de nem-nem por estado #
 
+
+adol <- pnadc_df %>%
+  select(UF, Trimestre, Ano, V1028, V2009) %>%
+  dplyr:: filter(V2009 >=14 & V2009 <= 17) %>%
+  group_by(UF,Trimestre, Ano) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(adol = mean(aux))
+
 jovens <- pnadc_df %>%
   select(UF, Trimestre, Ano, V1028, V2009) %>%
-  dplyr:: filter(V2009 >=14 & V2009 <= 25) %>%
+  dplyr:: filter(V2009 >=18 & V2009 <= 29) %>%
   group_by(UF,Trimestre, Ano) %>%
   mutate(aux = sum(V1028)) %>%
   summarise(jovens = mean(aux))
 
+faixa <- pnadc_df %>%
+  select(UF, Trimestre, Ano, V1028, V2009) %>%
+  dplyr:: filter(V2009 >=14 & V2009 <= 29) %>%
+  group_by(UF,Trimestre, Ano) %>%
+  mutate(aux = sum(V1028)) %>%
+  summarise(faixa = mean(aux))
 
-nemnem <- nemnem %>% 
-  dplyr:: filter(V2009 >=14 & V2009 <= 25) %>% 
+
+nemnemoficial <- nemnem %>% 
+  dplyr:: filter(V2009 >=14 & V2009 <= 29) %>% 
   group_by(UF, Trimestre, Ano) %>%
   mutate(aux = sum (V1028)) %>%
-  summarise(nemnem = mean (aux))
+  summarise(nemnemoficial = mean (aux))
+
+
+nemnemadol <- nemnem %>% 
+  dplyr:: filter(V2009 >=14 & V2009 <= 17) %>% 
+  group_by(UF, Trimestre, Ano) %>%
+  mutate(aux = sum (V1028)) %>%
+  summarise(nemnemadol = mean (aux))
+
+
+nemnemjovens <- nemnem %>% 
+  dplyr:: filter(V2009 >=18 & V2009 <= 29) %>% 
+  group_by(UF, Trimestre, Ano) %>%
+  mutate(aux = sum (V1028)) %>%
+  summarise(nemnemjovens = mean (aux))
 
 
 # Juncao de todas as variaveis num data frame unico
@@ -1404,9 +1430,13 @@ basefinal <- merge(basefinal, desocupesco6cor5, by = c("UF", "Trimestre","Ano"),
 basefinal <- merge(basefinal, desocupesco7cor5, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, informais, by = c("UF", "Trimestre","Ano"), all = TRUE) 
 basefinal <- merge(basefinal, formais, by = c("UF", "Trimestre","Ano"), all = TRUE) 
-basefinal <- merge(basefinal, desalentados, by = c("UF", "Trimestre","Ano"), all = TRUE) 
+basefinal <- merge(basefinal, desalentados, by = c("UF", "Trimestre","Ano"), all = TRUE)
+basefinal <- merge(basefinal, adol, by = c("UF","Trimestre", "Ano"), all = TRUE)
 basefinal <- merge(basefinal, jovens, by = c("UF","Trimestre", "Ano"), all = TRUE)
-basefinal <- merge(basefinal, nemnem, by = c("UF","Trimestre", "Ano"), all = TRUE)
+basefinal <- merge(basefinal, faixa, by = c("UF","Trimestre", "Ano"), all = TRUE)
+basefinal <- merge(basefinal, nemnemoficial, by = c("UF","Trimestre", "Ano"), all = TRUE)
+basefinal <- merge(basefinal, nemnemadol, by = c("UF","Trimestre", "Ano"), all = TRUE)
+basefinal <- merge(basefinal, nemnemjovens, by = c("UF","Trimestre", "Ano"), all = TRUE)
 basefinal <- basefinal %>% mutate(year = yr)
 
 
