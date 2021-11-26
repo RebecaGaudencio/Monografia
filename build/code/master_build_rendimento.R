@@ -438,8 +438,11 @@ Aluguel <- basededados %>%
 
 basededados2 <- convey_prep(basededados2)
 
-gini <- svyby(~VD4020, by = ~Ano, basededados2, svygini, na.rm = TRUE)
-colnames(gini) <- c("Ano", "GiniBR", "SE")
+ginief <- svyby(~VD4020, by = ~Ano, basededados2, svygini, na.rm = TRUE)
+colnames(ginief) <- c("Ano", "GiniEf", "SE")
+
+giniha <- svyby(~VD4019, by = ~Ano, basededados2, svygini, na.rm = TRUE)
+colnames(giniha) <- c("Ano", "GiniHa", "SE")
 
 ginihab <- svyby(~VD4020, by = ~UF + Ano, basededados2, svygini, na.rm = TRUE)
 colnames(ginihab) <- c ("UF", "Ano", "GiniHab", "SE1")
@@ -656,7 +659,8 @@ basefinal <- merge(basefinal, ginihab, by = c("UF","Ano"), all = TRUE)
 
 
 baserenda <- pop
-baserenda <- merge(baserenda, gini, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, ginief, by = c("Ano"), all = TRUE)
+baserenda <- merge(baserenda, giniha, by = c("Ano"), all = TRUE)
 baserenda <- merge(baserenda, rendatotal, by = c("Ano"), all = TRUE)
 baserenda <- merge(baserenda, item1, by = c("Ano"), all = TRUE)
 baserenda <- merge(baserenda, item2, by = c("Ano"), all = TRUE)
