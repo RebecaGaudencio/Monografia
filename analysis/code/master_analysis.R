@@ -9,6 +9,8 @@ library(magrittr)
 library(haven)
 library(hrbrthemes)
 library(zoo)
+library(cowplot)
+library(gridExtra)
 
 ############################################################
 #                          Folder Path                     #
@@ -230,14 +232,14 @@ Figura3 <- ggplot(item3, aes(x = Tempo)) +
   geom_line(aes(y = taxadedesempregoesco7, col = "Superior Completo"), size = 1.1) +
     geom_vline(xintercept = item3$Tempo[33], linetype = 8) +
   theme_bw() +
-  scale_color_manual(values = c("#000000", "#736F6E", "#C0C0C0",  
-                                "palegreen3", "#98AFC7", "#6698FF", "dodgerblue4"),
-                     breaks = c("Médio Incompleto",
-                                "Superior Incompleto",
-                                "Médio Completo",
-                                "Fundamental Completo",
+  scale_color_manual(values = c("#6698FF", "#98AFC7", "palegreen3",
+                                "#000000", "#C0C0C0", "#736F6E", "dodgerblue4"),
+                     breaks = c("Sem Instrução",
                                 "Fundamental Incompleto",
-                                "Sem Instrução",
+                                "Fundamental Completo",
+                                "Médio Incompleto",
+                                "Médio Completo",
+                                "Superior Incompleto",
                                 "Superior Completo")) +
   labs(x = "Trimestre",
        y = "Em %",
@@ -278,18 +280,18 @@ item4 <- basededados %>%
 windowsFonts(Times=windowsFont("Times New Roman"))
 
 Figura4 <- ggplot(item4, aes(x = Tempo, y = taxadedesempregoadol)) +
-  geom_line(aes(col = "Adolescentes"), size = 1.1) +
-  geom_line(aes(y = taxadedesempregojovens, col = "Jovens"), size = 1.1) +
-  geom_line(aes(y = taxadedesempregoadultos, col = "Adultos"), size = 1.1) +
-  geom_line(aes(y = taxadedesempregoidosos, col = "Idosos"), size = 1.1) + 
+  geom_line(aes(col = "14-17 anos"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregojovens, col = "18-29 anos"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoadultos, col = "30-50 anos"), size = 1.1) +
+  geom_line(aes(y = taxadedesempregoidosos, col = ">=60 anos"), size = 1.1) + 
   geom_vline(xintercept = item4$Tempo[33], linetype = 8) +
   theme_bw() +
   scale_linetype_manual(values = c("twodash", "dotted")) +
   scale_color_manual(values = c("#000000", "#736F6E", "#98AFC7", "#6698FF"),
-                     breaks = c("Adolescentes",
-                                "Jovens",
-                                "Adultos",
-                                "Idosos")) +
+                     breaks = c("14-17 anos",
+                                "18-29 anos",
+                                "30-50 anos",
+                                ">=60 anos")) +
   labs(x = "Trimestre",
        y = "Em %",
        color = "") +
@@ -482,20 +484,52 @@ dev.off()
 
 item9 <- basededados %>%
   group_by(Tempo) %>%
-  mutate(aux1 = sum(nemnem), aux2 = sum(jovens),
-         taxanemnem = (aux1/aux2)*100) %>%
-  summarise(taxanemnem = mean(taxanemnem))
+  mutate(aux1 = sum(nemnemoficial), aux2 = sum(faixa),
+         aux3 = sum(nemnemjovens), aux4 = sum(jovens),
+         aux5 = sum(nemnemadol), aux6 = sum(adol),
+         taxanemnem = ((aux1/aux2))*100,
+         taxanemnemjovens = ((aux3/aux4))*100,
+         taxanemnemadol = (aux5/aux6)*100) %>%
+  summarise(taxanemnem = mean(taxanemnem),
+            taxanemnemjovens = mean(taxanemnemjovens),
+            taxanemnemadol = mean(taxanemnemadol)
+            )
 
-Figura9 <- ggplot(data = item9, aes(Tempo, taxanemnem)) +
-  geom_line(color = "gray20") + 
-  geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
-  geom_vline(xintercept = item9$Tempo[33], linetype = 8) +
+Figura9 <- ggplot(data = item9, aes(x = Tempo)) +
+  geom_line(aes(y = taxanemnem, color = "14 a 29 anos")) + 
+  geom_line(aes(y = taxanemnemjovens, color = "18 a 29 anos")) + 
+  geom_line(aes(y = taxanemnemadol, color = "14 a 17 anos")) + 
+  geom_point(aes(y = taxanemnem, color = "14 a 29 anos"),
+             color = "black",  shape = 21, fill = "indianred", size = 3) +
+  geom_point(aes(y = taxanemnemjovens, color = "18 a 29 anos"),
+             color = "black",  shape = 21, fill = "blue", size = 3) +
+  geom_point(aes(y = taxanemnemadol, color = "14 a 17 anos"),
+             color = "black",  shape = 21, fill = "green", size = 3) +
+  scale_color_manual(" ",
+                     values = c ("black", "black", "black"),
+                        breaks = c ("14 a 29 anos", 
+                                    "18 a 29 anos",
+                                    "14 a 17 anos")) +
+      geom_vline(xintercept = item9$Tempo[33], linetype = 8) +
   theme_bw() +
   labs(x = "Trimestre",
        y = "Em %") +
+  theme(legend.position = 'bottom') +
   theme(plot.title = element_text(family = "Times"))
 
 plot(Figura9)
+
+
+Figura9 + guides(color = guide_legend(
+  override.aes = list(pch = c(16,16,16), linetype = c(1,1,1))
+))
+
+
+plot_grid(Figura9, Figura91, Figura92)
+
+plot_grid(Figura9, Figura91, Figura92, ncol = 1, nrow = 1)
+
+grid.arrange(Figura9, Figura91, Figura92, ncol = 1)
 
 
 setwd(out_dir)
@@ -508,7 +542,7 @@ dev.off()
 #######################################################
 
 
-item1 <- basededados %>%
+item10 <- basededados %>%
   group_by(Tempo) %>%
   mutate(aux1 = sum(desocup), aux2 = sum(PEA),
          taxadesocupacao = (aux1/aux2)*100) %>%
