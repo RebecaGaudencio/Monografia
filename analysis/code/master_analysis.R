@@ -519,18 +519,13 @@ Figura9 <- ggplot(data = item9, aes(x = Tempo)) +
 
 plot(Figura9)
 
-
-Figura9 + guides(color = guide_legend(
-  override.aes = list(pch = c(16,16,16), linetype = c(1,1,1))
-))
-
-
+# Não rodar - daqui 
 plot_grid(Figura9, Figura91, Figura92)
 
 plot_grid(Figura9, Figura91, Figura92, ncol = 1, nrow = 1)
 
 grid.arrange(Figura9, Figura91, Figura92, ncol = 1)
-
+# Até aqui 
 
 setwd(out_dir)
 png("Evolucao_dos_Nem-nens.png", units = "px", width = 850, height = 536, res = 110)
