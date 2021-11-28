@@ -181,8 +181,23 @@ Figura2 <- ggplot(item2, aes(x = Ano)) +
   geom_line(aes(y = faixa5, col = "Mais de 2 até 3 SM"), size = 1.2) +
   geom_line(aes(y = faixa6, col = "Mais de 3 até 5 SM"), size = 1.2) +
   geom_line(aes(y = faixa7, col = "Mais de 5 SM"), size = 1.2) +
+  geom_point(aes(y = faixa1, color = "Até 1/4 do SM"),
+             color = "#98AFC7",  shape = 21, fill = "#98AFC7", size = 3) +
+  geom_point(aes(y = faixa2, color = "Mais de 1/4 até 1/2 SM"),
+             color = "#C0C0C0",  shape = 21, fill = "#C0C0C0", size = 3) +
+  geom_point(aes(y = faixa3, color = "Mais de 1/2 até 1 SM"),
+             color = "#000000",  shape = 21, fill = "#000000", size = 3) +
+  geom_point(aes(y = faixa4, color = "Mais de 1 até 2 SM"),
+             color = "#736F6E",  shape = 21, fill = "#736F6E", size = 3) +
+  geom_point(aes(y = faixa5, color = "Mais de 2 até 3 SM"),
+             color = "#90CAF9",  shape = 21, fill = "#90CAF9", size = 3) +
+  geom_point(aes(y = faixa6, color = "Mais de 3 até 5 SM"),
+             color = "#6698FF",  shape = 21, fill = "#6698FF", size = 3) +
+  geom_point(aes(y = faixa7, color = "Mais de 5 SM"),
+             color = "#0D47A1",  shape = 21, fill = "#0D47A1", size = 3) +
   theme_bw() +
-  scale_color_manual(values = c("#000000", "#736F6E", "#C0C0C0", "#98AFC7", 
+  scale_color_manual("Faixas Salariais",
+                     values = c("#000000", "#736F6E", "#C0C0C0", "#98AFC7", 
                                 "#90CAF9", "#6698FF",  "#0D47A1"),
                      breaks = c("Mais de 1/2 até 1 SM",
                                 "Mais de 1 até 2 SM",
@@ -228,24 +243,24 @@ item3 <- baseproporcao %>%
             pobre50 = mean(pobre50))
 
 Figura3 <- ggplot(item3, aes(x = Ano)) +
-  geom_bar(aes(y = rico1, fill = "1% mais rico"),
+  geom_bar(aes(y = pobre40, fill = "40% mais pobres"),
            stat = "identity", width = .15, position = position_nudge(x = -0.25)) +
-    geom_bar(aes(y = rico5, fill = "5% mais ricos"), 
+  geom_bar(aes(y = pobre50, fill = "50% mais pobres"), 
            stat = "identity", width = .15, position = position_nudge(x = -0.1)) +
-    geom_bar(aes(y = rico10, fill = "10% mais ricos"), 
+  geom_bar(aes(y = rico10, fill = "10% mais ricos"), 
            stat = "identity", width = .15, position = position_nudge(x = 0.05)) +
-    geom_bar(aes(y = pobre50, fill = "50% mais pobres"), 
+  geom_bar(aes(y = rico5, fill = "5% mais ricos"), 
            stat = "identity", width = .15, position = position_nudge(x = 0.2)) +
-    geom_bar(aes(y = pobre40, fill = "40% mais pobres"),
+  geom_bar(aes(y = rico1, fill = "1% mais rico"),
            stat = "identity", width = .15, position = position_nudge(x = 0.35)) +
-    theme_bw() +
-  scale_fill_manual(values = c("#000000", "#736F6E", "#C0C0C0", "#98AFC7", "#6698FF"),
-                    breaks = c("1% mais rico",
-                               "5% mais ricos",
-                               "10% mais ricos",
+      theme_bw() +
+  scale_fill_manual(values = c("#98AFC7", "#6698FF", "#C0C0C0", "#736F6E", "#000000"),
+                    breaks = c("40% mais pobres",
                                "50% mais pobres",
-                               "40% mais pobres"
-                               )) +
+                               "10% mais ricos",
+                               "5% mais ricos",
+                               "1% mais rico"
+                    )) +
   guides(fill = guide_legend(title = "Percentis")) +
   labs(x = "Ano",
        y = "Em %",
