@@ -10,6 +10,7 @@ library(haven)
 library(hrbrthemes)
 library(zoo)
 library(wesanderson)
+library(formattable)
 
 ############################################################
 #                          Folder Path                     #
@@ -98,7 +99,6 @@ item1 <- basededados %>%
             rendadompcsul = mean(rendadompcsul),
             rendadompcentroeste = mean(rendadompcentroeste))
 
-
 Figura1 <- ggplot(item1, aes(x = Ano)) +
   geom_line(aes(y = rendadompcnordeste, col = "Nordeste"), size = 1.05) +
   geom_line(aes(y = rendadompcnorte, col = "Norte"), size = 1.05) +
@@ -174,26 +174,33 @@ item2 <- basededados %>%
             faixa7 = mean(faixa7))
 
 Figura2 <- ggplot(item2, aes(x = Ano)) +
-  geom_bar(aes(y = faixa1, fill = "Até 1/4 do SM"), size = 1.2) +
-  geom_bar(aes(y = faixa2, fill = "Mais de 1/4 até 1/2 SM"), size = 1.2) +
-  geom_bar(aes(y = faixa3, fill = "Mais de 1/2 até 1 SM"), size = 1.2) +
-  geom_bar(aes(y = faixa4, fill = "Mais de 1 até 2 SM"), size = 1.2) +
-  geom_bar(aes(y = faixa5, fill = "Mais de 2 até 3 SM"), size = 1.2) +
-  geom_bar(aes(y = faixa6, fill = "Mais de 3 até 5 SM"), size = 1.2) +
-  geom_bar(aes(y = faixa7, fill = "Mais de 5 SM"), size = 1.2) +
-  coord_flip() +
+  geom_line(aes(y = faixa1, col = "Até 1/4 do SM"), size = 1.2) +
+  geom_line(aes(y = faixa2, col = "Mais de 1/4 até 1/2 SM"), size = 1.2) +
+  geom_line(aes(y = faixa3, col = "Mais de 1/2 até 1 SM"), size = 1.2) +
+  geom_line(aes(y = faixa4, col = "Mais de 1 até 2 SM"), size = 1.2) +
+  geom_line(aes(y = faixa5, col = "Mais de 2 até 3 SM"), size = 1.2) +
+  geom_line(aes(y = faixa6, col = "Mais de 3 até 5 SM"), size = 1.2) +
+  geom_line(aes(y = faixa7, col = "Mais de 5 SM"), size = 1.2) +
   theme_bw() +
-  scale_fill_brewer(palette = "Blues") +
+  scale_color_manual(values = c("#000000", "#736F6E", "#C0C0C0", "#98AFC7", 
+                                "#90CAF9", "#6698FF",  "#0D47A1"),
+                     breaks = c("Mais de 1/2 até 1 SM",
+                                "Mais de 1 até 2 SM",
+                                "Mais de 1/4 até 1/2 SM",
+                                "Até 1/4 do SM",
+                                "Mais de 2 até 3 SM",
+                                "Mais de 3 até 5 SM",
+                                "Mais de 5 SM"
+                                )) +
   guides(fill = guide_legend(title = "Faixa de Renda")) +
   labs(x = "Ano",
-       y = "Em %",
-       color = "") +
-  theme(legend.position = 'bottom')
+       y = "População (%)",
+       color = "") 
 
 plot(Figura2)
 
 setwd(out_dir)
-png("Faixas_Salariais", units = "px", width = 850, height = 536, res = 110)
+png("Faixas_Salariais.png", units = "px", width = 850, height = 536, res = 110)
 plot(Figura2)
 dev.off()
 
@@ -335,28 +342,71 @@ renda_extra <- basededados %>%
 #                 Indice de Gini                #
 #################################################
 
+# Gini EFETIVO
+
 item7 <- baseproporcao %>%
   group_by(Ano) %>%
-  summarise(Gini = mean(GiniBR))
+  summarise(GiniEf = mean(GiniEf))
 
-Figura7 <- ggplot(item7, aes(Ano, Gini)) +
+item7$GiniEf <- formattable(item7$GiniEf, digits = 3, format = "f")
+
+windowsFonts(Times=windowsFont("Times New Roman"))
+
+Figura7 <- ggplot(item7, aes(Ano, GiniEf)) +
+  geom_text(aes(label = GiniEf), vjust = 2) +
   geom_line(color ="gray20") +
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
   theme_bw() +
+  coord_cartesian(ylim = c(0.5, 0.54)) +
   labs(x = "Ano",
        y = "Coeficiente de Gini") +
   ylab("Coeficiente de Gini\n") +
-  theme(legend.position = 'bottom')
+  theme(legend.position = 'bottom') 
 
 plot(Figura7)
   
-  
+setwd(out_dir)
+png("Coeficiente_Gini.png", units = "px", width = 850, height = 536, res = 110)
+plot(Figura7)
+dev.off()
+
+
+# Gini HABITUAL
+
+item8 <- baseproporcao %>%
+  group_by(Ano) %>%
+  summarise(GiniHa = mean(GiniHa))
+
+item8$GiniHa <- formattable(item8$GiniHa, digits = 3, format = "f")
+
+windowsFonts(Times=windowsFont("Times New Roman"))
+
+Figura8 <- ggplot(item8, aes(Ano, GiniHa)) +
+  geom_text(aes(label = GiniHa), vjust = 2) +
+  geom_line(color ="gray20") +
+  geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
+  theme_bw() +
+  coord_cartesian(ylim = c(0.45, 0.55)) +
+  labs(x = "Ano",
+       y = "Coeficiente de Gini") +
+  ylab("Coeficiente de Gini\n") +
+  theme(legend.position = 'bottom') 
+
+plot(Figura8)
+
+setwd(out_dir)
+png("Coeficiente_Gini_Habitual.png", units = "px", width = 850, height = 536, res = 110)
+plot(Figura8)
+dev.off()
+
+
+
 ##################################################
 #     Desocupação por Percentis de Renda         #
 ##################################################
 
 
-item8 <- baseproporcao %>%
+item9 <- baseproporcao %>%
   group_by(Ano) %>%
   mutate(aux1 = sum(desitem1),
          aux2 = sum(desitem2),
@@ -380,7 +430,7 @@ item8 <- baseproporcao %>%
             desocup5 = mean(desocup5))
 
 
-Figura8 <- ggplot(item8, aes(x = Ano)) +
+Figura9 <- ggplot(item9, aes(x = Ano)) +
   geom_bar(aes(y = desocup1, fill = "1% mais rico"),
            stat = "identity", width = .15, position = position_nudge(x = -0.25)) +
   geom_bar(aes(y = desocup2, fill = "5% mais ricos"), 
@@ -405,10 +455,9 @@ Figura8 <- ggplot(item8, aes(x = Ano)) +
        color = "") +
   theme(legend.position = 'bottom')
 
-plot(Figura8)
-
+plot(Figura9)
 
 setwd(out_dir)
 png("Desocupacao_Perecentis_Renda.png", units = "px", width = 850, height = 536, res = 110)
-plot(Figura8)
+plot(Figura9)
 dev.off()
