@@ -43,17 +43,19 @@ lista_ano <- c("dados_PNADC_2016_visita1.txt")
 lista_chave <- c("input_PNADC_2016_visita1.txt")
 
 basededados <- PNADcIBGE::read_pnadc(microdata = lista_ano, input_txt = lista_chave)
-basededados <- PNADcIBGE::pnadc_deflator(data_pnadc = basededados, deflator.file = "deflator_PNADC_2019.xls")
+basededados <- PNADcIBGE::pnadc_deflator(data_pnadc = basededados, deflator.file = "deflator_PNADC_2020.xls")
 
 
 # Importacao dos dados e leitura da PNADc 
 
-lista <- c("2016_visita1")
+lista <- c("2020_visita5")
 
 lista <- c("2016_visita1",
            "2017_visita1",
            "2018_visita1",
-           "2019_visita1")
+           "2019_visita1",
+           "2020_visita5"
+           )
 
 for (yr in lista) {
   
@@ -71,13 +73,17 @@ basededados <- PNADcIBGE::pnadc_deflator(data_pnadc = basededados, deflator.file
 #  Incluindo Linhas de Pobreza e Extrema Pobreza no DF   #
 ##########################################################
 
+
+####     Ano base 2020    ###
+
 basededados <- basededados %>%
-  mutate(LinhaPobreza = (1.66*5.5*30*1.57088710))
+  mutate(LinhaPobreza = (1.66*5.5*30*1.64184950))
 
 
 basededados <- basededados %>%
-  mutate(LinhaExtremaPobreza = (1.66*1.9*30*1.57088710)) 
-                                     
+  mutate(LinhaExtremaPobreza = (1.66*1.9*30*1.64184950)) 
+                        
+
 ###############################################
 #   Declarando a variável de peso amostral   #
 ##############################################
