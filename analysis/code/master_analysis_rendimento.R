@@ -39,8 +39,10 @@ code_dir <- file.path(ROOT, "analysis", "code")
 lista_visita <- c("2016_visita1",
                   "2017_visita1",
                   "2018_visita1",
-                  "2019_visita1"
+                  "2019_visita1",
+                  "2020_visita5"
                   )
+
 
 basededados <- data.frame(UF = character(), Ano = character())
 baseproporcao <- data.frame(Ano = character())
@@ -106,8 +108,20 @@ Figura1 <- ggplot(item1, aes(x = Ano)) +
   geom_line(aes(y = rendadompcsudeste, col = "Sudeste"), size = 1.05) +
   geom_line(aes(y = rendadompcsul, col = "Sul"), size = 1.05) +
   geom_line(aes(y = rendadompcentroeste, col = "Centro Oeste"), size = 1.05) +
-  theme_bw() +
-  scale_color_manual(values = c("#56B4E9", "mediumblue", "tan2", "gray55", "gray76", "black"),
+  geom_point(aes(y = rendadompcnordeste, color = "Nordeste"),
+             color = "mediumblue",  shape = 21, fill = "mediumblue", size = 3) +
+  geom_point(aes(y = rendadompcnorte, color = "Norte"),
+             color = "#56B4E9",  shape = 21, fill = "#56B4E9", size = 3) +
+  geom_point(aes(y = rendapc, color = "Brasil"),
+             color = "black",  shape = 21, fill = "indianred", size = 3) +
+  geom_point(aes(y = rendadompcsudeste, color = "Sudeste"),
+             color = "black",  shape = 21, fill = "black", size = 3) +
+  geom_point(aes(y = rendadompcsul, color = "Sul"),
+             color = "gray76",  shape = 21, fill = "gray76", size = 3) +
+  geom_point(aes(y = rendadompcentroeste, color = "Centro Oeste"),
+             color = "gray55",  shape = 21, fill = "gray55", size = 3) +
+    theme_bw() +
+  scale_color_manual(values = c("#56B4E9", "mediumblue", "indianred", "gray55", "gray76", "black"),
                      breaks = c("Norte", "Nordeste", "Brasil", "Centro Oeste", "Sul", "Sudeste")) +
   labs(x = "Ano",
        y = "Em R$",
@@ -116,25 +130,6 @@ Figura1 <- ggplot(item1, aes(x = Ano)) +
   theme(legend.position = 'bottom')
 
 plot(Figura1)
-
- teste <- ggplot(item1, aes(x = Ano)) +
-  geom_bar(aes(y = rendadompcnordeste, fill = "Nordeste"), stat = "identity") +
-  geom_bar(aes(y = rendadompcnorte, fill = "Norte"), stat = "identity") +
-  geom_bar(aes(y = rendapc, fill = "Brasil"), stat = "identity") +
-  geom_bar(aes(y = rendadompcsudeste, fill = "Sudeste"), stat = "identity") +
-  geom_bar(aes(y = rendadompcsul, fill = "Sul"), stat = "identity") +
-  geom_bar(aes(y = rendadompcentroeste, fill = "Centro Oeste"), stat = "identity") +
-  theme_bw() +
-  scale_fill_manual(values = c("#56B4E9", "mediumblue", "tan2", "gray55", "gray76", "black"),
-                     breaks = c("Norte", "Nordeste", "Brasil", "Centro Oeste", "Sul", "Sudeste")) +
-  guides(fill = guide_legend(title = " ")) +
-  labs(x = "Ano",
-       y = "Em R$",
-       color = "") +
-  ylab("Em R$\n") +
-  theme(legend.position = 'bottom')
-
-teste + coord_flip()
 
 
 # Salvando a imagem #
@@ -184,25 +179,30 @@ Figura2 <- ggplot(item2, aes(x = Ano)) +
   geom_point(aes(y = faixa1, color = "Até 1/4 do SM"),
              color = "#98AFC7",  shape = 21, fill = "#98AFC7", size = 3) +
   geom_point(aes(y = faixa2, color = "Mais de 1/4 até 1/2 SM"),
-             color = "#C0C0C0",  shape = 21, fill = "#C0C0C0", size = 3) +
+             color = "#90CAF9",  shape = 21, fill = "#90CAF9", size = 3) +
   geom_point(aes(y = faixa3, color = "Mais de 1/2 até 1 SM"),
              color = "#000000",  shape = 21, fill = "#000000", size = 3) +
   geom_point(aes(y = faixa4, color = "Mais de 1 até 2 SM"),
              color = "#736F6E",  shape = 21, fill = "#736F6E", size = 3) +
   geom_point(aes(y = faixa5, color = "Mais de 2 até 3 SM"),
-             color = "#90CAF9",  shape = 21, fill = "#90CAF9", size = 3) +
+             color = "#C0C0C0",  shape = 21, fill = "#C0C0C0", size = 3) +
   geom_point(aes(y = faixa6, color = "Mais de 3 até 5 SM"),
              color = "#6698FF",  shape = 21, fill = "#6698FF", size = 3) +
   geom_point(aes(y = faixa7, color = "Mais de 5 SM"),
              color = "#0D47A1",  shape = 21, fill = "#0D47A1", size = 3) +
   theme_bw() +
   scale_color_manual("Faixas Salariais",
-                     values = c("#000000", "#736F6E", "#C0C0C0", "#98AFC7", 
-                                "#90CAF9", "#6698FF",  "#0D47A1"),
-                     breaks = c("Mais de 1/2 até 1 SM",
-                                "Mais de 1 até 2 SM",
+                     values = c("#98AFC7",
+                                "#90CAF9", 
+                                "#000000", 
+                                "#736F6E", 
+                                "#C0C0C0",  
+                                "#6698FF",
+                                "#0D47A1"),
+                     breaks = c("Até 1/4 do SM",
                                 "Mais de 1/4 até 1/2 SM",
-                                "Até 1/4 do SM",
+                                "Mais de 1/2 até 1 SM",
+                                "Mais de 1 até 2 SM",
                                 "Mais de 2 até 3 SM",
                                 "Mais de 3 até 5 SM",
                                 "Mais de 5 SM"
@@ -300,11 +300,11 @@ item4 <- basededados %>%
 Figura5 <- ggplot(item4, aes(x = Ano)) +
   geom_line(aes(y = trabhabitpc, col = "Habitual"), size = 1.0) +
   geom_line(aes(y = trabefetpc, col = "Efetivo"), size = 1.0) +
-  geom_point(aes(y = trabhabitpc, col = "Habitual"), color = "tomato3", shape = 16, size = 2.5 ) +
+  geom_point(aes(y = trabhabitpc, col = "Habitual"), color =  "#6698FF", shape = 16, size = 2.5 ) +
   geom_point(aes(y = trabefetpc, col = "Efetivo"), color = "black", shape = 16, size = 2.5 ) +
   theme_bw() +
   scale_linetype_manual(values = c("twodash", "dotted")) +
-  scale_color_manual(values = c("black", "tomato3")) +
+  scale_color_manual(values = c("black",  "#6698FF")) +
   labs(x = "Ano",
        y = "Em R$",
        color = "") +
@@ -401,7 +401,7 @@ Figura8 <- ggplot(item8, aes(Ano, GiniHa)) +
   geom_line(color ="gray20") +
   geom_point(shape = 21, color = "black", fill = "indianred1", size = 3) +
   theme_bw() +
-  coord_cartesian(ylim = c(0.45, 0.55)) +
+  coord_cartesian(ylim = c(0.48, 0.52)) +
   labs(x = "Ano",
        y = "Coeficiente de Gini") +
   ylab("Coeficiente de Gini\n") +
@@ -413,8 +413,6 @@ setwd(out_dir)
 png("Coeficiente_Gini_Habitual.png", units = "px", width = 850, height = 536, res = 110)
 plot(Figura8)
 dev.off()
-
-
 
 ##################################################
 #     Desocupação por Percentis de Renda         #
@@ -446,24 +444,24 @@ item9 <- baseproporcao %>%
 
 
 Figura9 <- ggplot(item9, aes(x = Ano)) +
-  geom_bar(aes(y = desocup1, fill = "1% mais rico"),
+  geom_bar(aes(y = desocup5, fill = "40% mais pobres"),
            stat = "identity", width = .15, position = position_nudge(x = -0.25)) +
-  geom_bar(aes(y = desocup2, fill = "5% mais ricos"), 
+  geom_bar(aes(y = desocup4, fill = "50% mais pobres"), 
            stat = "identity", width = .15, position = position_nudge(x = -0.1)) +
   geom_bar(aes(y = desocup3, fill = "10% mais ricos"), 
            stat = "identity", width = .15, position = position_nudge(x = 0.05)) +
-  geom_bar(aes(y = desocup4, fill = "50% mais pobres"), 
-           stat = "identity", width = .15, position = position_nudge(x = 0.2)) +
-  geom_bar(aes(y = desocup5, fill = "40% mais pobres"),
+  geom_bar(aes(y = desocup2, fill = "5% mais ricos"), 
+           stat = "identity", width = .15, position = position_nudge(x = 0.20)) +
+  geom_bar(aes(y = desocup1, fill = "1% mais rico"),
            stat = "identity", width = .15, position = position_nudge(x = 0.35)) +
-  theme_bw() +
-  scale_fill_manual(values = c("#000000", "#736F6E", "#C0C0C0", "#98AFC7", "#6698FF"),
-                    breaks = c("1% mais rico",
-                               "5% mais ricos",
-                               "10% mais ricos",
+    theme_bw() +
+  scale_fill_manual(values = c("#6698FF", "#98AFC7", "#C0C0C0", "#736F6E", "#000000"),
+                    breaks = c("40% mais pobres",
                                "50% mais pobres",
-                               "40% mais pobres"
-                    )) +
+                               "10% mais ricos",
+                               "5% mais ricos",
+                               "1% mais rico"
+                               )) +
   guides(fill = guide_legend(title = "Percentis")) +
   labs(x = "Ano",
        y = "Em %",
