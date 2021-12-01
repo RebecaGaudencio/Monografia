@@ -35,12 +35,13 @@ code_dir <- file.path(ROOT, "build", "code")
 
 # Importacao dos dados e leitura da PNADc 
 
-lista <- c("2016_visita1")
+lista <- c("2020_visita5")
 
 lista <- c("2016_visita1",
-            "2017_visita1",
-            "2018_visita1",
-            "2019_visita1"
+           "2017_visita1",
+           "2018_visita1",
+           "2019_visita1",
+           "2020_visita5"
             )
 
 for (yr in lista) {
@@ -53,7 +54,9 @@ for (yr in lista) {
 
 
 basededados <- PNADcIBGE::read_pnadc(microdata = lista_pnad, input_txt = chave_input)
+basededados <- PNADcIBGE::pnadc_deflator(data_pnadc = basededados, deflator.file = "deflator_PNADC_2020.xls")
 basededados2 <- pnadc_design(basededados)
+
 ##############################################
 #   Declarando a variável de peso amostral   #
 ##############################################
@@ -111,9 +114,9 @@ pop <- basededados %>%
 ######################################################
 
 rendtrahabit <- basededados %>%
-  select(UF, Trimestre, Ano, V1032, VD4019) %>%
+  select(UF, Trimestre, Ano, V1032, VD4019, CO2) %>%
   group_by(UF, Ano) %>%
-  mutate(aux = (V1032*VD4019), 
+  mutate(aux = (V1032*VD4019*CO2), 
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendtrabhabit = mean(aux1))
 
@@ -122,9 +125,9 @@ rendtrahabit <- basededados %>%
 ######################################################
 
 rendtrabefet <- basededados %>%
-  select(UF, Trimestre, Ano, V1032, VD4020) %>%
+  select(UF, Trimestre, Ano, V1032, VD4020, CO2e) %>%
   group_by(UF, Ano) %>%
-  mutate(aux = (V1032*VD4020),
+  mutate(aux = (V1032*VD4020*CO2e),
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendtrabeft = mean(aux1))
 
@@ -146,16 +149,16 @@ rendtrabefetfontes <- basededados %>%
 #####################################################
 
 rendpc <- basededados %>%
-  select(UF, Trimestre, Ano, V1032, VD5011) %>%
+  select(UF, Trimestre, Ano, V1032, VD5011, CO2) %>%
   group_by(UF, Ano) %>%
-  mutate(aux = (V1032*VD5011),
+  mutate(aux = (V1032*VD5011*CO2),
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpc = mean(aux1))
 
 rendatotal <- basededados %>%
-  select(UF, Trimestre, Ano, V1032, VD5011) %>%
+  select(UF, Trimestre, Ano, V1032, VD5011, CO2) %>%
   group_by(Ano) %>%
-  mutate(aux = (V1032*VD5011),
+  mutate(aux = (V1032*VD5011*CO2),
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpc = mean(aux1))
 colnames(rendatotal) <- c("Ano", "rendapctotal")
@@ -166,42 +169,42 @@ colnames(rendatotal) <- c("Ano", "rendapctotal")
 ##################################################################
 
 rendpcnordeste <- basededados %>%
-  select(UF, Ano, V1032, VD5011) %>%
+  select(UF, Ano, V1032, VD5011, CO2) %>%
   dplyr:: filter(UF == "21" | UF == "22" | UF == "23"| UF == "24"| UF == "25"| UF == "26"| UF == "27"| UF == "28"| UF == "29") %>%
   group_by(UF,Ano) %>%
-  mutate(aux = (V1032*VD5011),
+  mutate(aux = (V1032*VD5011*CO2),
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpcnordeste = mean(aux1))
   
 rendpcnorte <- basededados %>%
-  select(UF, Ano, V1032, VD5011) %>%
+  select(UF, Ano, V1032, VD5011, CO2) %>%
   dplyr::filter(UF == "11" | UF == "12" | UF == "13"| UF == "14"| UF == "15"| UF == "16"| UF == "17") %>%
   group_by(UF, Ano) %>%
-  mutate(aux = (V1032*VD5011),
+  mutate(aux = (V1032*VD5011*CO2),
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpcnorte = mean(aux1))
 
 rendpcsudeste <- basededados %>%
-  select(UF, Ano, V1032, VD5011) %>%
+  select(UF, Ano, V1032, VD5011, CO2) %>%
   dplyr::filter(UF == "31" | UF == "32" | UF == "33"| UF == "34"| UF == "35") %>%
   group_by(UF, Ano) %>%
-  mutate(aux = (V1032*VD5011),
+  mutate(aux = (V1032*VD5011*CO2),
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpcsudeste = mean(aux1))
 
 rendpcsul <- basededados %>%
-  select(UF, Ano, V1032, VD5011) %>%
+  select(UF, Ano, V1032, VD5011, CO2) %>%
   dplyr::filter(UF == "41" | UF == "42" | UF == "43") %>%
   group_by(UF, Ano) %>%
-  mutate(aux = (V1032*VD5011),
+  mutate(aux = (V1032*VD5011*CO2),
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpcsul = mean(aux1))
 
 rendpcentroeste <- basededados %>%
-  select(UF, Ano, V1032, VD5011) %>%
+  select(UF, Ano, V1032, VD5011, CO2) %>%
   dplyr::filter(UF == "50" | UF == "51" | UF == "52"| UF == "53") %>%
   group_by(UF, Ano) %>%
-  mutate(aux = (V1032*VD5011),
+  mutate(aux = (V1032*VD5011*CO2),
          aux1 = sum(aux, na.rm = TRUE)) %>%
   summarise(rendpcentroeste = mean(aux1))
   
@@ -330,7 +333,7 @@ faixa7rendeft <- basededados %>%
 
 
 #############################################
-#     Rendimento de Programas Sociais      #
+#     Recebimento de Programas Sociais      #
 #############################################
 
 # BPC
@@ -358,9 +361,9 @@ PSocial <- basededados %>%
   summarise(PSocial = mean(aux))
 
 
-#############################################
-#             Outros Rendimentos            #
-#############################################
+##################################################
+#       Recebimento de Outros Rendimentos        #
+##################################################
 
 #Seguro desemprego
 Segdesemprego <- basededados %>%
@@ -457,14 +460,14 @@ colnames(giniefet) <- c ("UF", "Ano", "GiniEfet", "SE2")
 basededados <- basededados %>%
   mutate(domicilio = paste0(UPA, V1008))
 
-#####################################
-##     Concentracao de Renda       ##
-#####################################
+##################################################
+##               Concentracao de Renda          ##
+##################################################
 
 item <- basededados %>%
   group_by(Ano) %>%
-  dplyr::arrange(desc(VD5011)) %>%
-  select(VD5011, Ano, V1032) %>%
+  dplyr::arrange(desc(VD5011*CO2)) %>%
+  select(VD5011, Ano, V1032, CO2) %>%
   mutate(aux1 = cumsum(V1032)) 
 
 #################################
@@ -473,11 +476,11 @@ item <- basededados %>%
 
 item1 <- basededados %>%
   group_by(Ano) %>%
-  dplyr::arrange(desc(VD5011)) %>%
-  select(VD5011, Ano, V1032) %>%
+  dplyr::arrange(desc(VD5011*CO2)) %>%
+  select(VD5011, Ano, V1032, CO2) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 <= pop$pop*0.01) %>%
-  mutate(aux2 = (VD5011*V1032)) %>%
+  mutate(aux2 = (VD5011*CO2*V1032)) %>%
   summarise(renda1rico = sum(aux2))
 
 #################################
@@ -486,11 +489,11 @@ item1 <- basededados %>%
 
 item2 <- basededados %>%
   group_by(Ano) %>%
-  dplyr::arrange(desc(VD5011)) %>%
-  select(VD5011, Ano, V1032) %>%
+  dplyr::arrange(desc(VD5011*CO2)) %>%
+  select(VD5011, Ano, V1032, CO2) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 <= pop$pop*0.05) %>%
-  mutate(aux2 = (VD5011*V1032)) %>%
+  mutate(aux2 = (VD5011*CO2*V1032)) %>%
   summarise(renda5rico = sum(aux2))
 
 ##################################
@@ -499,11 +502,11 @@ item2 <- basededados %>%
 
 item3 <- basededados %>%
   group_by(Ano) %>%
-  dplyr::arrange(desc(VD5011)) %>%
-  select(VD5011, Ano, V1032) %>%
+  dplyr::arrange(desc(VD5011*CO2)) %>%
+  select(VD5011, Ano, V1032, CO2) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 <= pop$pop*0.1) %>%
-  mutate(aux2 = (VD5011*V1032)) %>%
+  mutate(aux2 = (VD5011*CO2*V1032)) %>%
   summarise(renda10rico = sum(aux2))
   
 #######################################
@@ -512,11 +515,11 @@ item3 <- basededados %>%
 
 item4 <- basededados %>%
   group_by(Ano) %>%
-  dplyr::arrange(desc(VD5011)) %>%
-  select(VD5011, Ano, V1032) %>%
+  dplyr::arrange(desc(VD5011*CO2)) %>%
+  select(VD5011, Ano, V1032, CO2) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 >= pop$pop*0.1 & aux1 <= pop$pop*0.6) %>%
-  mutate(aux2 = (VD5011*V1032)) %>%
+  mutate(aux2 = (VD5011*CO2*V1032)) %>%
   summarise(renda50seguinte = sum(aux2))
 
 
@@ -526,11 +529,11 @@ item4 <- basededados %>%
 
 item5 <- basededados %>%
   group_by(Ano) %>%
-  dplyr::arrange((VD5011)) %>%
-  select(VD5011, Ano, V1032) %>%
+  dplyr::arrange((VD5011*CO2)) %>%
+  select(VD5011, Ano, V1032, CO2) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 <= pop$pop*0.4) %>%
-  mutate(aux2 = (VD5011*V1032)) %>%
+  mutate(aux2 = (VD5011*CO2*V1032)) %>%
   summarise(renda40pobre = sum(aux2))
 
 #######################################
@@ -539,11 +542,11 @@ item5 <- basededados %>%
 
 item6 <- basededados %>%
   group_by(Ano) %>%
-  dplyr::arrange((VD5011)) %>%
-  select(VD5011, Ano, V1032) %>%
+  dplyr::arrange((VD5011*CO2)) %>%
+  select(VD5011, Ano, V1032, CO2) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 <= pop$pop*0.5) %>%
-  mutate(aux2 = (VD5011*V1032)) %>%
+  mutate(aux2 = (VD5011*CO2*V1032)) %>%
   summarise(renda50pobre = sum(aux2))
 
 
@@ -553,8 +556,8 @@ item6 <- basededados %>%
 
 desitem1 <- basededados %>%
   group_by(Ano) %>%
-  dplyr::arrange(desc(VD5011)) %>%
-  select(VD5011, Ano, V1032, VD4002) %>%
+  dplyr::arrange(desc(VD5011*CO2)) %>%
+  select(VD5011, Ano, V1032, VD4002, CO2) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 <= pop$pop*0.01) %>%
   dplyr:: filter(VD4002 == 2) %>%
@@ -564,8 +567,8 @@ desitem1 <- basededados %>%
   
 desitem2 <- basededados %>%
   group_by(Ano) %>%
-  dplyr::arrange(desc(VD5011)) %>%
-  select(VD5011, Ano, V1032, VD4002) %>%
+  dplyr::arrange(desc(VD5011*CO2)) %>%
+  select(VD5011, Ano, V1032, VD4002, CO2) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 <= pop$pop*0.05) %>%
   dplyr:: filter(VD4002 == 2) %>%
@@ -575,8 +578,8 @@ desitem2 <- basededados %>%
 
 desitem3 <- basededados %>%
   group_by(Ano) %>%
-  dplyr::arrange(desc(VD5011)) %>%
-  select(VD5011, Ano, V1032, VD4002) %>%
+  dplyr::arrange(desc(VD5011*CO2)) %>%
+  select(VD5011, Ano, V1032, VD4002, CO2) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 <= pop$pop*0.1) %>%
   dplyr:: filter(VD4002 == 2) %>%
@@ -586,8 +589,8 @@ desitem3 <- basededados %>%
 
 desitem5 <- basededados %>%
   group_by(Ano) %>%
-  dplyr::arrange((VD5011)) %>%
-  select(VD5011, Ano, V1032, VD4002) %>%
+  dplyr::arrange((VD5011*CO2)) %>%
+  select(VD5011, Ano, V1032, VD4002, CO2) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 <= pop$pop*0.4) %>%
   dplyr:: filter(VD4002 == 2) %>%
@@ -597,8 +600,8 @@ desitem5 <- basededados %>%
 
 desitem6 <- basededados %>%
   group_by(Ano) %>%
-  dplyr::arrange((VD5011)) %>%
-  select(VD5011, Ano, V1032, VD4002) %>%
+  dplyr::arrange((VD5011*CO2)) %>%
+  select(VD5011, Ano, V1032, VD4002, CO2) %>%
   mutate(aux1 = cumsum(V1032)) %>%
   dplyr:: filter(aux1 <= pop$pop*0.5) %>%
   dplyr:: filter(VD4002 == 2) %>%
