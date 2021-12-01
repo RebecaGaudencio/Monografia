@@ -38,9 +38,9 @@ code_dir <- file.path(ROOT, "build", "code")
 
 setwd(in_dir)
 
-lista_ano <- c("dados_PNADC_2016_visita1.txt")
+lista_ano <- c("dados_PNADC_2020_visita5.txt")
 
-lista_chave <- c("input_PNADC_2016_visita1.txt")
+lista_chave <- c("input_PNADC_2020_visita5.txt")
 
 basededados <- PNADcIBGE::read_pnadc(microdata = lista_ano, input_txt = lista_chave)
 basededados <- PNADcIBGE::pnadc_deflator(data_pnadc = basededados, deflator.file = "deflator_PNADC_2020.xls")
@@ -67,7 +67,7 @@ for (yr in lista) {
   
   
 basededados <- PNADcIBGE::read_pnadc(microdata = lista_pnad, input_txt = chave_input)
-basededados <- PNADcIBGE::pnadc_deflator(data_pnadc = basededados, deflator.file = "deflator_PNADC_2019.xls")
+basededados <- PNADcIBGE::pnadc_deflator(data_pnadc = basededados, deflator.file = "deflator_PNADC_2020.xls")
 
 ##########################################################
 #  Incluindo Linhas de Pobreza e Extrema Pobreza no DF   #
