@@ -263,7 +263,7 @@ Figura3 <- ggplot(item3, aes(x = Ano)) +
                     )) +
   guides(fill = guide_legend(title = "Percentis")) +
   labs(x = "Ano",
-       y = "Em %",
+       y = "Renda Total em %",
        color = "") +
   theme(legend.position = 'bottom')
 
